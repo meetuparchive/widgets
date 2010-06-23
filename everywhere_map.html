@@ -6,7 +6,7 @@
 <script src="local.js"></script>
 <script src="api_key.js"></script>
 <script>
-  // start config
+  // widget config
   var $parameters = {
     urlname: "techcrunch"
   }
@@ -15,7 +15,7 @@
       return api_call("/ew/events", {status: "upcoming", urlname: $parameters.urlname});
     }
   }
-  // end config
+  // widget config
 
   $(function() {
     var map = new google.maps.Map(document.getElementById("map_canvas"), {
