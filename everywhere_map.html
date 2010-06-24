@@ -5,15 +5,15 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="local.js"></script>
 <script src="api_key.js"></script>
-<script id="config">
+<script id="config" type="text/javascript">
   var $parameters = {
     urlname: "techcrunch"
-  }
+  };
   var $queries = {
     events: function() { 
       return api_call("/ew/events", {status: "upcoming", urlname: $parameters.urlname});
     }
-  }
+  };
 </script>
 <script>
   $(function() {
