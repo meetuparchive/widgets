@@ -1,0 +1,278 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="local.js"></script>
+<script src="api_key.js"></script>
+<script id="config" type="text/javascript">
+  var $parameters = {
+    urlname: "techcrunch",
+    width: 200,
+    _name: "Everywhere Stats",
+    _description: "Shows world map with pins and number of upcoming meetups."
+  };
+  var $queries = {
+    containers: function() { 
+      return api_call("/ew/containers", {urlname: $parameters.urlname});
+    },
+    events: function() { 
+      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname});
+    }
+  };
+</script>
+<script>
+  var map_temp = "";
+  var groupcount = 0;
+  var peoplecount = 0;
+  var place = "";
+
+  $.getJSON($queries.containers(), function(data) {
+    $(".MEETUP_EVERYWHERE_WIDGET").width($parameters.width);
+    if (data.status && data.status.match(/^200/) == null) {
+       alert(data.status + ": " + data.details);
+    } else {
+      var container = data.results[0];
+      $("#webaddress").append("<span class=\"MEETUP_EVERYWHERE_WIDGET_people\">"+container.member_count+" People</span>");
+      var webaddress = container.meetup_url;
+      $.getJSON($queries.events(), function(data) {
+        if (data.status && data.status.match(/^200/) == null) {
+          alert(data.status + ": " + data.details);
+        } else {
+          groupcount = parseInt(data.meta.total_count);
+
+          $.each(data.results, function(i, ev) {
+            if (i==0) {
+              var formattedname = ev.container.name;
+              $("#webaddress").attr("href", webaddress);
+
+              var groupname_area = "<span class=\"MEETUP_EVERYWHERE_WIDGET_count\">"+groupcount+" </span><span class=\"MEETUP_EVERYWHERE_WIDGET_name\">"+ formattedname +" </span><div class=\"MEETUP_EVERYWHERE_WIDGET_suffix\">  Meetups</div>";
+              $("#groupname_area").append(groupname_area);
+
+              $("#meetup_logo").attr("href", webaddress);
+              //FORMAT TIME AND DATE
+              var myDate = new Date( ev.time);
+
+              if (ev.state) {
+                place = ev.state;
+              }
+              else {
+                place = ev.country;
+              }
+              $("#time_date_area").append("<a href=\"" + ev.meetup_url + "\"><span class=\"when birddogData\"><span class=\"date\">" + getMonth(myDate.getMonth()) + " " + (myDate.getDate()) + "</span><span class=\"time\">"+ getTime(myDate.getHours(),myDate.getMinutes()) + "</span></span><span class=\"loc birddogData\"><span class=\"city linked\">" + ev.city+ ", " + place.toUpperCase() + "</span></span></a><a href=\""+ webaddress + "\"><span class=\"MEETUP_EVERYWHERE_WIDGET_all\">See all<span class=\"MEETUP_EVERYWHERE_WIDGET_go\">></span></span></a>");
+            }
+            // MAP GENERATOR
+            if (i < 100) {
+              map_temp = map_temp.concat("|" + ev.lat.toFixed(2) + "," + ev.lon.toFixed(2));
+            }
+          });
+          var mapw = $parameters.width - 16;
+          var mapv = mapw/2;
+          $("#webaddress").append("<img src=\"http://maps.google.com/maps/api/staticmap?zoom=0&size="+mapw+"x"+mapv+"&maptype=roadmap&markers=color:red|size:tiny" + map_temp + "&sensor=false\"/>");
+        }
+      });;
+    }
+  });
+
+
+
+  function getTime(h, m) {
+
+    var time = "AM";
+
+    if (h >= 12) {time = "PM";}
+    if (h > 12) { h = h - 12;}
+    if (m > 9) { return (h + ":" + m + " " + time);}
+    else {return (h + ":0" + m + " " + time);}
+  }
+
+  function getMonth(m) {
+    switch (m)
+    {
+    case 0:
+        return ("Jan");
+    case 1:
+      return ("Feb");    
+    case 2:
+        return ("Mar");
+    case 3:
+      return ("Apr");
+    case 4:
+      return ("May");
+    case 5:
+      return ("Jun");
+    case 6:
+      return ("Jul");
+    case 7:
+      return ("Aug");
+    case 8:
+      return ("Sep");
+    case 9:
+      return ("Oct");
+    case 10:
+      return ("Nov");
+    case 11:
+      return ("Dec");
+    default:
+      return ("Undef");
+    }
+  }
+</script>
+
+<style type="text/css">
+  .MEETUP_EVERYWHERE_WIDGET{
+  background: #1a1a1a;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  font-family: verdana, sans-serif;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_body{
+  padding: 8px;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_total a{
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  }
+  .MEETUP_EVERYWHERE_WIDGET a img{
+  border: 0!important;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_total a img{
+  margin: 4px 0;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_title{
+  display: block;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 1.2em;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_total .MEETUP_EVERYWHERE_WIDGET_title{
+  font-size: 22px;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_name{
+  }
+  .MEETUP_EVERYWHERE_WIDGET_logo{
+  display: block;
+  text-align: left;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_people{
+  font-size: 12px;
+  display: block;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_suffix{
+  color: #aaa;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_title{
+  font-size: 14px;
+  color: #aaa;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list{
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  display: block;
+  background: #333;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list a{
+  zoom: 1;
+  border-top: 1px solid #1a1a1a!important;
+  padding: 8px 10px;
+  display: block;
+  font-size: 12px;
+  color: #fff;
+  text-decoration: none;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list a:after{
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden; }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list a:hover{
+  background: #a3e4ff;
+  color: #3c3633 !important;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list a{
+  padding: 6px 10px;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby .MEETUP_EVERYWHERE_WIDGET_nearby_list a .MEETUP_EVERYWHERE_WIDGET_all{
+  display: block;
+  text-align: right;
+  display: block;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  /*
+  text-transform: lowercase;
+  font-variant: small-caps;
+  */
+  font-size: 11.399999999999999px;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_bottom_logo{
+  margin-top: 8px;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby a .when{
+  display: block;
+  float: left;
+  width: 4em;
+  text-align: right;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby a .loc{
+  margin-left: 4.35em;
+  padding-left: .35em;
+  border-left: 1px dotted #555;
+  display: block;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby a .loc .city{
+  font-weight: bold;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_nearby a .when .time,
+  .MEETUP_EVERYWHERE_WIDGET_nearby a .loc .address{
+  font-size: 10.2px;
+  display: block;
+  }
+  .MEETUP_EVERYWHERE_WIDGET_go{
+  background-color: #ca3e47;
+  background-image: -moz-linear-gradient(top, #ca3e47, #a8252e);
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #a8252e),color-stop(1, #ca3e47));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ca3e47', endColorstr='#a8252e');
+  border: 2px solid #a8252e;
+  -moz-border-radius: 4px 4px 4px 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px 4px 4px 4px;
+  text-shadow: black 0px 0px 2px;
+  zoom: 1;
+  display: inline;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  margin-left: 2px;
+  line-height: .75em;
+  color: #fff!important;
+  font-family: arial;
+  padding: 0px 4px;
+  cursor: pointer;
+  cursor: hand;
+  }
+</style>
+</head>
+<body>
+  
+
+<div class="MEETUP_EVERYWHERE_WIDGET" id="MEETUP_EVERYWHERE_WIDGET_28">
+  <div class="MEETUP_EVERYWHERE_WIDGET_body">
+    <div class="MEETUP_EVERYWHERE_WIDGET_total">
+      <a id="webaddress">
+        <span class="MEETUP_EVERYWHERE_WIDGET_title" id="groupname_area"></span>
+      </a>
+    </div>
+    <div class="MEETUP_EVERYWHERE_WIDGET_nearby">
+      <div class="MEETUP_EVERYWHERE_WIDGET_nearby_list" id="time_date_area"></div>
+    </div>
+    <a class="MEETUP_EVERYWHERE_WIDGET_logo" id="meetup_logo"><img class="MEETUP_EVERYWHERE_WIDGET_bottom_logo" src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"/></a>
+  </div>
+</div>
+
+</body>
+</html>
