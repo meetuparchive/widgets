@@ -13,7 +13,7 @@
   };
   var $queries = {
     containers: function() { 
-      return api_call("/ew/containers", {urlname: $parameters.urlname});
+      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "member_count"});
     },
     events: function() { 
       return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname});
@@ -23,7 +23,6 @@
 <script>
   var map_temp = "";
   var groupcount = 0;
-  var peoplecount = 0;
   var place = "";
 
   $.getJSON($queries.containers(), function(data) {
