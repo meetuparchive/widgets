@@ -9,8 +9,8 @@
     after: "-6m",
     before: "6m",
     _width: 400,
-    _height: 300,
-    _name: "Meetup Group Caledar",
+    _height: 290,
+    _name: "Meetup Group Calendar",
     _description: "Lists recent and upcoming meetups for the specified group. The style is very basic so it can be easily adapted to match your site."
   };
   var $queries = {
@@ -18,7 +18,9 @@
       return api_call("/events", {
         after: $parameters.after,
         before: $parameters.before,
-        group_urlname: $parameters.group_urlname
+        group_urlname: $parameters.group_urlname,
+        page: 6,
+        desc: true
       });
     },
     groups: function() { 
@@ -32,7 +34,10 @@
   body {
     font-family: arial, sans-serif;
     font-size: 12px;
+    padding: 0;
+    margin: 0;
   }
+  h2 { margin: 0 0 1em 0 }
   ul {
     padding: 0;
     margin: 0;
@@ -52,7 +57,7 @@
       target.empty();
       if (data.status && data.status.match(/^200/) == null) {
         $("#meetup_listing").empty();
-      } else for (var i in data.results) {
+      } else for (var i in data.results.reverse()) {
         ev = data.results[data.results.length - i - 1];
         ds = ev.time.match(/\w+ (\w+) (\d+) (\d+):(\d+):\d+ \w+ (\d+)/)
         year = ds.pop();
@@ -62,12 +67,12 @@
         month = ds.pop();
         date = month + " " + day + ", " + year + " @ " + hour % 12 + ":" + 
           minute + (hour < 12 ? "am" : "pm");
-        li = $('<li/>');
-        li.append($('<div style="font-weight: bold"/>').append(ev.name))
-        go = $('<div/>').append($('<a href="' + ev.event_url + '"/>').append(date))
+        li = $('<li></li>');
+        li.append($('<div style="font-weight: bold"></div>').append(ev.name))
+        go = $('<div></div>').append($('<a target="_TOP" href="' + ev.event_url + '"></a>').append(date))
         if (ev.status == 'upcoming')
           go.append(' | ')
-            .append($('<a href="' + ev.event_url + '" style="background: red; color: white; text-decoration: none; font-size: smaller; font-weight: bold; padding: .3em .5em; border: white; -webkit-border-radius: .3em; -moz-border-radius: .3em"/>')
+            .append($('<a target="_TOP" href="' + ev.event_url + '" style="background: red; color: white; text-decoration: none; font-size: smaller; font-weight: bold; padding: .3em .5em; border: white; -webkit-border-radius: .3em; -moz-border-radius: .3em"></a>')
               .append("RSVP")
             );
         target.append(li.append(go));
