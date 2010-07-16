@@ -13,10 +13,10 @@
   };
   var $queries = {
     containers: function() { 
-      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "member_count"});
+      return api_call("ew/containers", {urlname: $parameters.urlname, fields: "member_count"});
     },
     events: function() { 
-      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname});
+      return api_call("ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname});
     }
   };
 </script>
