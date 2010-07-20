@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="local.js"></script>
+	<script src="api_key.js"></script>
+</head>
+<body>
+	
+		<script id="mupcss" type="text/javascript" charset="utf-8">
+			// Dynamic variables in CSS via JavaScript
+			// Default Variables
+			var	MUPCSS_BACKGROUND = '#fff',
+					MUPCSS_FOREGROUND = '#999',
+					MUPCSS_LINK = '#2261A0';
+			
+			function get_css() {
+				var the_css = '\
+				.mup_everywhere_bare_stats-main {\
+					background: MUPCSS_BACKGROUND;\
+					color: MUPCSS_FOREGROUND;\
+					font-family: lucida grande, arial, verdana, san-serif;\
+					font-size: 13px;\
+					border-radius: 5px;\
+					-moz-border-radius: 5px;\
+					-webkit-border-radius: 5px;\
+				}\
+				.mup_everywhere_bare_stats-content {\
+					padding: 6px;\
+				}\
+				a,\
+				a:active,\
+				a:visited,\
+				a:hover {\
+					color: MUPCSS_LINK;\
+					text-decoration: none;\
+				}\
+				.mup_everywhere_bare_stats-head_title {\
+					font-size: 20px;\
+				}\
+				.mup_everywhere_bare_stats-head_members {\
+					font-size: 15px;\
+					margin-bottom: 8px;\
+				}\
+				#mup_everywhere_bare_stats-body_list {\
+					list-style: none;\
+					padding: 0;\
+					margin-left: 0;\
+					margin: 0;\
+				}\
+				#mup_everywhere_bare_stats-body_list > li {\
+					position: relative;\
+					padding: 6px 0;\
+					border-top-color: #DDD;\
+					border-top-style: solid;\
+					border-top-width: 1px;\
+				}\
+				.mup_everywhere_bare_stats-body_when,\
+				.mup_everywhere_bare_stats-body_what {\
+					width: 228px;\
+				}\
+				.mup_everywhere_bare_stats-body_time {\
+					font-size: 11px;\
+				}\
+				.mup_everywhere_bare_stats-body_comment {\
+					word-wrap: break-word;\
+				}\
+				.mup_everywhere_bare_stats-body_author {\
+					\
+				}\
+				.mup_everywhere_bare_stats-footer_widgetrepo {\
+					border-top-color: #DDD;\
+					border-top-style: solid;\
+					border-top-width: 1px;\
+					padding-top: 6px;\
+					font-size: 8px;\
+					text-align: center;\
+				}\
+				';
+
+				return the_css;
+			}
+			
+			function write_css() {
+				var js2css = get_css();
+				
+				// Replace variables with code
+				js2css = js2css.replace(/MUPCSS_BACKGROUND/g, MUPCSS_BACKGROUND);
+				js2css = js2css.replace(/MUPCSS_FOREGROUND/g, MUPCSS_FOREGROUND);
+				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
+				
+				// Write it
+				document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
+			}
+			
+			write_css();
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+		<script id="config" type="text/javascript" charset="utf-8">
+		  var $parameters = {
+		    urlname: "etsy-craft-party",
+		    width: 240,
+		    _height: 350,
+		    _name: "Everywhere Mashup",
+		    _description: "Shows past meetups and aggregates tagged content from other services."
+		  };
+		  var $queries = {
+		    containers: function() { 
+		      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+		    },
+		    events: function() { 
+		      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "25.0", fields: "rsvp_count"});
+		    },
+				comments: function() { 
+					return api_call("/ew/comments", {urlname: $parameters.urlname});
+				}
+		  };
+		</script>
+		<script type="text/javascript" charset="utf-8">
+			// Set global variables
+			var resultCount = 0;
+			
+			// Functions
+			function onload() {
+				$('body').append('<div id="mup_everywhere_bare_stats" class="mup_everywhere_bare_stats-main"><div class="mup_everywhere_bare_stats-content"></div></div>');
+			}
+			onload();
+			
+			function numberFormat(nStr){
+			  nStr += '';
+			  x = nStr.split('.');
+			  x1 = x[0];
+			  x2 = x.length > 1 ? '.' + x[1] : '';
+			  var rgx = /(\d+)(\d{3})/;
+			  while (rgx.test(x1))
+			    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			  return x1 + x2;
+			}
+			
+			function getFormattedDate( millis ) {
+				var date = new Date( millis );
+				
+				function addLeadingZero ( num ) {
+					if ( num < 10 ) {
+						var day = '0' + num;
+					} else {
+						return num;
+					}
+					return day;
+				}
+				
+				function getTwoDigitYear ( yr ) {
+					var year = yr.substring(2,4);
+					return year;
+				}
+				
+				function getFullMonth ( mo ) {
+					switch ( mo ) {
+						case 0:
+					  		return ("JAN");
+						case 1:
+							return ("FEB");		
+						case 2:
+					  		return ("MAR");
+						case 3:
+							return ("APR");
+						case 4:
+							return ("MAY");
+						case 5:
+							return ("JUN");
+						case 6:
+							return ("JUL");
+						case 7:
+							return ("AUG");
+						case 8:
+							return ("SEP");
+						case 9:
+							return ("OCT");
+						case 10:
+							return ("NOV");
+						case 11:
+							return ("DEC");
+						default:
+							return ("Undef");
+					}
+				}
+				
+				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
+				return formattedTime;
+			}
+			
+			function getFormattedTime( millis ) {
+				var time = new Date( millis );
+				var hours = time.getHours();
+				var min = time.getMinutes();
+				var ampm = '';
+				
+				if( hours < 10 ) {
+					hours = '0' + hours;
+				}
+				if( min < 10 ) {
+					min = '0' + min;
+				}
+				if ( hours > 11 ) {
+					if ( hours > 12 ) {
+						hours = hours - 12;
+					}
+					ampm = 'PM';
+				} else {
+					ampm = 'AM'
+				}
+				var formattedTime = hours + ':' + min + ' ' + ampm;
+				return formattedTime;
+			}
+			
+			function getTimeAgo( millis ) {
+				var now = new Date();
+				var post = new Date( millis );
+				var diff = now.getTime() - post.getTime();
+				var oneHour = 3600000;
+				var daysAgo = Math.floor( diff / oneHour / 24 );
+				var hoursAgo = Math.floor( diff / oneHour );
+				var output = '';
+				
+				if ( daysAgo >= 1 ) {
+					return getFormattedTime( millis ) + ' ' + getFormattedDate( millis );
+					//return daysAgo + ' day ago';
+				//}  else if ( daysAgo > 1 ) {
+				// 					return daysAgo + ' days ago';
+				} else {
+					// Hours ago
+					if ( hoursAgo < 1 ) {
+						return 'just a moment ago';
+					} else if ( hoursAgo == 1) {
+						return 'about ' + hoursAgo + ' hour ago';
+					} else {
+						return 'about ' + hoursAgo + ' hours ago';
+					}
+				}
+				
+			}
+			
+			function getFormattedCity( city, state ) {
+				var geo = city + ', ' + state;
+				return geo;
+			}
+			
+			function getFormattedVenue( venue ) {
+				if ( venue != null ) {
+					return venue;
+				} else {
+					return 'Venue TBD';
+				}
+			}
+			
+			function addLink( content, link ) {
+				return '<a href="' + link + '">' + content + '</a>';
+			}
+			
+			$.getJSON($queries.containers(), function(data) {
+		    $("#mup_everywhere_bare_stats").width($parameters.width);
+		    if (data.status && data.status.match(/^200/) == null) {
+		       alert(data.status + ": " + data.details);
+		    } else {
+		      var container = data.results[0];
+					// My code here.
+					
+					// Push lat/lon into event api call
+					$parameters.lon = data.meta.geo_ip.lon;
+					$parameters.lat = data.meta.geo_ip.lat;
+					
+					var total_meetup_count = container.meetup_count + container.past_meetup_count;
+					
+					$(document).ready(function() {
+						$('.mup_everywhere_bare_stats-content').append(
+							'<div id="mup_everywhere_bare_stats-head">\n' +
+								'<div class="mup_everywhere_bare_stats-head_title">\n' +
+									'<span id="mup_everywhere_bare_stats-head_meetups">' + numberFormat(total_meetup_count) + ' </span><span>' + container.name + ' Meetups</span>\n' +
+								'</div>\n' +
+								'<div class="mup_everywhere_bare_stats-head_members">' + numberFormat(container.member_count) + ' people</div>\n' +
+							'</div>'
+							);
+					});
+					
+		      $.getJSON($queries.comments(), function(data) {
+		        if (data.status && data.status.match(/^200/) == null) {
+		          alert(data.status + ": " + data.details);
+		        } else {
+		          resultCount = parseInt(data.meta.total_count);
+							$('.mup_everywhere_bare_stats-content').append('<div id="mup_everywhere_bare_stats-body"><ul id="mup_everywhere_bare_stats-body_list"></ul></div>');
+		          $.each(data.results, function(i, com) {
+		            if ( i < resultCount ) {
+		              // My code here.
+									$(document).ready(function() {
+										$('#mup_everywhere_bare_stats-body_list').append( 
+											'<li>' +
+												'<div class="mup_everywhere_bare_stats-body_what">' +
+													'<span class="mup_everywhere_bare_stats-body_comment">&ldquo;' + com.comment + '&rdquo;</span>' +
+													'<span class="mup_everywhere_bare_stats-body_author"> -<em>' + com.member.name + '</em></span>' +
+												'</div>' +
+												'<div class="mup_everywhere_bare_stats-body_when">' +
+													'<span class="mup_everywhere_bare_stats-body_time">' + getTimeAgo( com.time ) + '</span>' +
+												'</div>' +
+											'</li>' );
+									});
+		            }
+		          });
+							$(document).ready(function() {
+								$('.mup_everywhere_bare_stats-content').append('<div id="mup_everywhere_bare_stats-footer"><div class="mup_everywhere_bare_stats-footer_widgetrepo">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div></div>')
+							});
+		        }
+		      });
+		    }
+		  });
+		</script>
+</body>
+</html>
