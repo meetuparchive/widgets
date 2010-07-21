@@ -230,9 +230,6 @@
 				var min = time.getMinutes();
 				var ampm = '';
 				
-				if( hours < 10 ) {
-					hours = '0' + hours;
-				}
 				if( min < 10 ) {
 					min = '0' + min;
 				}
@@ -311,8 +308,8 @@
 					$(document).ready(function() {
 						$('.mup-doc').append(
 							'<div class="mup-hd">\n' +
-								'<h3>' + numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups</h3>\n' +
-								'<h4>' + numberFormat(container.member_count) + ' people</h4>\n' +
+								'<h3>' + addLink( numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups', container.meetup_url )+ '</h3>\n' +
+								'<h4>' + addLink( numberFormat(container.member_count) + ' people', container.meetup_url ) + '</h4>\n' +
 							'</div>'
 							);
 					});
