@@ -9,23 +9,60 @@
 		<script id="mupcss" type="text/javascript" charset="utf-8">
 			// Dynamic variables in CSS via JavaScript
 			// Default Variables
-			var	MUPCSS_BACKGROUND = '#fff',
-					MUPCSS_FOREGROUND = '#999',
-					MUPCSS_LINK = '#2261A0';
+			var	MUPCSS_PBACKGROUND = '#fbe590',
+					MUPCSS_PTEXT = '#000',
+					MUPCSS_SBACKGROUND = '#fff',
+					MUPCSS_STEXT = '#444',
+					MUPCSS_LINK = '#776004';
 			
 			function get_css() {
 				var the_css = '\
-				.mup_everywhere_bare_stats-main {\
-					background: MUPCSS_BACKGROUND;\
-					color: MUPCSS_FOREGROUND;\
-					font-family: lucida grande, arial, verdana, san-serif;\
-					font-size: 13px;\
+				.mup-widget {\
+					font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
+					font-size: 12px;\
+				}\
+				#mup-widget-1 .mup-doc,\
+				#mup-widget-1 .mup-hd a,\
+				#mup-widget-1 h3,\
+				#mup-widget-1 h4 {\
+					background: MUPCSS_PBACKGROUND;\
+					color: MUPCSS_PTEXT;\
+				}\
+				#mup-widget-1 .mup-doc {\
 					border-radius: 5px;\
 					-moz-border-radius: 5px;\
 					-webkit-border-radius: 5px;\
+					width: 250px;\
 				}\
-				.mup_everywhere_bare_stats-content {\
-					padding: 6px;\
+				#mup-widget-1 .mup-hd {\
+					padding: 10px 8px;\
+					overflow: hidden;\
+				}\
+				.mup-widget h3,\
+				.mup-widget h4,\
+				.mup-widget p {\
+					line-height: 1.2 !important;\
+					margin: 0px !important;\
+					padding: 0px !important;\
+				}\
+				#mup-widget-1 h3 {\
+					font-size: 15px;\
+					font-weight: normal;\
+				}\
+				#mup-widget-1 h4 {\
+					font-size: 13px;\
+					font-weight: normal;\
+				}\
+				#mup-widget .mup-bd,\
+				#mup-widget .mup-timeline,\
+				#mup-widget .mup-bd p {\
+					color: MUPCSS_STEXT;\
+				}\
+				.mup-bd {\
+					padding: 0 1px;\
+				}\
+				#mup-widget-1 .mup-timeline {\
+					background: MUPCSS_SBACKGROUND;\
 				}\
 				a,\
 				a:active,\
@@ -34,32 +71,26 @@
 					color: MUPCSS_LINK;\
 					text-decoration: none;\
 				}\
-				.mup_everywhere_bare_stats-head_title {\
-					font-size: 20px;\
-				}\
-				.mup_everywhere_bare_stats-head_members {\
-					font-size: 15px;\
-					margin-bottom: 8px;\
-				}\
-				#mup_everywhere_bare_stats-body_list {\
+				.mup-timeline {\
 					list-style: none;\
 					padding: 0;\
-					margin-left: 0;\
 					margin: 0;\
+					height: 300px;\
+					overflow-y: auto;\
 				}\
-				#mup_everywhere_bare_stats-body_list > li {\
+				.mup-timeline > li {\
 					position: relative;\
-					padding: 6px 0;\
 					border-top-color: #DDD;\
-					border-top-style: solid;\
+					border-top-style: dotted;\
 					border-top-width: 1px;\
+					padding: 6px 8px;\
 				}\
 				.mup_everywhere_bare_stats-body_when,\
 				.mup_everywhere_bare_stats-body_what {\
-					width: 228px;\
+					\
 				}\
 				.mup_everywhere_bare_stats-body_time {\
-					font-size: 11px;\
+					font-size: 9px;\
 				}\
 				.mup_everywhere_bare_stats-body_comment {\
 					word-wrap: break-word;\
@@ -67,11 +98,13 @@
 				.mup_everywhere_bare_stats-body_author {\
 					\
 				}\
-				.mup_everywhere_bare_stats-footer_widgetrepo {\
-					border-top-color: #DDD;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
-					padding-top: 6px;\
+				.mup-ft {\
+					//border-top-color: #DDD;\
+					//border-top-style: solid;\
+					//border-top-width: 1px;\
+				}\
+				.mup-ft div {\
+					padding: 6px 8px;\
 					font-size: 8px;\
 					text-align: center;\
 				}\
@@ -84,8 +117,10 @@
 				var js2css = get_css();
 				
 				// Replace variables with code
-				js2css = js2css.replace(/MUPCSS_BACKGROUND/g, MUPCSS_BACKGROUND);
-				js2css = js2css.replace(/MUPCSS_FOREGROUND/g, MUPCSS_FOREGROUND);
+				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
+				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
+				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
+				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
 				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
 				
 				// Write it
@@ -98,8 +133,8 @@
 		<script id="config" type="text/javascript" charset="utf-8">
 		  var $parameters = {
 		    urlname: "etsy-craft-party",
-		    width: 240,
-		    _height: 350,
+		    width: 300,
+		    height: 400,
 		    _name: "Everywhere Mashup",
 		    _description: "Shows past meetups and aggregates tagged content from other services."
 		  };
@@ -111,17 +146,18 @@
 		      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "25.0", fields: "rsvp_count"});
 		    },
 				comments: function() { 
-					return api_call("/ew/comments", {urlname: $parameters.urlname});
+					return api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
 				}
 		  };
 		</script>
+		<script src="http://widgets.twimg.com/j/2/widget.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			// Set global variables
 			var resultCount = 0;
 			
 			// Functions
 			function onload() {
-				$('body').append('<div id="mup_everywhere_bare_stats" class="mup_everywhere_bare_stats-main"><div class="mup_everywhere_bare_stats-content"></div></div>');
+				$('body').append('<div id="mup-widget-1" class="mup-widget"><div class="mup-doc"></div></div>');
 			}
 			onload();
 			
@@ -257,7 +293,9 @@
 			}
 			
 			$.getJSON($queries.containers(), function(data) {
-		    $("#mup_everywhere_bare_stats").width($parameters.width);
+
+		    //$("#mup_everywhere_bare_stats").width($parameters.width);
+				//$("#mup_everywhere_bare_stats").height($parameters.height);
 		    if (data.status && data.status.match(/^200/) == null) {
 		       alert(data.status + ": " + data.details);
 		    } else {
@@ -271,12 +309,10 @@
 					var total_meetup_count = container.meetup_count + container.past_meetup_count;
 					
 					$(document).ready(function() {
-						$('.mup_everywhere_bare_stats-content').append(
-							'<div id="mup_everywhere_bare_stats-head">\n' +
-								'<div class="mup_everywhere_bare_stats-head_title">\n' +
-									'<span id="mup_everywhere_bare_stats-head_meetups">' + numberFormat(total_meetup_count) + ' </span><span>' + container.name + ' Meetups</span>\n' +
-								'</div>\n' +
-								'<div class="mup_everywhere_bare_stats-head_members">' + numberFormat(container.member_count) + ' people</div>\n' +
+						$('.mup-doc').append(
+							'<div class="mup-hd">\n' +
+								'<h3>' + numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups</h3>\n' +
+								'<h4>' + numberFormat(container.member_count) + ' people</h4>\n' +
 							'</div>'
 							);
 					});
@@ -286,12 +322,14 @@
 		          alert(data.status + ": " + data.details);
 		        } else {
 		          resultCount = parseInt(data.meta.total_count);
-							$('.mup_everywhere_bare_stats-content').append('<div id="mup_everywhere_bare_stats-body"><ul id="mup_everywhere_bare_stats-body_list"></ul></div>');
+							$('.mup-doc').append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
+							
 		          $.each(data.results, function(i, com) {
 		            if ( i < resultCount ) {
 		              // My code here.
+		
 									$(document).ready(function() {
-										$('#mup_everywhere_bare_stats-body_list').append( 
+										$('.mup-timeline').append( 
 											'<li>' +
 												'<div class="mup_everywhere_bare_stats-body_what">' +
 													'<span class="mup_everywhere_bare_stats-body_comment">&ldquo;' + com.comment + '&rdquo;</span>' +
@@ -305,7 +343,7 @@
 		            }
 		          });
 							$(document).ready(function() {
-								$('.mup_everywhere_bare_stats-content').append('<div id="mup_everywhere_bare_stats-footer"><div class="mup_everywhere_bare_stats-footer_widgetrepo">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div></div>')
+								$('.mup-doc').append('<div class="mup-ft"><div>' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div></div>')
 							});
 		        }
 		      });
