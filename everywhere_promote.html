@@ -169,30 +169,6 @@
 		</script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 		<script id="config" type="text/javascript" charset="utf-8">
-		  var $parameters = {
-		    urlname: "etsy-craft-party",
-		    width: 300,
-		    height: 400,
-				event_id: 12992,
-		    _name: "Everywhere Mashup",
-		    _description: "Shows past meetups and aggregates tagged content from other services."
-		  };
-		  var $queries = {
-		    containers: function() { 
-		      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
-		    },
-		    events: function() { 
-		      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "25.0", fields: "rsvp_count"});
-		    },
-				comments: function() { 
-					return api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
-				},
-				event: function() {
-					return api_call("/ew/events", {event_id: $parameters.event_id, fields: "rsvp_count"});
-				}
-		  };
-		</script>
-		<script src="http://widgets.twimg.com/j/2/widget.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			// Set global variables
 			var resultCount = 0;
