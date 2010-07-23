@@ -153,22 +153,34 @@
 			
 			function write_css() {
 				var js2css = get_css();
-				
 				// Replace variables with code
 				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
 				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
 				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
 				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
 				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
-				
 				// Write it
 				document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
 			}
-			
 			write_css();
 		</script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 		<script id="config" type="text/javascript" charset="utf-8">
+         
+         var $parameters = {
+            urlname: "etsy-craft-party",
+            width: 300,
+            height: 400,
+            event_id: 12992,
+            _name: "Everywhere Mashup",
+            _description: "Shows past meetups and aggregates tagged content from other services."
+         };
+         var $queries = {
+            event: function() {
+               return api_call("/ew/events", {event_id: $parameters.event_id, fields: "rsvp_count"});
+            }
+         };
+      </script>
 		<script type="text/javascript" charset="utf-8">
 			// Set global variables
 			var resultCount = 0;
@@ -178,122 +190,6 @@
 				$('body').append('<div id="mup-widget-1" class="mup-widget"><div class="mup-doc"></div></div>');
 			}
 			onload();
-			
-			function numberFormat(nStr){
-			  nStr += '';
-			  x = nStr.split('.');
-			  x1 = x[0];
-			  x2 = x.length > 1 ? '.' + x[1] : '';
-			  var rgx = /(\d+)(\d{3})/;
-			  while (rgx.test(x1))
-			    x1 = x1.replace(rgx, '$1' + ',' + '$2');
-			  return x1 + x2;
-			}
-			
-			function getFormattedDate( millis ) {
-				var date = new Date( millis );
-				
-				function addLeadingZero ( num ) {
-					if ( num < 10 ) {
-						var day = '0' + num;
-					} else {
-						return num;
-					}
-					return day;
-				}
-				
-				function getTwoDigitYear ( yr ) {
-					var year = yr.substring(2,4);
-					return year;
-				}
-				
-				function getFullMonth ( mo ) {
-					switch ( mo ) {
-						case 0:
-					  		return ("JAN");
-						case 1:
-							return ("FEB");		
-						case 2:
-					  		return ("MAR");
-						case 3:
-							return ("APR");
-						case 4:
-							return ("MAY");
-						case 5:
-							return ("JUN");
-						case 6:
-							return ("JUL");
-						case 7:
-							return ("AUG");
-						case 8:
-							return ("SEP");
-						case 9:
-							return ("OCT");
-						case 10:
-							return ("NOV");
-						case 11:
-							return ("DEC");
-						default:
-							return ("Undef");
-					}
-				}
-				
-				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
-				return formattedTime;
-			}
-			
-			function getFormattedTime( millis ) {
-				var time = new Date( millis );
-				var hours = time.getHours();
-				var min = time.getMinutes();
-				var ampm = '';
-				
-				if( min < 10 ) {
-					min = '0' + min;
-				}
-				if ( hours > 11 ) {
-					if ( hours > 12 ) {
-						hours = hours - 12;
-					}
-					ampm = 'PM';
-				} else {
-					ampm = 'AM'
-				}
-				var formattedTime = hours + ':' + min + ' ' + ampm;
-				return formattedTime;
-			}
-			
-			function getTimeAgo( millis ) {
-				var now = new Date();
-				var post = new Date( millis );
-				var diff = now.getTime() - post.getTime();
-				var oneHour = 3600000;
-				var daysAgo = Math.floor( diff / oneHour / 24 );
-				var hoursAgo = Math.floor( diff / oneHour );
-				var output = '';
-				
-				if ( daysAgo >= 1 ) {
-					return getFormattedTime( millis ) + ' ' + getFormattedDate( millis );
-					//return daysAgo + ' day ago';
-				//}  else if ( daysAgo > 1 ) {
-				// 					return daysAgo + ' days ago';
-				} else {
-					// Hours ago
-					if ( hoursAgo < 1 ) {
-						return 'just a moment ago';
-					} else if ( hoursAgo == 1) {
-						return 'about ' + hoursAgo + ' hour ago';
-					} else {
-						return 'about ' + hoursAgo + ' hours ago';
-					}
-				}
-				
-			}
-			
-			function getFormattedCity( city, state ) {
-				var geo = city + ', ' + state;
-				return geo;
-			}
 			
 			function getFormattedAddress( _venue, _street, _city, _state, _zip ) {
 				if ( _venue != null ) {
