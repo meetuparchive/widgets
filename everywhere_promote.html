@@ -230,6 +230,79 @@
 				return address;
 			}
 			
+			function getFormattedDate( millis ) {
+				var date = new Date( millis );
+				
+				function addLeadingZero ( num ) {
+					if ( num < 10 ) {
+						var day = '0' + num;
+					} else {
+						return num;
+					}
+					return day;
+				}
+				
+				function getTwoDigitYear ( yr ) {
+					var year = yr.substring(2,4);
+					return year;
+				}
+				
+				function getFullMonth ( mo ) {
+					switch ( mo ) {
+						case 0:
+					  		return ("JAN");
+						case 1:
+							return ("FEB");		
+						case 2:
+					  		return ("MAR");
+						case 3:
+							return ("APR");
+						case 4:
+							return ("MAY");
+						case 5:
+							return ("JUN");
+						case 6:
+							return ("JUL");
+						case 7:
+							return ("AUG");
+						case 8:
+							return ("SEP");
+						case 9:
+							return ("OCT");
+						case 10:
+							return ("NOV");
+						case 11:
+							return ("DEC");
+						default:
+							return ("Undef");
+					}
+				}
+				
+				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
+				return formattedTime;
+			}
+			
+			function getFormattedTime( millis ) {
+				var time = new Date( millis );
+				var hours = time.getHours();
+				var min = time.getMinutes();
+				var ampm = '';
+				
+				if( min < 10 ) {
+					min = '0' + min;
+				}
+				if ( hours > 11 ) {
+					if ( hours > 12 ) {
+						hours = hours - 12;
+					}
+					ampm = 'PM';
+				} else {
+					ampm = 'AM'
+				}
+				var formattedTime = hours + ':' + min + ' ' + ampm;
+				return formattedTime;
+			}
+			
 			function addLink( content, link ) {
 				return '<a href="' + link + '">' + content + '</a>';
 			}
@@ -260,6 +333,7 @@
 					var secs = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ) - (minutes*60000)) / 1000);
 					
 					var update = days + '<span class="mup-tlabel"> DAYS &nbsp; </span>' + hours + '<span class="mup-tlabel"> HR &nbsp; </span>' + minutes + '<span class="mup-tlabel"> MIN &nbsp; </span>' + secs + '<span class="mup-tlabel"> SEC</span>';
+					
 					document.getElementById('timer').innerHTML = update;
 					window.muptimer = window.muptimer - 1000;
 					tt=initCountdown( window.muptimer );
@@ -279,17 +353,16 @@
 		    } else {
 		      var event = data.results[0];
 					var eventTime = event.time;
-					// My code here.
 					
 					$(document).ready(function() {
 						$('.mup-doc').append(
 							'<div class="mup-hd">' +
-								'<h4><span id="timer" style="display:block; height: 16px;"></span></h4>' +
+								'<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>' +
 								'<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>' +
 							'</div>' +
 							'<div class="mup-bd"><ul class="mup-list">' +
-								'<li><p><h5>' + addLink( event.container.name + '<br />Meetup', event.meetup_url )+ '</h5></p></li>' +
-								'<li><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p></li>' +
+								'<li><p><h5>' + addLink( event.container.name + ' Meetup', event.meetup_url )+ '</h5></p></li>' +
+								'<li><p>' + getFormattedDate( event.time ) + ' @ ' + getFormattedTime( event.time ) + '</p><br /><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p></li>' +
 								'<li><span class="mup-rsvp">' + addLink( event.rsvp_count + ' people', event.meetup_url ) + '</span>' +
 								addLink ( '<span class="mup-button" style="width:140px; margin-bottom:6px;">Interested?</span>', event.meetup_url ) +
 								'<span class="mup-rsvp">Not near ' + event.city + '?<br/>' + addLink( 'Find a ' + event.container.name + ' meetup near you!', 'http://www.meetup.com/' + event.container.urlname + '/' ) + '</li>' +
