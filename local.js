@@ -1,7 +1,7 @@
-var wjq$ = jQuery.noConflict();
+jQuery.noConflict();
 function with_jquery(block) {
   block(jQuery);
 }
 function api_call(path, params) {
-  return "http://api.meetup.com" + path + "?callback=?&" + wjq$.param(wjq$.extend({ key: $api_key }, params));
+  return "http://api.meetup.com" + path + "?callback=?&" + jQuery.param(jQuery.extend({ key: $api_key }, params));
 }
