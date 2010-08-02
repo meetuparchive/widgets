@@ -1,172 +1,173 @@
-<!DOCTYPE html>
 <html>
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 	<script src="local.js"></script>
 	<script src="api_key.js"></script>
-</head>
-<body>
 	
-		<script id="mupcss" type="text/javascript" charset="utf-8">
-			// Dynamic variables in CSS via JavaScript
-			// Default Variables
-			var	MUPCSS_PBACKGROUND = '#fbe590',
-					MUPCSS_PTEXT = '#000',
-					MUPCSS_SBACKGROUND = '#fff',
-					MUPCSS_STEXT = '#444',
-					MUPCSS_LINK = '#776004';
-			
-			function get_css() {
-				var the_css = '\
-				.mup-widget {\
-					font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
-					font-size: 12px;\
-				}\
-				#mup-widget-1 .mup-doc,\
-				#mup-widget-1 .mup-hd a,\
-				#mup-widget-1 h3,\
-				#mup-widget-1 h4 {\
-					background: MUPCSS_PBACKGROUND;\
-					color: MUPCSS_PTEXT;\
-				}\
-				#mup-widget-1 .mup-doc {\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-					width: 250px;\
-				}\
-				#mup-widget-1 .mup-hd {\
-					padding: 10px 8px;\
-					overflow: hidden;\
-				}\
-				.mup-widget h3,\
-				.mup-widget h4,\
-				.mup-widget p {\
-					line-height: 1.2 !important;\
-					margin: 0px !important;\
-					padding: 0px !important;\
-				}\
-				#mup-widget-1 h3 {\
-					font-size: 15px;\
-					font-weight: normal;\
-				}\
-				#mup-widget-1 h4 {\
-					font-size: 13px;\
-					font-weight: normal;\
-				}\
-				#mup-widget .mup-bd,\
-				#mup-widget .mup-timeline,\
-				#mup-widget .mup-bd p {\
-					color: MUPCSS_STEXT;\
-				}\
-				.mup-bd {\
-					padding: 0 1px;\
-				}\
-				#mup-widget-1 .mup-timeline {\
-					background: MUPCSS_SBACKGROUND;\
-				}\
-				a,\
-				a:active,\
-				a:visited,\
-				a:hover {\
-					color: MUPCSS_LINK;\
-					text-decoration: none;\
-				}\
-				.mup-timeline {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0;\
-					height: 300px;\
-					overflow-y: auto;\
-				}\
-				.mup-timeline > li {\
-					position: relative;\
-					border-top-color: #DDD;\
-					border-top-style: dotted;\
-					border-top-width: 1px;\
-					padding: 6px 8px;\
-				}\
-				.mup_everywhere_bare_stats-body_when,\
-				.mup_everywhere_bare_stats-body_what {\
-					\
-				}\
-				.mup_everywhere_bare_stats-body_time {\
-					font-size: 9px;\
-				}\
-				.mup_everywhere_bare_stats-body_comment {\
-					word-wrap: break-word;\
-				}\
-				.mup_everywhere_bare_stats-body_author {\
-					\
-				}\
-				.mup-ft {\
-					//border-top-color: #DDD;\
-					//border-top-style: solid;\
-					//border-top-width: 1px;\
-				}\
-				.mup-ft .mup-getwdgt {\
-					padding: 6px 8px;\
-					font-size: 8px;\
-					text-align: center;\
-					border-top-color: #F2F2F2;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
-				}\
-				.mup-ft .mup-logo {\
-					padding: 6px 8px 2px 8px;\
-				}\
-				';
+	<script id="config" type="text/javascript" charset="utf-8">
+	  var $parameters = {
+	    urlname: "etsy-craft-party",
+	    width: 	250,
+	    _name: "Everywhere Comments",
+	    _description: "Shows 50 recent comments."
+	  };
+	  var $queries = {
+	    containers: function() { 
+	      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+	    },
+	    events: function() { 
+	      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "25.0", fields: "rsvp_count"});
+	    },
+			comments: function() { 
+				return api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
+			}
+	  };
+	</script>
+	<LINK REL=StyleSheet HREF="mup_reset.css" TYPE="text/css" MEDIA=screen>
+	<script id="mupcss" type="text/javascript" charset="utf-8">
+		// Dynamic variables in CSS via JavaScript
+		// Default Variables
+		var	MUPCSS_PBACKGROUND = '#CA4D00',
+				MUPCSS_PTEXT = '#F2F2F2',
+				MUPCSS_SBACKGROUND = '#f2f2f2',
+				MUPCSS_STEXT = '#000',
+				MUPCSS_LINK = '#f2f2f2';
+				MUPCSS_WIDTH = $parameters.width;
+		
+		function get_css() {
+			var the_css = '\
+			.mup-widget {\
+				font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
+				font-size: 12px;\
+			}\
+			#mup-widget-1 .mup-doc,\
+			#mup-widget-1 .mup-hd a,\
+			#mup-widget-1 h3,\
+			#mup-widget-1 h4 {\
+				background: MUPCSS_PBACKGROUND;\
+				color: MUPCSS_PTEXT;\
+			}\
+			#mup-widget-1 .mup-doc {\
+				border-radius: 5px;\
+				-moz-border-radius: 5px;\
+				-webkit-border-radius: 5px;\
+				width: MUPCSS_WIDTH;\
+			}\
+			#mup-widget-1 .mup-hd {\
+				padding: 10px 8px;\
+				overflow: hidden;\
+			}\
+			.mup-widget h3,\
+			.mup-widget h4,\
+			.mup-widget p {\
+				line-height: 1.2 !important;\
+				//margin: 0px !important;\
+				//padding: 0px !important;\
+			}\
+			#mup-widget-1 h3 {\
+				font-size: 16px;\
+				font-weight: bold;\
+			}\
+			#mup-widget-1 h4 {\
+				font-size: 13px;\
+				font-weight: normal;\
+			}\
+			#mup-widget-1 .mup-bd,\
+			#mup-widget-1 .mup-timeline,\
+			#mup-widget-1 .mup-bd p {\
+				color: MUPCSS_STEXT;\
+			}\
+			.mup-bd {\
+				padding: 0 1px;\
+			}\
+			a,\
+			a:active,\
+			a:visited,\
+			a:hover {\
+				color: MUPCSS_LINK;\
+				text-decoration: none;\
+			}\
+			#mup-widget-1 .mup-timeline {\
+				background: MUPCSS_SBACKGROUND;\
+				list-style: none;\
+				padding: 0;\
+				margin: 0;\
+				height: 300px;\
+				overflow-y: auto;\
+				color: MUPCSS_STEXT;\
+			}\
+			#mup-widget-1 .mup-timeline > li {\
+				position: relative;\
+				border-top-color: #DDD;\
+				border-top-style: dotted;\
+				border-top-width: 1px;\
+				padding: 6px 8px;\
+			}\
+			#mup-widget-1 .mup-when,\
+			#mup-widget-1 .mup-what {\
+				\
+			}\
+			#mup-widget-1 .mup-time {\
+				font-size: 9px;\
+			}\
+			#mup-widget-1 .mup-comment {\
+				word-wrap: break-word;\
+			}\
+			#mup-widget-1 .mup-author {\
+				\
+			}\
+			#mup-widget-1 .mup-ft {\
+				//border-top-color: #DDD;\
+				//border-top-style: solid;\
+				//border-top-width: 1px;\
+			}\
+			#mup-widget-1 .mup-ft .mup-getwdgt {\
+				padding: 6px 8px;\
+				font-size: 8px;\
+				text-align: center;\
+				//border-top-color: #F2F2F2;\
+				//border-top-style: solid;\
+				//border-top-width: 1px;\
+				background: #0A0A0A;\
+				-webkit-border-bottom-right-radius: 5px;\
+				-webkit-border-bottom-left-radius: 5px;\
+				-moz-border-radius-bottomright: 5px;\
+				-moz-border-radius-bottomleft: 5px;\
+				border-bottom-right-radius: 5px;\
+				border-bottom-left-radius: 5px;\
+			}\
+			#mup-widget-1 .mup-ft .mup-logo {\
+				padding: 6px 8px;\
+			}\
+			';
 
-				return the_css;
-			}
+			return the_css;
+		}
+		
+		function write_css() {
+			var js2css = get_css();
 			
-			function write_css() {
-				var js2css = get_css();
-				
-				// Replace variables with code
-				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
-				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
-				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
-				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
-				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
-				
-				// Write it
-				document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
-			}
+			// Replace variables with code
+			js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
+			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
+			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_STEXT);
+			js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
+			js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
+			js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
+			js2css = js2css.replace(/MUPCSS_WIDTH/g, MUPCSS_WIDTH);
 			
-			write_css();
-		</script>
-		<script id="config" type="text/javascript" charset="utf-8">
-		  var $parameters = {
-		    urlname: "etsy-craft-party",
-		    width: 300,
-		    height: 400,
-		    _name: "Everywhere Mashup",
-		    _description: "Shows past meetups and aggregates tagged content from other services."
-		  };
-		  var $queries = {
-		    containers: function() { 
-		      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
-		    },
-		    events: function() { 
-		      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "25.0", fields: "rsvp_count"});
-		    },
-				comments: function() { 
-					return api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
-				}
-		  };
-		</script>
-		<script type="text/javascript" charset="utf-8">
+			// Write it
+			document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
+		}
+		
+		write_css();
+	</script>
+	<script type="text/javascript" charset="utf-8">
 		with_jquery(function($) {
 			// Set global variables
 			var resultCount = 0;
-			
+		
 			// Functions
-			function onload() {
-				$('body').append('<div id="mup-widget-1" class="mup-widget"><div class="mup-doc"></div></div>');
-			}
-			onload();
-			
 			function numberFormat(nStr){
 			  nStr += '';
 			  x = nStr.split('.');
@@ -177,10 +178,10 @@
 			    x1 = x1.replace(rgx, '$1' + ',' + '$2');
 			  return x1 + x2;
 			}
-			
+		
 			function getFormattedDate( millis ) {
 				var date = new Date( millis );
-				
+			
 				function addLeadingZero ( num ) {
 					if ( num < 10 ) {
 						var day = '0' + num;
@@ -189,12 +190,12 @@
 					}
 					return day;
 				}
-				
+			
 				function getTwoDigitYear ( yr ) {
 					var year = yr.substring(2,4);
 					return year;
 				}
-				
+			
 				function getFullMonth ( mo ) {
 					switch ( mo ) {
 						case 0:
@@ -225,19 +226,22 @@
 							return ("Undef");
 					}
 				}
-				
+			
 				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
 				return formattedTime;
 			}
-			
+		
 			function getFormattedTime( millis ) {
 				var time = new Date( millis );
 				var hours = time.getHours();
 				var min = time.getMinutes();
 				var ampm = '';
-				
+			
 				if( min < 10 ) {
 					min = '0' + min;
+				}
+				if ( hours == 0 ) {
+					hours = 1;
 				}
 				if ( hours > 11 ) {
 					if ( hours > 12 ) {
@@ -250,7 +254,7 @@
 				var formattedTime = hours + ':' + min + ' ' + ampm;
 				return formattedTime;
 			}
-			
+		
 			function getTimeAgo( millis ) {
 				var now = new Date();
 				var post = new Date( millis );
@@ -259,7 +263,7 @@
 				var daysAgo = Math.floor( diff / oneHour / 24 );
 				var hoursAgo = Math.floor( diff / oneHour );
 				var output = '';
-				
+			
 				if ( daysAgo >= 1 ) {
 					return getFormattedTime( millis ) + ' ' + getFormattedDate( millis );
 					//return daysAgo + ' day ago';
@@ -275,14 +279,14 @@
 						return 'about ' + hoursAgo + ' hours ago';
 					}
 				}
-				
-			}
 			
+			}
+		
 			function getFormattedCity( city, state ) {
 				var geo = city + ', ' + state;
 				return geo;
 			}
-			
+		
 			function getFormattedVenue( venue ) {
 				if ( venue != null ) {
 					return venue;
@@ -290,11 +294,11 @@
 					return 'Venue TBD';
 				}
 			}
-			
+		
 			function addLink( content, link ) {
 				return '<a href="' + link + '">' + content + '</a>';
 			}
-			
+		
 			$.getJSON($queries.containers(), function(data) {
 
 		    //$("#mup_everywhere_bare_stats").width($parameters.width);
@@ -304,42 +308,44 @@
 		    } else {
 		      var container = data.results[0];
 					// My code here.
-					
+				
 					// Push lat/lon into event api call
 					$parameters.lon = data.meta.geo_ip.lon;
 					$parameters.lat = data.meta.geo_ip.lat;
-					
+				
 					var total_meetup_count = container.meetup_count + container.past_meetup_count;
-					
+				
 					$(document).ready(function() {
-						$('.mup-doc').append(
-							'<div class="mup-hd">\n' +
-								'<h3>' + addLink( numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups', container.meetup_url )+ '</h3>\n' +
-								'<h4>' + addLink( numberFormat(container.member_count) + ' people', container.meetup_url ) + '</h4>\n' +
+						$('#mup-widget-1').append(
+							'<div class="mup-doc">\n' +
+								'<div class="mup-hd">\n' +
+									'<h3>' + addLink( numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups', container.meetup_url )+ '</h3>\n' +
+									'<h4>' + addLink( numberFormat(container.member_count) + ' people', container.meetup_url ) + '</h4>\n' +
+								'</div>' +
 							'</div>'
 							);
 					});
-					
+				
 		      $.getJSON($queries.comments(), function(data) {
 		        if (data.status && data.status.match(/^200/) == null) {
 		          alert(data.status + ": " + data.details);
 		        } else {
 		          resultCount = parseInt(data.meta.total_count);
 							$('.mup-doc').append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
-							
+						
 		          $.each(data.results, function(i, com) {
 		            if ( i < resultCount ) {
 		              // My code here.
-		
+	
 									$(document).ready(function() {
 										$('.mup-timeline').append( 
 											'<li>' +
-												'<div class="mup_everywhere_bare_stats-body_what">' +
-													'<span class="mup_everywhere_bare_stats-body_comment">&ldquo;' + com.comment + '&rdquo;</span>' +
-													'<span class="mup_everywhere_bare_stats-body_author"> -<em>' + com.member.name + '</em></span>' +
+												'<div class="mup-what">' +
+													'<span class="mup-comment">&ldquo;' + com.comment + '&rdquo;</span>' +
+													'<span class="mup-author"> -<em>' + com.member.name + '</em></span>' +
 												'</div>' +
-												'<div class="mup_everywhere_bare_stats-body_when">' +
-													'<span class="mup_everywhere_bare_stats-body_time">' + getTimeAgo( com.time ) + '</span>' +
+												'<div class="mup-when">' +
+													'<span class="mup-time">' + getTimeAgo( com.time ) + '</span>' +
 												'</div>' +
 											'</li>' );
 									});
@@ -353,6 +359,9 @@
 		    }
 		  });
 		});
-		</script>
+	</script>
+</head>
+<body>
+	<div id="mup-widget-1" class="mup-widget"></div>
 </body>
 </html>
