@@ -8,6 +8,7 @@
 	  var $parameters = {
 	    urlname: "etsy-craft-party",
 	    width: 	250,
+	    _height: 300,
 	    _name: "Everywhere Comments",
 	    _description: "Shows 50 recent comments."
 	  };
@@ -24,144 +25,6 @@
 	  };
 	</script>
 	<LINK REL=StyleSheet HREF="mup_reset.css" TYPE="text/css" MEDIA=screen>
-	<script id="mupcss" type="text/javascript" charset="utf-8">
-		// Dynamic variables in CSS via JavaScript
-		// Default Variables
-		var	MUPCSS_PBACKGROUND = '#CA4D00',
-				MUPCSS_PTEXT = '#F2F2F2',
-				MUPCSS_SBACKGROUND = '#f2f2f2',
-				MUPCSS_STEXT = '#000',
-				MUPCSS_LINK = '#f2f2f2';
-				MUPCSS_WIDTH = $parameters.width;
-		
-		function get_css() {
-			var the_css = '\
-			.mup-widget {\
-				font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
-				font-size: 12px;\
-			}\
-			#mup-widget-1 .mup-doc,\
-			#mup-widget-1 .mup-hd a,\
-			#mup-widget-1 h3,\
-			#mup-widget-1 h4 {\
-				background: MUPCSS_PBACKGROUND;\
-				color: MUPCSS_PTEXT;\
-			}\
-			#mup-widget-1 .mup-doc {\
-				border-radius: 5px;\
-				-moz-border-radius: 5px;\
-				-webkit-border-radius: 5px;\
-				width: MUPCSS_WIDTH;\
-			}\
-			#mup-widget-1 .mup-hd {\
-				padding: 10px 8px;\
-				overflow: hidden;\
-			}\
-			.mup-widget h3,\
-			.mup-widget h4,\
-			.mup-widget p {\
-				line-height: 1.2 !important;\
-				//margin: 0px !important;\
-				//padding: 0px !important;\
-			}\
-			#mup-widget-1 h3 {\
-				font-size: 16px;\
-				font-weight: bold;\
-			}\
-			#mup-widget-1 h4 {\
-				font-size: 13px;\
-				font-weight: normal;\
-			}\
-			#mup-widget-1 .mup-bd,\
-			#mup-widget-1 .mup-timeline,\
-			#mup-widget-1 .mup-bd p {\
-				color: MUPCSS_STEXT;\
-			}\
-			.mup-bd {\
-				padding: 0 1px;\
-			}\
-			a,\
-			a:active,\
-			a:visited,\
-			a:hover {\
-				color: MUPCSS_LINK;\
-				text-decoration: none;\
-			}\
-			#mup-widget-1 .mup-timeline {\
-				background: MUPCSS_SBACKGROUND;\
-				list-style: none;\
-				padding: 0;\
-				margin: 0;\
-				height: 300px;\
-				overflow-y: auto;\
-				color: MUPCSS_STEXT;\
-			}\
-			#mup-widget-1 .mup-timeline > li {\
-				position: relative;\
-				border-top-color: #DDD;\
-				border-top-style: dotted;\
-				border-top-width: 1px;\
-				padding: 6px 8px;\
-			}\
-			#mup-widget-1 .mup-when,\
-			#mup-widget-1 .mup-what {\
-				\
-			}\
-			#mup-widget-1 .mup-time {\
-				font-size: 9px;\
-			}\
-			#mup-widget-1 .mup-comment {\
-				word-wrap: break-word;\
-			}\
-			#mup-widget-1 .mup-author {\
-				\
-			}\
-			#mup-widget-1 .mup-ft {\
-				//border-top-color: #DDD;\
-				//border-top-style: solid;\
-				//border-top-width: 1px;\
-			}\
-			#mup-widget-1 .mup-ft .mup-getwdgt {\
-				padding: 6px 8px;\
-				font-size: 8px;\
-				text-align: center;\
-				//border-top-color: #F2F2F2;\
-				//border-top-style: solid;\
-				//border-top-width: 1px;\
-				background: #0A0A0A;\
-				-webkit-border-bottom-right-radius: 5px;\
-				-webkit-border-bottom-left-radius: 5px;\
-				-moz-border-radius-bottomright: 5px;\
-				-moz-border-radius-bottomleft: 5px;\
-				border-bottom-right-radius: 5px;\
-				border-bottom-left-radius: 5px;\
-			}\
-			#mup-widget-1 .mup-ft .mup-logo {\
-				padding: 6px 8px;\
-			}\
-			';
-
-			return the_css;
-		}
-		
-		function write_css() {
-			var js2css = get_css();
-			
-			// Replace variables with code
-			js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
-			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
-			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_STEXT);
-			js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
-			js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
-			js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
-			js2css = js2css.replace(/MUPCSS_WIDTH/g, MUPCSS_WIDTH);
-			
-			// Write it
-			document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
-		}
-		
-		write_css();
-	</script>
 	<script type="text/javascript" charset="utf-8">
 		with_jquery(function($) {
 			// Set global variables
@@ -358,6 +221,142 @@
 		      });
 		    }
 		  });
+		  // Dynamic variables in CSS via JavaScript
+  		// Default Variables
+  		var	MUPCSS_PBACKGROUND = '#CA4D00',
+  				MUPCSS_PTEXT = '#F2F2F2',
+  				MUPCSS_SBACKGROUND = '#f2f2f2',
+  				MUPCSS_STEXT = '#000',
+  				MUPCSS_LINK = '#f2f2f2';
+  				MUPCSS_WIDTH = $parameters.width;
+
+  		function get_css() {
+  			var the_css = '\
+  			.mup-widget {\
+  				font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
+  				font-size: 12px;\
+  			}\
+  			#mup-widget-1 .mup-doc,\
+  			#mup-widget-1 .mup-hd a,\
+  			#mup-widget-1 h3,\
+  			#mup-widget-1 h4 {\
+  				background: MUPCSS_PBACKGROUND;\
+  				color: MUPCSS_PTEXT;\
+  			}\
+  			#mup-widget-1 .mup-doc {\
+  				border-radius: 5px;\
+  				-moz-border-radius: 5px;\
+  				-webkit-border-radius: 5px;\
+  				width: MUPCSS_WIDTH;\
+  			}\
+  			#mup-widget-1 .mup-hd {\
+  				padding: 10px 8px;\
+  				overflow: hidden;\
+  			}\
+  			.mup-widget h3,\
+  			.mup-widget h4,\
+  			.mup-widget p {\
+  				line-height: 1.2 !important;\
+  				//margin: 0px !important;\
+  				//padding: 0px !important;\
+  			}\
+  			#mup-widget-1 h3 {\
+  				font-size: 16px;\
+  				font-weight: bold;\
+  			}\
+  			#mup-widget-1 h4 {\
+  				font-size: 13px;\
+  				font-weight: normal;\
+  			}\
+  			#mup-widget-1 .mup-bd,\
+  			#mup-widget-1 .mup-timeline,\
+  			#mup-widget-1 .mup-bd p {\
+  				color: MUPCSS_STEXT;\
+  			}\
+  			.mup-bd {\
+  				padding: 0 1px;\
+  			}\
+  			a,\
+  			a:active,\
+  			a:visited,\
+  			a:hover {\
+  				color: MUPCSS_LINK;\
+  				text-decoration: none;\
+  			}\
+  			#mup-widget-1 .mup-timeline {\
+  				background: MUPCSS_SBACKGROUND;\
+  				list-style: none;\
+  				padding: 0;\
+  				margin: 0;\
+  				height: 300px;\
+  				overflow-y: auto;\
+  				color: MUPCSS_STEXT;\
+  			}\
+  			#mup-widget-1 .mup-timeline > li {\
+  				position: relative;\
+  				border-top-color: #DDD;\
+  				border-top-style: dotted;\
+  				border-top-width: 1px;\
+  				padding: 6px 8px;\
+  			}\
+  			#mup-widget-1 .mup-when,\
+  			#mup-widget-1 .mup-what {\
+  				\
+  			}\
+  			#mup-widget-1 .mup-time {\
+  				font-size: 9px;\
+  			}\
+  			#mup-widget-1 .mup-comment {\
+  				word-wrap: break-word;\
+  			}\
+  			#mup-widget-1 .mup-author {\
+  				\
+  			}\
+  			#mup-widget-1 .mup-ft {\
+  				//border-top-color: #DDD;\
+  				//border-top-style: solid;\
+  				//border-top-width: 1px;\
+  			}\
+  			#mup-widget-1 .mup-ft .mup-getwdgt {\
+  				padding: 6px 8px;\
+  				font-size: 8px;\
+  				text-align: center;\
+  				//border-top-color: #F2F2F2;\
+  				//border-top-style: solid;\
+  				//border-top-width: 1px;\
+  				background: #0A0A0A;\
+  				-webkit-border-bottom-right-radius: 5px;\
+  				-webkit-border-bottom-left-radius: 5px;\
+  				-moz-border-radius-bottomright: 5px;\
+  				-moz-border-radius-bottomleft: 5px;\
+  				border-bottom-right-radius: 5px;\
+  				border-bottom-left-radius: 5px;\
+  			}\
+  			#mup-widget-1 .mup-ft .mup-logo {\
+  				padding: 6px 8px;\
+  			}\
+  			';
+
+  			return the_css;
+  		}
+
+  		function write_css() {
+  			var js2css = get_css();
+
+  			// Replace variables with code
+  			js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
+  			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
+  			js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_STEXT);
+  			js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
+  			js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
+  			js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
+  			js2css = js2css.replace(/MUPCSS_WIDTH/g, MUPCSS_WIDTH);
+
+  			// Write it
+  			$('head').append('<style type="text/css" media="screen">'+ js2css +'</style>');
+  		}
+
+  		write_css();
 		});
 	</script>
 </head>
