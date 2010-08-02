@@ -6,8 +6,8 @@
 	<script id="config" type="text/javascript" charset="utf-8">
 	  var $parameters = {
 	    urlname: "etsy-craft-party",
-	    width: 180,
-			_height: 300,
+	    width: 200,
+			_height: 200,
 	    _name: "Everywhere Badge",
 	    _description: "Shows past meetups and aggregates tagged content from other services."
 	  };
@@ -36,10 +36,11 @@
 								'<div class="mup-bd">' +
 									'<h3>' + container.name + '</h3>' +
 									'<span class="mup-stats">' + (container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + container.member_count + '<span class="mup-tlabel"> PEOPLE</span></span>' +
-									'<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-go" style="float:right;margin-right:2px;">GO</span></div>' +
+									'<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">GO</span></div>' +
 								'</div>' +
 								'<div class="mup-ft">' +
 									'<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>' +
+									'<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>' +
 								'</div>' +
 							'</div>'
 							);
@@ -52,7 +53,8 @@
 					MUPCSS_PTEXT = '#f2f2f2',
 					MUPCSS_SBACKGROUND = '#333',
 					MUPCSS_STEXT = '#f2f2f2',
-					MUPCSS_LINK = '#26B';
+					MUPCSS_LINK = '#f2f2f2';
+					MUPCSS_WIDTH = $parameters.width;
 
 			function get_css() {
 				var the_css = '\
@@ -69,8 +71,8 @@
 					border-radius: 5px;\
 					-moz-border-radius: 5px;\
 					-webkit-border-radius: 5px;\
-					width: 180px;\
-					padding: 8px;\
+					width: MUPCSS_WIDTH;\
+					padding-top: 8px;\
 				}\
 				#mup-widget-1 .mup-hd {\
 					padding: 10px 8px;\
@@ -80,17 +82,13 @@
 				.mup-widget h4,\
 				.mup-widget p {\
 					line-height: 1.2 !important;\
-					margin: 0px !important;\
-					padding: 0px !important;\
 					text-align: center;\
 				}\
 				#mup-widget-1 h3 {\
 					font-size: 15px;\
-					font-weight: normal;\
 				}\
 				#mup-widget-1 h4 {\
 					font-size: 13px;\
-					font-weight: normal;\
 				}\
 				#mup-widget-1 h5 {\
 					font-size: 20px;\
@@ -112,9 +110,7 @@
 					-moz-border-radius: 5px;\
 					-webkit-border-radius: 5px;\
 					padding: 8px 6px;\
-					background: MUPCSS_SBACKGROUND;\
-				}\
-				#mup-widget-1 .mup-timeline {\
+					margin: 0 8px;\
 					background: MUPCSS_SBACKGROUND;\
 				}\
 				a,\
@@ -124,54 +120,9 @@
 					color: MUPCSS_LINK;\
 					text-decoration: none;\
 				}\
-				.mup-timeline {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0;\
-					height: 300px;\
-					overflow-y: auto;\
-				}\
-				.mup-timeline > li {\
-					position: relative;\
-					border-top-color: #DDD;\
-					border-top-style: dotted;\
-					border-top-width: 1px;\
-					padding: 6px 8px;\
-				}\
-				.mup-list {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0 8px;\
-					background: MUPCSS_SBACKGROUND;\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-				}\
-				.mup-list > li {\
-					padding: 12px 6px;\
-					border-top-color: MUPCSS_PBACKGROUND;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
-				}\
-				.mup-ft {\
-					//border-top-color: #DDD;\
-					//border-top-style: solid;\
-					//border-top-width: 1px;\
-					padding: 6px 0 0;\
-				}\
-				.mup-ft div {\
-					//padding: 6px 0;\
-					//font-size: 8px;\
-					//text-align: center;\
-				}\
 				.mup-tlabel {\
 					font-size: 8px;\
 					color: #AAA;\
-				}\
-				.mup-rsvp {\
-					display:block;\
-					margin-bottom: 6px;\
-					text-align: center;\
 				}\
 				.mup-stats {\
 					display: block;\
@@ -184,22 +135,6 @@
 					-webkit-border-radius: 3px;\
 				}\
 				.mup-button {\
-					display:block;\
-					margin: 0 auto;\
-					padding: 6px 6px;\
-					background-color: MUPCSS_LINK;\
-					background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));\
-					background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-					font-size: 15px;\
-					font-weight: bold;\
-					color: MUPCSS_PTEXT !important;\
-					text-align: center;\
-					border: 1px solid #0d2748;\
-				}\
-				.mup-go {\
 					display:block;\
 					margin: 0 auto;\
 					padding: 2px 4px;\
@@ -216,16 +151,19 @@
 					border: 1px solid #0d2748;\
 				}\
 				.mup-ft .mup-getwdgt {\
-					padding: 6px 0 0;\
+					padding: 3px 0;\
 					font-size: 8px;\
 					text-align: center;\
-					color: MUPCSS_SBACKGROUND;\
-					border-top-color: MUPCSS_SBACKGROUND;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
+					background: #0A0A0A;\
+					-webkit-border-bottom-right-radius: 5px;\
+  				-webkit-border-bottom-left-radius: 5px;\
+  				-moz-border-radius-bottomright: 5px;\
+  				-moz-border-radius-bottomleft: 5px;\
+  				border-bottom-right-radius: 5px;\
+  				border-bottom-left-radius: 5px;\
 				}\
 				.mup-ft .mup-logo {\
-					padding: 0 8px 0 0;\
+					padding: 6px 8px;\
 				}\
 				';
 				return the_css;
@@ -240,6 +178,7 @@
 				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
 				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
 				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
+				js2css = js2css.replace(/MUPCSS_WIDTH/g, MUPCSS_WIDTH);
 
 				// Write it
 				$('head').append('<style type="text/css" media="screen">'+ js2css +'</style>');
