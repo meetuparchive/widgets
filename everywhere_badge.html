@@ -1,81 +1,116 @@
-<!DOCTYPE html>
 <html>
 <head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 	<script src="local.js"></script>
 	<script src="api_key.js"></script>
-</head>
-<body>
-	
-		<script id="mupcss" type="text/javascript" charset="utf-8">
+	<script id="config" type="text/javascript" charset="utf-8">
+	  var $parameters = {
+	    urlname: "etsy-craft-party",
+	    width: 200,
+			_height: 200,
+	    _name: "Everywhere Badge",
+	    _description: "Shows past meetups and aggregates tagged content from other services."
+	  };
+	  var $queries = {
+	    containers: function() { 
+	      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+	    }
+	  };
+	</script>
+	<link rel=stylesheet href="mup_reset.css" type="text/css" media=screen>
+	<script type="text/javascript" charset="utf-8">
+		with_jquery(function($) {
+			// Functions
+			function addLink( content, link ) {
+				return '<a href="' + link + '">' + content + '</a>';
+			}
+
+			$.getJSON($queries.containers(), function(data) {
+		    if (data.status && data.status.match(/^200/) == null) {
+			       alert(data.status + ": " + data.details);
+		    } else {
+				container = data.results[0];
+					$(document).ready(function() {
+						$('#mup-widget-2').append(
+							'<div class="mup-doc">' +
+								'<div class="mup-bd">' +
+									'<h3>' + container.name + '</h3>' +
+									'<span class="mup-stats">' + (container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + container.member_count + '<span class="mup-tlabel"> PEOPLE</span></span>' +
+									'<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">GO</span></div>' +
+								'</div>' +
+								'<div class="mup-ft">' +
+									'<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>' +
+									'<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>' +
+								'</div>' +
+							'</div>'
+							);
+					});
+		    }
+		  });
 			// Dynamic variables in CSS via JavaScript
 			// Default Variables
 			var	MUPCSS_PBACKGROUND = '#1A1A1A',
 					MUPCSS_PTEXT = '#f2f2f2',
 					MUPCSS_SBACKGROUND = '#333',
 					MUPCSS_STEXT = '#f2f2f2',
-					MUPCSS_LINK = '#26B';
-			
+					MUPCSS_LINK = '#f2f2f2';
+					MUPCSS_WIDTH = $parameters.width;
+
 			function get_css() {
 				var the_css = '\
 				.mup-widget {\
 					font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
 					font-size: 12px;\
 				}\
-				#mup-widget-1 .mup-doc,\
-				#mup-widget-1 .mup-hd a {\
+				#mup-widget-2 .mup-doc,\
+				#mup-widget-2 .mup-hd a {\
 					background: MUPCSS_PBACKGROUND;\
 					color: MUPCSS_PTEXT;\
 				}\
-				#mup-widget-1 .mup-doc {\
+				#mup-widget-2 .mup-doc {\
 					border-radius: 5px;\
 					-moz-border-radius: 5px;\
 					-webkit-border-radius: 5px;\
-					width: 179px;\
-					padding: 8px;\
+					width: MUPCSS_WIDTH;\
+					padding-top: 8px;\
 				}\
-				#mup-widget-1 .mup-hd {\
+				#mup-widget-2 .mup-hd {\
 					padding: 10px 8px;\
 					overflow: hidden;\
 				}\
-				.mup-widget h3,\
-				.mup-widget h4,\
-				.mup-widget p {\
+				#mup-widget-2 h3,\
+				#mup-widget-2 h4,\
+				#mup-widget-2 p {\
 					line-height: 1.2 !important;\
-					margin: 0px !important;\
-					padding: 0px !important;\
 					text-align: center;\
 				}\
-				#mup-widget-1 h3 {\
+				#mup-widget-2 h3 {\
 					font-size: 15px;\
-					font-weight: normal;\
 				}\
-				#mup-widget-1 h4 {\
+				#mup-widget-2 h4 {\
 					font-size: 13px;\
-					font-weight: normal;\
 				}\
-				#mup-widget-1 h5 {\
+				#mup-widget-2 h5 {\
 					font-size: 20px;\
 					margin: 0 auto;\
 					text-align: center;\
 					letter-spacing: -1px;\
 					text-shadow: 1px 1px 1px MUPCSS_PBACKGROUND;\
 				}\
-				.mup-widget p {\
+				#mup-widget-2 .mup-widget p {\
 					text-align: center;\
 				}\
-				#mup-widget .mup-bd,\
-				#mup-widget .mup-timeline,\
-				#mup-widget .mup-bd p {\
+				#mup-widget-2 .mup-bd,\
+				#mup-widget-2 .mup-timeline,\
+				#mup-widget-2 .mup-bd p {\
 					color: MUPCSS_STEXT;\
 				}\
-				.mup-bd {\
+				#mup-widget-2 .mup-bd {\
 					border-radius: 5px;\
 					-moz-border-radius: 5px;\
 					-webkit-border-radius: 5px;\
 					padding: 8px 6px;\
-					background: MUPCSS_SBACKGROUND;\
-				}\
-				#mup-widget-1 .mup-timeline {\
+					margin: 0 8px;\
 					background: MUPCSS_SBACKGROUND;\
 				}\
 				a,\
@@ -85,56 +120,11 @@
 					color: MUPCSS_LINK;\
 					text-decoration: none;\
 				}\
-				.mup-timeline {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0;\
-					height: 300px;\
-					overflow-y: auto;\
-				}\
-				.mup-timeline > li {\
-					position: relative;\
-					border-top-color: #DDD;\
-					border-top-style: dotted;\
-					border-top-width: 1px;\
-					padding: 6px 8px;\
-				}\
-				.mup-list {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0 8px;\
-					background: MUPCSS_SBACKGROUND;\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-				}\
-				.mup-list > li {\
-					padding: 12px 6px;\
-					border-top-color: MUPCSS_PBACKGROUND;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
-				}\
-				.mup-ft {\
-					//border-top-color: #DDD;\
-					//border-top-style: solid;\
-					//border-top-width: 1px;\
-					padding: 6px 0 0;\
-				}\
-				.mup-ft div {\
-					//padding: 6px 0;\
-					//font-size: 8px;\
-					//text-align: center;\
-				}\
-				.mup-tlabel {\
+				#mup-widget-2 .mup-tlabel {\
 					font-size: 8px;\
 					color: #AAA;\
 				}\
-				.mup-rsvp {\
-					display:block;\
-					margin-bottom: 6px;\
-					text-align: center;\
-				}\
-				.mup-stats {\
+				#mup-widget-2 .mup-stats {\
 					display: block;\
 					margin: 6px 0;\
 					padding: 4px;\
@@ -144,23 +134,7 @@
 					-moz-border-radius: 3px;\
 					-webkit-border-radius: 3px;\
 				}\
-				.mup-button {\
-					display:block;\
-					margin: 0 auto;\
-					padding: 6px 6px;\
-					background-color: MUPCSS_LINK;\
-					background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));\
-					background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-					font-size: 15px;\
-					font-weight: bold;\
-					color: MUPCSS_PTEXT !important;\
-					text-align: center;\
-					border: 1px solid #0d2748;\
-				}\
-				.mup-go {\
+				#mup-widget-2 .mup-button {\
 					display:block;\
 					margin: 0 auto;\
 					padding: 2px 4px;\
@@ -176,84 +150,44 @@
 					text-align: center;\
 					border: 1px solid #0d2748;\
 				}\
-				.mup-ft .mup-getwdgt {\
-					padding: 6px 0 0;\
+				#mup-widget-2 .mup-ft .mup-getwdgt {\
+					padding: 3px 0;\
 					font-size: 8px;\
 					text-align: center;\
-					color: MUPCSS_SBACKGROUND;\
-					border-top-color: MUPCSS_SBACKGROUND;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
+					background: #0A0A0A;\
+					-webkit-border-bottom-right-radius: 5px;\
+  				-webkit-border-bottom-left-radius: 5px;\
+  				-moz-border-radius-bottomright: 5px;\
+  				-moz-border-radius-bottomleft: 5px;\
+  				border-bottom-right-radius: 5px;\
+  				border-bottom-left-radius: 5px;\
 				}\
-				.mup-ft .mup-logo {\
-					padding: 0 8px 0 0;\
+				#mup-widget-2 .mup-ft .mup-logo {\
+					padding: 6px 8px;\
 				}\
 				';
 				return the_css;
 			}
-			
+
 			function write_css() {
 				var js2css = get_css();
-				
+
 				// Replace variables with code
 				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
 				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
 				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
 				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
 				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
-				
+				js2css = js2css.replace(/MUPCSS_WIDTH/g, MUPCSS_WIDTH);
+
 				// Write it
-				document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
+				$('head').append('<style type="text/css" media="screen">'+ js2css +'</style>');
 			}
 			write_css();
-		</script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-		<script id="config" type="text/javascript" charset="utf-8">
-		  var $parameters = {
-		    urlname: "etsy-craft-party",
-		    width: 300,
-		    height: 400,
-		    _name: "Everywhere Mashup",
-		    _description: "Shows past meetups and aggregates tagged content from other services."
-		  };
-		  var $queries = {
-		    containers: function() { 
-		      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
-		    }
-		  };
-		</script>
-		<script type="text/javascript" charset="utf-8">
-			// Set global variables
-			
-			// Functions
-			function onload() {
-				$('body').append('<div id="mup-widget-1" class="mup-widget"><div class="mup-doc"></div></div>');
-			}
-			onload();
-			
-			function addLink( content, link ) {
-				return '<a href="' + link + '">' + content + '</a>';
-			}
-
-			$.getJSON($queries.containers(), function(data) {
-		    if (data.status && data.status.match(/^200/) == null) {
-		       alert(data.status + ": " + data.details);
-		    } else {
-				container = data.results[0];
-					$(document).ready(function() {
-						$('.mup-doc').append(
-							'<div class="mup-bd">' +
-								'<h3>' + container.name + '</h3>' +
-								'<span class="mup-stats">' + (container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + container.member_count + '<span class="mup-tlabel"> PEOPLE</span></span>' +
-								'<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-go" style="float:right;margin-right:2px;">GO</span></div>' +
-							'</div>' +
-							'<div class="mup-ft">' +
-								'<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>' +
-							'</div>'
-							);
-					});
-		    }
-		  });
-		</script>
+		});
+	</script>
+</head>
+<body>
+	<div id="mup-widget-2" class="mup-widget"></div>
 </body>
 </html>
