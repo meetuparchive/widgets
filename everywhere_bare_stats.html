@@ -113,7 +113,7 @@
 			}
 		
 			function getFormattedCity( city, state ) {
-				var geo = city + ', ' + state;
+				var geo = city + (state == undefined ? "" : ", " + state);
 				return geo;
 			}
 		
@@ -290,10 +290,12 @@
 				}\
 				#mup-widget-3 .mup-city {\
 					padding-left: 8px;\
+					display: inline-block;\
 				}\
 				#mup-widget-3 .mup-venue {\
 					padding-left: 8px;\
 					font-size: 10px;\
+					display: inline-block;\
 				}\
 				#mup-widget-3 .mup-badge{\
 					display: block;\
