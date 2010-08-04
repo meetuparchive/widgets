@@ -1,196 +1,71 @@
-<!DOCTYPE html>
 <html>
 <head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 	<script src="local.js"></script>
 	<script src="api_key.js"></script>
-</head>
-<body>
+	<script id="config" type="text/javascript" charset="utf-8">
+	   var $parameters = {
+	      _width: 300,
+	      _height: 400,
+	      event_id: 9013,
+	      _name: "Everywhere Promote Event",
+	      _description: "Shows details and countdown until the start of specified event."
+	   };
+	   var $queries = {
+	      event: function() {
+	         return api_call("/ew/events", {event_id: $parameters.event_id, fields: "rsvp_count"});
+	      }
+	   };
+	</script>
+	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
+	<script type="text/javascript" charset="utf-8">
+		
+		function initCountdown( mupTimeMillis ) {
+		
+			window.muptimer = parseFloat( mupTimeMillis );
+			var end = 0;
+			var refresh = 1000; // Refresh rate in milliseconds
+		
+			if( window.muptimer >= end ) {
+				muptime = setTimeout( 'updateCountdown( true )', refresh );
+			} else {
+				updateCountdown( false );
+			}
+		}
 	
-		<script id="mupcss" type="text/javascript" charset="utf-8">
-			// Dynamic variables in CSS via JavaScript
-			// Default Variables
-			var	MUPCSS_PBACKGROUND = '#1A1A1A',
-					MUPCSS_PTEXT = '#f2f2f2',
-					MUPCSS_SBACKGROUND = '#333',
-					MUPCSS_STEXT = '#f2f2f2',
-					MUPCSS_LINK = '#26B';
+		function updateCountdown( state ) {
+			if( state ) {
+				// Start time has not yet been reached
+				// Calculate the number of days left
+				var days=Math.floor(window.muptimer / 86400000); 
+				// After deducting the days calculate the number of hours left
+				var hours = Math.floor((window.muptimer - (days * 86400000 ))/3600000);
+				// After days and hours , how many minutes are left 
+				var minutes = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ))/60000);
+				// Finally how many seconds left after removing days, hours and minutes. 
+				var secs = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ) - (minutes*60000)) / 1000);
 			
-			function get_css() {
-				var the_css = '\
-				.mup-widget {\
-					font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
-					font-size: 12px;\
-				}\
-				#mup-widget-1 .mup-doc,\
-				#mup-widget-1 .mup-hd a {\
-					background: MUPCSS_PBACKGROUND;\
-					color: MUPCSS_PTEXT;\
-				}\
-				#mup-widget-1 .mup-doc {\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-					width: 195px;\
-				}\
-				#mup-widget-1 .mup-hd {\
-					padding: 10px 8px;\
-					overflow: hidden;\
-				}\
-				.mup-widget h3,\
-				.mup-widget h4,\
-				.mup-widget p {\
-					line-height: 1.2 !important;\
-					margin: 0px !important;\
-					padding: 0px !important;\
-					text-align: center;\
-				}\
-				#mup-widget-1 h3 {\
-					font-size: 15px;\
-					font-weight: normal;\
-				}\
-				#mup-widget-1 h4 {\
-					font-size: 13px;\
-					font-weight: normal;\
-				}\
-				#mup-widget-1 h5 {\
-					font-size: 20px;\
-					margin: 0 auto;\
-					text-align: center;\
-					letter-spacing: -1px;\
-					text-shadow: 1px 1px 1px MUPCSS_PBACKGROUND;\
-				}\
-				.mup-widget p {\
-					text-align: center;\
-				}\
-				#mup-widget .mup-bd,\
-				#mup-widget .mup-timeline,\
-				#mup-widget .mup-bd p {\
-					color: MUPCSS_STEXT;\
-				}\
-				.mup-bd {\
-					//margin: 0 8px;\
-					//padding: 12px 6px;\
-				}\
-				#mup-widget-1 .mup-timeline {\
-					background: MUPCSS_SBACKGROUND;\
-				}\
-				a,\
-				a:active,\
-				a:visited,\
-				a:hover {\
-					color: MUPCSS_LINK;\
-					text-decoration: none;\
-				}\
-				.mup-timeline {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0;\
-					height: 300px;\
-					overflow-y: auto;\
-				}\
-				.mup-timeline > li {\
-					position: relative;\
-					border-top-color: #DDD;\
-					border-top-style: dotted;\
-					border-top-width: 1px;\
-					padding: 6px 8px;\
-				}\
-				.mup-list {\
-					list-style: none;\
-					padding: 0;\
-					margin: 0 8px;\
-					background: MUPCSS_SBACKGROUND;\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-				}\
-				.mup-list > li {\
-					padding: 12px 6px;\
-					border-top-color: MUPCSS_PBACKGROUND;\
-					border-top-style: solid;\
-					border-top-width: 1px;\
-				}\
-				.mup-ft {\
-					//border-top-color: #DDD;\
-					//border-top-style: solid;\
-					//border-top-width: 1px;\
-					padding: 6px 8px;\
-				}\
-				.mup-ft div {\
-					padding: 6px 8px;\
-					font-size: 8px;\
-					text-align: center;\
-				}\
-				.mup-tlabel {\
-					font-size: 8px;\
-					color: #AAA;\
-				}\
-				.mup-rsvp {\
-					display:block;\
-					margin-bottom: 6px;\
-					text-align: center;\
-				}\
-				.mup-button {\
-					display:block;\
-					margin: 0 auto;\
-					padding: 6px 6px;\
-					background-color: MUPCSS_LINK;\
-					background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));\
-					background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);\
-					border-radius: 5px;\
-					-moz-border-radius: 5px;\
-					-webkit-border-radius: 5px;\
-					font-size: 15px;\
-					font-weight: bold;\
-					color: MUPCSS_PTEXT !important;\
-					text-align: center;\
-					border: 1px solid #0d2748;\
-				}\
-				';
-
-				return the_css;
-			}
+				var update = days + '<span class="mup-tlabel"> DAYS &nbsp; </span>' + hours + '<span class="mup-tlabel"> HR &nbsp; </span>' + minutes + '<span class="mup-tlabel"> MIN &nbsp; </span>';
+				// add to end of update to show seconds
+				// + secs + '<span class="mup-tlabel"> SEC</span>'
 			
-			function write_css() {
-				var js2css = get_css();
-				// Replace variables with code
-				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
-				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
-				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
-				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
-				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
-				// Write it
-				document.write('<style type="text/css" media="screen">'+ js2css +'</style>');
+				document.getElementById('timer').innerHTML = update;
+				window.muptimer = window.muptimer - 1000;
+				tt=initCountdown( window.muptimer );
 			}
-			write_css();
-		</script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-		<script id="config" type="text/javascript" charset="utf-8">
-         
-         var $parameters = {
-            urlname: "etsy-craft-party",
-            width: 300,
-            height: 400,
-            event_id: 12992,
-            _name: "Everywhere Mashup",
-            _description: "Shows past meetups and aggregates tagged content from other services."
-         };
-         var $queries = {
-            event: function() {
-               return api_call("/ew/events", {event_id: $parameters.event_id, fields: "rsvp_count"});
-            }
-         };
-      </script>
-		<script type="text/javascript" charset="utf-8">
+			else if ( !state ) {
+				// Event start time has been reached or is in the past
+				console.info('Meetup has begun or is in the past. Do something here!');
+				document.getElementById('mup-hd').innerHTML = 'Event has past. ' + addLink( 'Find More.', 'http://www.meetup.com/everywhere/' );
+				ocument.getElementById('mup-hd').style.textAlign = 'center';
+			}
+		}
+		
+		with_jquery(function($) {
 			// Set global variables
 			var resultCount = 0;
-			
+		
 			// Functions
-			function onload() {
-				$('body').append('<div id="mup-widget-1" class="mup-widget"><div class="mup-doc"></div></div>');
-			}
-			onload();
-			
 			function getFormattedAddress( _venue, _street, _city, _state, _zip ) {
 				if ( _venue != null ) {
 					var  venue = _venue;
@@ -199,28 +74,28 @@
 					var venue = 'Venue TBD';
 					var address = venue;
 				}
-				
+			
 				if ( _street != null ) {
 					var street = _street;
 					address += '<br />' + street;
 				} else {
 					var street = '';
 				}
-				
+			
 				if ( _city != null ) {
 					var city = _city;
 					address += '<br />' + city;
 				} else {
 					var city = '';
 				}
-				
+			
 				if ( _state != null ) {
 					var state = _state;
 					address += ', ' + state;
 				} else {
 					var state = '';
 				}
-				
+			
 				if ( _zip != null ) {
 					var zip = _zip;
 					address += ' ' + zip;
@@ -229,10 +104,10 @@
 				}
 				return address;
 			}
-			
+		
 			function getFormattedDate( millis ) {
 				var date = new Date( millis );
-				
+			
 				function addLeadingZero ( num ) {
 					if ( num < 10 ) {
 						var day = '0' + num;
@@ -241,12 +116,12 @@
 					}
 					return day;
 				}
-				
+			
 				function getTwoDigitYear ( yr ) {
 					var year = yr.substring(2,4);
 					return year;
 				}
-				
+			
 				function getFullMonth ( mo ) {
 					switch ( mo ) {
 						case 0:
@@ -277,17 +152,17 @@
 							return ("Undef");
 					}
 				}
-				
+			
 				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
 				return formattedTime;
 			}
-			
+		
 			function getFormattedTime( millis ) {
 				var time = new Date( millis );
 				var hours = time.getHours();
 				var min = time.getMinutes();
 				var ampm = '';
-				
+			
 				if( min < 10 ) {
 					min = '0' + min;
 				}
@@ -302,48 +177,11 @@
 				var formattedTime = hours + ':' + min + ' ' + ampm;
 				return formattedTime;
 			}
-			
+		
 			function addLink( content, link ) {
 				return '<a href="' + link + '">' + content + '</a>';
 			}
-			
-			function initCountdown( mupTimeMillis ) {
-				
-				window.muptimer = parseFloat( mupTimeMillis );
-				var end = 0;
-				var refresh = 1000; // Refresh rate in milliseconds
-				
-				if( window.muptimer >= end ) {
-					muptime = setTimeout( 'updateCountdown( "true" )', refresh );
-				} else {
-					updateCountdown( false );
-				}
-			}
-			
-			function updateCountdown( state ) {
-				if( state ) {
-					// Start time has not yet been reached
-					// Calculate the number of days left
-					var days=Math.floor(window.muptimer / 86400000); 
-					// After deducting the days calculate the number of hours left
-					var hours = Math.floor((window.muptimer - (days * 86400000 ))/3600000);
-					// After days and hours , how many minutes are left 
-					var minutes = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ))/60000);
-					// Finally how many seconds left after removing days, hours and minutes. 
-					var secs = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ) - (minutes*60000)) / 1000);
-					
-					var update = days + '<span class="mup-tlabel"> DAYS &nbsp; </span>' + hours + '<span class="mup-tlabel"> HR &nbsp; </span>' + minutes + '<span class="mup-tlabel"> MIN &nbsp; </span>' + secs + '<span class="mup-tlabel"> SEC</span>';
-					
-					document.getElementById('timer').innerHTML = update;
-					window.muptimer = window.muptimer - 1000;
-					tt=initCountdown( window.muptimer );
-				}
-				else if ( !state ) {
-					// Event start time has been reached or is in the past
-					console.info('Meetup has begun or is in the past. Do something here!');
-				}
-			}
-			
+		
 			$.getJSON($queries.event(), function(data) {
 
 		    //$("#mup_everywhere_bare_stats").width($parameters.width);
@@ -355,21 +193,23 @@
 					var eventTime = event.time;
 					
 					$(document).ready(function() {
-						$('.mup-doc').append(
-							'<div class="mup-hd">' +
-								'<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>' +
-								'<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>' +
-							'</div>' +
-							'<div class="mup-bd"><ul class="mup-list">' +
-								'<li><p><h5>' + addLink( event.container.name + ' Meetup', event.meetup_url )+ '</h5></p></li>' +
-								'<li><p>' + getFormattedDate( event.time ) + ' @ ' + getFormattedTime( event.time ) + '</p><br /><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p></li>' +
-								'<li><span class="mup-rsvp">' + addLink( event.rsvp_count + ' people', event.meetup_url ) + '</span>' +
-								addLink ( '<span class="mup-button" style="width:140px; margin-bottom:6px;">Interested?</span>', event.meetup_url ) +
-								'<span class="mup-rsvp">Not near ' + event.city + '?<br/>' + addLink( 'Find a ' + event.container.name + ' meetup near you!', 'http://www.meetup.com/' + event.container.urlname + '/' ) + '</li>' +
-							'</ul></div>' +
-							'<div class="mup-ft">' +
-								'<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png">' +
-							'</div>'
+						$('#mup-widget-4').append(
+							'<div class="mup-doc">' +
+								'<div id="mup-hd">' +
+									'<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>' +
+									'<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>' +
+								'</div>' +
+								'<div class="mup-bd"><ul class="mup-list">' +
+									'<li><p><h5>' + addLink( event.container.name + ' Meetup', event.meetup_url )+ '</h5></p></li>' +
+									'<p>' + getFormattedDate( event.time ) + ' @ ' + getFormattedTime( event.time ) + '</p><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p><br />' +
+									'<li><span class="mup-rsvp">' + event.rsvp_count + ' people</span>' +
+									addLink ( '<span class="mup-button" style="width:140px;">Interested?</span>', event.meetup_url ) + '</li>' +
+									'<li><span class="mup-rsvp">Not near ' + event.city + '?</span>' + addLink( '<span class="mup-button" style="width:140px;">Find a meetup near you!</span>', 'http://www.meetup.com/' + event.container.urlname + '/' ) + '</li>' +
+								'</ul></div>' +
+								'<div class="mup-ft">' +
+									'<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>' +
+									'<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.dev.meetup.com/meetup_api/foundry/' ) + '</div>' +
+								'</div></div>'
 							);
 							initCountdown( function(){
 								var now = new Date();
@@ -380,6 +220,186 @@
 					});
 		    }
 		  });
-		</script>
+			// Dynamic variables in CSS via JavaScript
+			// Default Variables
+			var	MUPCSS_PBACKGROUND = '#1A1A1A',
+					MUPCSS_PTEXT = '#f2f2f2',
+					MUPCSS_SBACKGROUND = '#333',
+					MUPCSS_STEXT = '#f2f2f2',
+					MUPCSS_LINK = '#26B';
+			
+			function get_css() {
+				var the_css = '\
+				.mup-widget {\
+					font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
+					font-size: 12px;\
+				}\
+				#mup-widget-4 .mup-doc,\
+				#mup-widget-4 #mup-hd a {\
+					background: MUPCSS_PBACKGROUND;\
+					color: MUPCSS_PTEXT;\
+				}\
+				#mup-widget-4 .mup-doc {\
+					border-radius: 5px;\
+					-moz-border-radius: 5px;\
+					-webkit-border-radius: 5px;\
+					width: 195px;\
+				}\
+				#mup-widget-4 #mup-hd {\
+					padding: 10px 8px;\
+					overflow: hidden;\
+				}\
+				#mup-widget-4 h3,\
+				#mup-widget-4 h4,\
+				#mup-widget-4 p {\
+					line-height: 1.2 !important;\
+					margin: 0px !important;\
+					padding: 0px !important;\
+					text-align: center;\
+				}\
+				#mup-widget-4 h3 {\
+					font-size: 15px;\
+					font-weight: normal;\
+				}\
+				#mup-widget-4 h4 {\
+					font-size: 13px;\
+					font-weight: normal;\
+				}\
+				#mup-widget-4 h5 {\
+					font-size: 20px;\
+					margin: 0 auto;\
+					text-align: center;\
+					letter-spacing: -1px;\
+					//text-shadow: 1px 1px 1px MUPCSS_PBACKGROUND;\
+					font-weight: bold;\
+				}\
+				#mup-widget-4 h5 a,\
+				#mup-widget-4 h5 a:active,\
+				#mup-widget-4 h5 a:visited,\
+				#mup-widget-4 h5 a:hover {\
+					color: #AAA;\
+					text-decoration: none;\
+				}\
+				#mup-widget-4 p {\
+					text-align: center;\
+				}\
+				#mup-widget-4 .mup-bd,\
+				#mup-widget-4 .mup-timeline,\
+				#mup-widget-4 .mup-bd p {\
+					color: MUPCSS_STEXT;\
+				}\
+				#mup-widget-4 .mup-bd {\
+					//margin: 0 8px;\
+					//padding: 12px 6px;\
+				}\
+				#mup-widget-4 .mup-timeline {\
+					background: MUPCSS_SBACKGROUND;\
+				}\
+				#mup-widget-4 a,\
+				#mup-widget-4 a:active,\
+				#mup-widget-4 a:visited,\
+				#mup-widget-4 a:hover {\
+					color: MUPCSS_LINK;\
+					text-decoration: none;\
+				}\
+				#mup-widget-4 .mup-timeline {\
+					list-style: none;\
+					padding: 0;\
+					margin: 0;\
+					height: 300px;\
+					overflow-y: auto;\
+				}\
+				#mup-widget-4 .mup-timeline > li {\
+					position: relative;\
+					border-top-color: #DDD;\
+					border-top-style: dotted;\
+					border-top-width: 1px;\
+					padding: 6px 8px;\
+				}\
+				#mup-widget-4 .mup-list {\
+					list-style: none;\
+					padding: 0;\
+					margin: 0 8px;\
+					background: MUPCSS_SBACKGROUND;\
+					border-radius: 5px;\
+					-moz-border-radius: 5px;\
+					-webkit-border-radius: 5px;\
+				}\
+				#mup-widget-4 .mup-list > li {\
+					padding: 12px 6px;\
+					border-top-color: MUPCSS_PBACKGROUND;\
+					border-top-style: solid;\
+					border-top-width: 1px;\
+				}\
+				#mup-widget-4 .mup-tlabel {\
+					font-size: 8px;\
+					color: #AAA;\
+				}\
+				#mup-widget-4 .mup-rsvp {\
+					display:block;\
+					margin-bottom: 6px;\
+					text-align: center;\
+				}\
+				#mup-widget-4 .mup-button {\
+					display:block;\
+					margin: 0 auto;\
+					padding: 6px 6px;\
+					background-color: MUPCSS_LINK;\
+					background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));\
+					background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);\
+					border-radius: 5px;\
+					-moz-border-radius: 5px;\
+					-webkit-border-radius: 5px;\
+					font-size: 15px;\
+					font-weight: bold;\
+					color: MUPCSS_PTEXT !important;\
+					text-align: center;\
+					border: 1px solid #0d2748;\
+				}\
+				#mup-widget-4 .mup-ft .mup-getwdgt {\
+					padding: 3px 0;\
+					font-size: 8px;\
+					text-align: center;\
+					background: #0A0A0A;\
+					-webkit-border-bottom-right-radius: 5px;\
+  				-webkit-border-bottom-left-radius: 5px;\
+  				-moz-border-radius-bottomright: 5px;\
+  				-moz-border-radius-bottomleft: 5px;\
+  				border-bottom-right-radius: 5px;\
+  				border-bottom-left-radius: 5px;\
+				}\
+				#mup-widget-4 .mup-ft .mup-getwdgt a,\
+				#mup-widget-4 .mup-ft .mup-getwdgt a:active,\
+				#mup-widget-4 .mup-ft .mup-getwdgt a:visited,\
+				#mup-widget-4 .mup-ft .mup-getwdgt a:hover {\
+					color: #f2f2f2;\
+					text-decoration: none;\
+				}\
+				#mup-widget-4 .mup-ft .mup-logo {\
+					padding: 6px 8px;\
+					text-align: left;\
+				}\
+				';
+
+				return the_css;
+			}
+			
+			function write_css() {
+				var js2css = get_css();
+				// Replace variables with code
+				js2css = js2css.replace(/MUPCSS_PBACKGROUND/g, MUPCSS_PBACKGROUND);
+				js2css = js2css.replace(/MUPCSS_PTEXT/g, MUPCSS_PTEXT);
+				js2css = js2css.replace(/MUPCSS_SBACKGROUND/g, MUPCSS_SBACKGROUND);
+				js2css = js2css.replace(/MUPCSS_STEXT/g, MUPCSS_STEXT);
+				js2css = js2css.replace(/MUPCSS_LINK/g, MUPCSS_LINK);
+				// Write it
+				$('head').append('<style type="text/css" media="screen">'+ js2css +'</style>');
+			}
+			write_css();
+		});
+	</script>
+</head>
+<body>
+	<div id="mup-widget-4" class="mup-widget"></div>
 </body>
 </html>
