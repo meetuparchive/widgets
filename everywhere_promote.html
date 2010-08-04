@@ -7,7 +7,7 @@
 	   var $parameters = {
 	      _width: 300,
 	      _height: 400,
-	      event_id: 12992,
+	      event_id: 9013,
 	      _name: "Everywhere Promote Event",
 	      _description: "Shows details and countdown until the start of specified event."
 	   };
@@ -19,6 +19,48 @@
 	</script>
 	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
 	<script type="text/javascript" charset="utf-8">
+		
+		function initCountdown( mupTimeMillis ) {
+		
+			window.muptimer = parseFloat( mupTimeMillis );
+			var end = 0;
+			var refresh = 1000; // Refresh rate in milliseconds
+		
+			if( window.muptimer >= end ) {
+				muptime = setTimeout( 'updateCountdown( true )', refresh );
+			} else {
+				updateCountdown( false );
+			}
+		}
+	
+		function updateCountdown( state ) {
+			if( state ) {
+				// Start time has not yet been reached
+				// Calculate the number of days left
+				var days=Math.floor(window.muptimer / 86400000); 
+				// After deducting the days calculate the number of hours left
+				var hours = Math.floor((window.muptimer - (days * 86400000 ))/3600000);
+				// After days and hours , how many minutes are left 
+				var minutes = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ))/60000);
+				// Finally how many seconds left after removing days, hours and minutes. 
+				var secs = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ) - (minutes*60000)) / 1000);
+			
+				var update = days + '<span class="mup-tlabel"> DAYS &nbsp; </span>' + hours + '<span class="mup-tlabel"> HR &nbsp; </span>' + minutes + '<span class="mup-tlabel"> MIN &nbsp; </span>';
+				// add to end of update to show seconds
+				// + secs + '<span class="mup-tlabel"> SEC</span>'
+			
+				document.getElementById('timer').innerHTML = update;
+				window.muptimer = window.muptimer - 1000;
+				tt=initCountdown( window.muptimer );
+			}
+			else if ( !state ) {
+				// Event start time has been reached or is in the past
+				console.info('Meetup has begun or is in the past. Do something here!');
+				document.getElementById('mup-hd').innerHTML = 'Event has past. ' + addLink( 'Find More.', 'http://www.meetup.com/everywhere/' );
+				ocument.getElementById('mup-hd').style.textAlign = 'center';
+			}
+		}
+		
 		with_jquery(function($) {
 			// Set global variables
 			var resultCount = 0;
@@ -140,45 +182,6 @@
 				return '<a href="' + link + '">' + content + '</a>';
 			}
 		
-			function initCountdown( mupTimeMillis ) {
-			
-				window.muptimer = parseFloat( mupTimeMillis );
-				var end = 0;
-				var refresh = 1000; // Refresh rate in milliseconds
-			
-				if( window.muptimer >= end ) {
-					muptime = setTimeout( 'updateCountdown( "true" )', refresh );
-				} else {
-					updateCountdown( false );
-				}
-			}
-		
-			function updateCountdown( state ) {
-				if( state ) {
-					// Start time has not yet been reached
-					// Calculate the number of days left
-					var days=Math.floor(window.muptimer / 86400000); 
-					// After deducting the days calculate the number of hours left
-					var hours = Math.floor((window.muptimer - (days * 86400000 ))/3600000);
-					// After days and hours , how many minutes are left 
-					var minutes = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ))/60000);
-					// Finally how many seconds left after removing days, hours and minutes. 
-					var secs = Math.floor((window.muptimer - (days * 86400000 ) - (hours *3600000 ) - (minutes*60000)) / 1000);
-				
-					var update = days + '<span class="mup-tlabel"> DAYS &nbsp; </span>' + hours + '<span class="mup-tlabel"> HR &nbsp; </span>' + minutes + '<span class="mup-tlabel"> MIN &nbsp; </span>' + secs + '<span class="mup-tlabel"> SEC</span>';
-				
-					document.getElementById('timer').innerHTML = update;
-					window.muptimer = window.muptimer - 1000;
-					tt=initCountdown( window.muptimer );
-				}
-				else if ( !state ) {
-					// Event start time has been reached or is in the past
-					console.info('Meetup has begun or is in the past. Do something here!');
-					$('.mup-hd').html( 'Event has past. ' + addLink( 'Find More.', 'http://www.meetup.com/everywhere/' ) );
-					$('.mup-hd').css('text-align', 'center');
-				}
-			}
-		
 			$.getJSON($queries.event(), function(data) {
 
 		    //$("#mup_everywhere_bare_stats").width($parameters.width);
@@ -192,7 +195,7 @@
 					$(document).ready(function() {
 						$('#mup-widget-4').append(
 							'<div class="mup-doc">' +
-								'<div class="mup-hd">' +
+								'<div id="mup-hd">' +
 									'<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>' +
 									'<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>' +
 								'</div>' +
@@ -232,7 +235,7 @@
 					font-size: 12px;\
 				}\
 				#mup-widget-4 .mup-doc,\
-				#mup-widget-4 .mup-hd a {\
+				#mup-widget-4 #mup-hd a {\
 					background: MUPCSS_PBACKGROUND;\
 					color: MUPCSS_PTEXT;\
 				}\
@@ -242,7 +245,7 @@
 					-webkit-border-radius: 5px;\
 					width: 195px;\
 				}\
-				#mup-widget-4 .mup-hd {\
+				#mup-widget-4 #mup-hd {\
 					padding: 10px 8px;\
 					overflow: hidden;\
 				}\
