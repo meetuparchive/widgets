@@ -181,8 +181,8 @@
 					var total_meetup_count = container.meetup_count + container.past_meetup_count;
 				
 					$(document).ready(function() {
-						$('#mup-widget-1').append(
-							'<div class="mup-doc">\n' +
+						$('#mup-widget').append(
+							'<div class="mup-widget-1">\n' +
 								'<div class="mup-hd">\n' +
 									'<h3>' + addLink( numberFormat(total_meetup_count) + ' ' + container.name + ' Meetups', container.meetup_url )+ '</h3>\n' +
 									'<h4>' + addLink( numberFormat(container.member_count) + ' people', container.meetup_url ) + '</h4>\n' +
@@ -196,7 +196,7 @@
 		          alert(data.status + ": " + data.details);
 		        } else {
 		          resultCount = parseInt(data.meta.total_count);
-							$('.mup-doc').append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
+							$('.mup-widget-1').append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
 						
 		          $.each(data.results, function(i, com) {
 		            if ( i < resultCount ) {
@@ -217,7 +217,7 @@
 		            }
 		          });
 							$(document).ready(function() {
-								$('.mup-doc').append('<div class="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>')
+								$('.mup-widget-1').append('<div class="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>')
 							});
 		        }
 		      });
@@ -234,61 +234,61 @@
 
   		function get_css() {
   			var the_css = '\
-  			.mup-widget {\
+  			#mup-widget {\
   				font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;\
   				font-size: 12px;\
   			}\
-  			#mup-widget-1 .mup-doc,\
-  			#mup-widget-1 .mup-hd a,\
-  			#mup-widget-1 h3,\
-  			#mup-widget-1 h4 {\
+  			#mup-widget .mup-widget-1,\
+  			#mup-widget .mup-widget-1 .mup-hd a,\
+  			#mup-widget .mup-widget-1 h3,\
+  			#mup-widget .mup-widget-1 h4 {\
   				background: MUPCSS_PBACKGROUND;\
   			}\
-  			#mup-widget-1 .mup-doc {\
+  			#mup-widget .mup-widget-1 {\
   				border-radius: 5px;\
   				-moz-border-radius: 5px;\
   				-webkit-border-radius: 5px;\
   				width: MUPCSS_WIDTH;\
   			}\
-  			#mup-widget-1 .mup-hd {\
+  			#mup-widget .mup-widget-1 .mup-hd {\
   				padding: 10px 8px;\
   				overflow: hidden;\
   			}\
-  			#mup-widget-1 h3,\
-  			#mup-widget-1 h4,\
-  			#mup-widget-1 p {\
+  			#mup-widget .mup-widget-1 h3,\
+  			#mup-widget .mup-widget-1 h4,\
+  			#mup-widget .mup-widget-1 p {\
   				line-height: 1.2em !important;\
   				//margin: 0px !important;\
   				//padding: 0px !important;\
   			}\
-  			#mup-widget-1 h3 {\
+  			#mup-widget .mup-widget-1 h3 {\
   				font-size: 16px;\
   				font-weight: bold;\
   			}\
-				#mup-widget-1 h3 a {\
+				#mup-widget .mup-widget-1 h3 a {\
 					color: #AAA;\
 				}\
-  			#mup-widget-1 h4 {\
+  			#mup-widget .mup-widget-1 h4 {\
   				font-size: 13px;\
   				font-weight: normal;\
 					color: MUPCSS_PTEXT;\
   			}\
-  			#mup-widget-1 .mup-bd,\
-  			#mup-widget-1 .mup-timeline,\
-  			#mup-widget-1 .mup-bd p {\
+  			#mup-widget .mup-widget-1 .mup-bd,\
+  			#mup-widget .mup-widget-1 .mup-timeline,\
+  			#mup-widget .mup-widget-1 .mup-bd p {\
   				color: MUPCSS_STEXT;\
   			}\
-  			#mup-widget-1 .mup-bd {\
+  			#mup-widget .mup-widget-1 .mup-bd {\
   				padding: 0 1px;\
   			}\
-  			#mup-widget-1 a,\
-  			#mup-widget-1 a:active,\
-  			#mup-widget-1 a:visited,\
-  			#mup-widget-1 a:hover {\
+  			#mup-widget .mup-widget-1 a,\
+  			#mup-widget .mup-widget-1 a:active,\
+  			#mup-widget .mup-widget-1 a:visited,\
+  			#mup-widget .mup-widget-1 a:hover {\
   				color: MUPCSS_LINK;\
   				text-decoration: none;\
   			}\
-  			#mup-widget-1 .mup-timeline {\
+  			#mup-widget .mup-widget-1 .mup-timeline {\
   				background: MUPCSS_SBACKGROUND;\
   				list-style: none;\
   				padding: 0;\
@@ -297,37 +297,36 @@
   				overflow-y: auto;\
   				color: MUPCSS_STEXT;\
   			}\
-  			#mup-widget-1 .mup-timeline > li {\
+  			#mup-widget .mup-widget-1 .mup-timeline > li {\
   				position: relative;\
   				border-top-color: #DDD;\
   				border-top-style: dotted;\
   				border-top-width: 1px;\
   				padding: 6px 8px;\
   			}\
-  			#mup-widget-1 .mup-what {\
+  			#mup-widget .mup-widget-1 .mup-what {\
 					margin-bottom: 3px;\
   			}\
-  			#mup-widget-1 .mup-time {\
+  			#mup-widget .mup-widget-1 .mup-time {\
   				font-size: 9px;\
 					line-height: 1.2em;\
   			}\
-  			#mup-widget-1 .mup-comment {\
+  			#mup-widget .mup-widget-1 .mup-comment {\
   				word-wrap: break-word;\
 					line-height: 1.2em;\
   			}\
-  			#mup-widget-1 .mup-author {\
+  			#mup-widget .mup-widget-1 .mup-author {\
 					line-height: 1.2em;\
   			}\
-  			#mup-widget-1 .mup-ft {\
+  			#mup-widget .mup-widget-1 .mup-ft {\
   				//border-top-color: #DDD;\
   				//border-top-style: solid;\
   				//border-top-width: 1px;\
   			}\
-  			#mup-widget-1 .mup-ft .mup-getwdgt {\
-  				padding: 6px 8px;\
+  			#mup-widget .mup-widget-1 .mup-ft .mup-getwdgt {\
+  				padding: 3px 8px;\
   				font-size: 8px;\
   				text-align: center;\
-					line-height: 1.2em;\
   				background: #0A0A0A;\
   				-webkit-border-bottom-right-radius: 5px;\
   				-webkit-border-bottom-left-radius: 5px;\
@@ -336,7 +335,7 @@
   				border-bottom-right-radius: 5px;\
   				border-bottom-left-radius: 5px;\
   			}\
-  			#mup-widget-1 .mup-ft .mup-logo {\
+  			#mup-widget .mup-widget-1 .mup-ft .mup-logo {\
   				padding: 6px 8px;\
   			}\
   			';
@@ -365,6 +364,6 @@
 	</script>
 </head>
 <body>
-	<div id="mup-widget-1" class="mup-widget"></div>
+	<div id="mup-widget"></div>
 </body>
 </html>
