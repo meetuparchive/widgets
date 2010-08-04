@@ -30,9 +30,9 @@
 			       alert(data.status + ": " + data.details);
 		    } else {
 				container = data.results[0];
-				$('#mup-widget').width($parameters.width);
-				$('#mup-widget').append(
-					'<div class="mup-widget-2">\
+				$('#mup-widget-2').width($parameters.width);
+				$('#mup-widget-2').append(
+					'<div id="mup-widget">\
 						<div class="mup-bd">\
 							<h3>' + container.name + '</h3>\
 							<span class="mup-stats">' + (container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + container.member_count + '<span class="mup-tlabel"> PEOPLE</span></span>\
@@ -49,55 +49,55 @@
 		});
 	</script>
 	<style type="text/css" media="screen">
-		#mup-widget {
+		#mup-widget-2 {
 			font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 			font-size: 12px;
 		}
-		#mup-widget .mup-widget-2,
-		#mup-widget .mup-widget-2 .mup-hd a {
+		#mup-widget-2 #mup-widget,
+		#mup-widget-2 #mup-widget .mup-hd a {
 			background: #1A1A1A;
 			color: #f2f2f2;
 		}
-		#mup-widget .mup-widget-2 {
+		#mup-widget-2 #mup-widget {
 			border-radius: 5px;
 			-moz-border-radius: 5px;
 			-webkit-border-radius: 5px;
 			padding-top: 8px;
 		}
-		#mup-widget .mup-widget-2 .mup-hd {
+		#mup-widget-2 #mup-widget .mup-hd {
 			padding: 10px 8px;
 			overflow: hidden;
 		}
-		#mup-widget .mup-widget-2 h3,
-		#mup-widget .mup-widget-2 h4,
-		#mup-widget .mup-widget-2 p {
+		#mup-widget-2 #mup-widget h3,
+		#mup-widget-2 #mup-widget h4,
+		#mup-widget-2 #mup-widget p {
 			line-height: 1.2 !important;
 			text-align: center;
 		}
-		#mup-widget .mup-widget-2 h3 {
+		#mup-widget-2 #mup-widget h3 {
 			font-size: 15px;
 			color: #f2f2f2;
 			font-weight: bold;
 		}
-		#mup-widget .mup-widget-2 h4 {
+		#mup-widget-2 #mup-widget h4 {
 			font-size: 13px;
 		}
-		#mup-widget .mup-widget-2 h5 {
+		#mup-widget-2 #mup-widget h5 {
 			font-size: 20px;
 			margin: 0 auto;
 			text-align: center;
 			letter-spacing: -1px;
 			text-shadow: 1px 1px 1px #1A1A1A;
 		}
-		#mup-widget .mup-widget-2 p {
+		#mup-widget-2 #mup-widget p {
 			text-align: center;
 		}
-		#mup-widget .mup-widget-2 .mup-bd,
-		#mup-widget .mup-widget-2 .mup-timeline,
-		#mup-widget .mup-widget-2 .mup-bd p {
+		#mup-widget-2 #mup-widget .mup-bd,
+		#mup-widget-2 #mup-widget .mup-timeline,
+		#mup-widget-2 #mup-widget .mup-bd p {
 			color: #f2f2f2;
 		}
-		#mup-widget .mup-widget-2 .mup-bd {
+		#mup-widget-2 #mup-widget .mup-bd {
 			border-radius: 5px;
 			-moz-border-radius: 5px;
 			-webkit-border-radius: 5px;
@@ -105,18 +105,18 @@
 			margin: 0 8px;
 			background: #333;
 		}
-		#mup-widget .mup-widget-2 a,
-		#mup-widget .mup-widget-2 a:active,
-		#mup-widget .mup-widget-2 a:visited,
-		#mup-widget .mup-widget-2 a:hover {
+		#mup-widget-2 #mup-widget a,
+		#mup-widget-2 #mup-widget a:active,
+		#mup-widget-2 #mup-widget a:visited,
+		#mup-widget-2 #mup-widget a:hover {
 			color: #f2f2f2;
 			text-decoration: none;
 		}
-		#mup-widget .mup-widget-2 .mup-tlabel {
+		#mup-widget-2 #mup-widget .mup-tlabel {
 			font-size: 8px;
 			color: #AAA;
 		}
-		#mup-widget .mup-widget-2 .mup-stats {
+		#mup-widget-2 #mup-widget .mup-stats {
 			display: block;
 			margin: 6px 0;
 			padding: 4px;
@@ -126,7 +126,7 @@
 			-moz-border-radius: 3px;
 			-webkit-border-radius: 3px;
 		}
-		#mup-widget .mup-widget-2 .mup-button {
+		#mup-widget-2 #mup-widget .mup-button {
 			display:block;
 			margin: 0 auto;
 			padding: 2px 4px;
@@ -142,7 +142,7 @@
 			text-align: center;
 			border: 1px solid #0d2748;
 		}
-		#mup-widget .mup-widget-2 .mup-ft .mup-getwdgt {
+		#mup-widget-2 #mup-widget .mup-ft .mup-getwdgt {
 			padding: 3px 0;
 			font-size: 8px;
 			text-align: center;
@@ -154,12 +154,12 @@
 			border-bottom-right-radius: 5px;
 			border-bottom-left-radius: 5px;
 		}
-		#mup-widget .mup-widget-2 .mup-ft .mup-logo {
+		#mup-widget-2 #mup-widget .mup-ft .mup-logo {
 			padding: 6px 8px;
 		}
 	</style>
 </head>
 <body>
-	<div id="mup-widget"></div>
+	<div id="mup-widget-2"></div>
 </body>
 </html>
