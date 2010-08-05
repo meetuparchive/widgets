@@ -22,9 +22,12 @@
 	</script>
 	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
 	<script type="text/javascript" charset="utf-8">
-		with_jquery(function($) {
-			// Set global variables
-			var resultCount = 0;
+		with_jquery(function($, ctx) {
+			// Variables
+			var	resultCount = 0,
+					months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+					date = new Date(),
+					month = months[date.getMonth()];
 		
 			// Functions
 		
@@ -38,57 +41,25 @@
 			    x1 = x1.replace(rgx, '$1' + ',' + '$2');
 			  return x1 + x2;
 			}
+			
+			function addLeadingZero ( num ) {
+				if ( num < 10 ) {
+					var day = '0' + num;
+				} else {
+					return num;
+				}
+				return day;
+			}
 		
+			function getTwoDigitYear ( yr ) {
+				return yr.substring(2,4);
+			}
+			
 			function getFormattedDate( millis ) {
 				var date = new Date( millis );
 			
-				function addLeadingZero ( num ) {
-					if ( num < 10 ) {
-						var day = '0' + num;
-					} else {
-						return num;
-					}
-					return day;
-				}
-			
-				function getTwoDigitYear ( yr ) {
-					var year = yr.substring(2,4);
-					return year;
-				}
-			
-				function getFullMonth ( mo ) {
-					switch ( mo ) {
-						case 0:
-					  		return ("JAN");
-						case 1:
-							return ("FEB");		
-						case 2:
-					  		return ("MAR");
-						case 3:
-							return ("APR");
-						case 4:
-							return ("MAY");
-						case 5:
-							return ("JUN");
-						case 6:
-							return ("JUL");
-						case 7:
-							return ("AUG");
-						case 8:
-							return ("SEP");
-						case 9:
-							return ("OCT");
-						case 10:
-							return ("NOV");
-						case 11:
-							return ("DEC");
-						default:
-							return ("Undef");
-					}
-				}
-			
-				var formattedTime = addLeadingZero( date.getDate() ) + ' ' + getFullMonth( date.getMonth() ) + ' ' + getTwoDigitYear( date.getFullYear().toString() );
-				return formattedTime;
+				var formattedDate = addLeadingZero( date.getDate() ) + ' ' + month + ' ' + getTwoDigitYear( date.getFullYear().toString() );
+				return formattedDate;
 			}
 		
 			function getFormattedTime( millis ) {
@@ -148,7 +119,7 @@
 					var total_meetup_count = container.meetup_count + container.past_meetup_count;
 				
 					$(document).ready(function() {
-						$('#mup-widget-3').append(
+						$('#mup-widget-3', ctx).append(
 							'<div class="mup-widget">\
 								<div id="mup-hd">\
 									<h3>' + numberFormat(total_meetup_count) + ' </span><span>' + container.name + ' Meetups</span></h3>\
@@ -169,7 +140,7 @@
 		            if ( i < resultCount ) {
 		              // My code here.
 									$(document).ready(function() {
-										$('#mup-widget-3 #mup-list').append( 
+										$('#mup-list', ctx).append( 
 											'<li>\
 												<div class="mup-when">\
 													<span class="mup-time">' + getFormattedDate( ev.time ) + '</span>\
@@ -186,7 +157,7 @@
 		            }
 		          });
 							$(document).ready(function() {
-								$('#mup-widget-3>.mup-widget').append('<div id="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>')
+								$('#mup-widget-3>.mup-widget', ctx).append('<div id="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>')
 							});
 		        }
 		      });
