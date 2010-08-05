@@ -24,7 +24,6 @@
 					addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					};
-
 			$.getJSON($queries.containers(), function(data) {
 		    if (data.status && data.status.match(/^200/) == null) {
 			       alert(data.status + ": " + data.details);
@@ -34,13 +33,13 @@
 				$('.mup-widget-2', ctx).append(
 					'<div class="mup-widget">\
 						<div class="mup-bd">\
-							<h3>' + container.name + '</h3>\
+							<h3>' + addLink( container.name, container.meetup_url ) + '</h3>\
 							<span class="mup-stats">' + (container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + container.member_count + '<span class="mup-tlabel"> PEOPLE</span></span>\
 							<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', container.meetup_url ) + '</span></div>\
 						</div>\
 						<div class="mup-ft">\
 							<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
-							<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', container.meetup_url ) + '</div>\
+							<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
 						</div>\
 					</div>'
 					);
