@@ -21,18 +21,18 @@
   };
 </script>
 <script>
-with_jquery(function($) {
+with_jquery(function($, ctx) {
   var map_temp = "";
   var groupcount = 0;
   var place = "";
 
   $.getJSON($queries.containers(), function(data) {
-    $(".MEETUP_EVERYWHERE_WIDGET").width($parameters.width);
+    $(".MEETUP_EVERYWHERE_WIDGET", ctx).width($parameters.width);
     if (data.status && data.status.match(/^200/) == null) {
        alert(data.status + ": " + data.details);
     } else {
       var container = data.results[0];
-      $("#webaddress").append("<span class=\"MEETUP_EVERYWHERE_WIDGET_people\">"+container.member_count+" People</span>");
+      $(".webaddress", ctx).append("<span class=\"MEETUP_EVERYWHERE_WIDGET_people\">"+container.member_count+" People</span>");
       var webaddress = container.meetup_url;
       $.getJSON($queries.events(), function(data) {
         if (data.status && data.status.match(/^200/) == null) {
@@ -43,12 +43,12 @@ with_jquery(function($) {
           $.each(data.results, function(i, ev) {
             if (i==0) {
               var formattedname = ev.container.name;
-              $("#webaddress").attr("href", webaddress);
+              $(".webaddress", ctx).attr("href", webaddress);
 
               var groupname_area = "<span class=\"MEETUP_EVERYWHERE_WIDGET_count\">"+groupcount+" </span><span class=\"MEETUP_EVERYWHERE_WIDGET_name\">"+ formattedname +" </span><div class=\"MEETUP_EVERYWHERE_WIDGET_suffix\">  Meetups</div>";
-              $("#groupname_area").append(groupname_area);
+              $(".groupname_area", ctx).append(groupname_area);
 
-              $("#meetup_logo").attr("href", webaddress);
+              $(".meetup_logo",ctx).attr("href", webaddress);
               //FORMAT TIME AND DATE
               var myDate = new Date( ev.time);
 
@@ -58,7 +58,7 @@ with_jquery(function($) {
               else {
                 place = ev.country;
               }
-              $("#time_date_area").append("<a href=\"" + ev.meetup_url + "\"><span class=\"when birddogData\"><span class=\"date\">" + getMonth(myDate.getMonth()) + " " + (myDate.getDate()) + "</span><span class=\"time\">"+ getTime(myDate.getHours(),myDate.getMinutes()) + "</span></span><span class=\"loc birddogData\"><span class=\"city linked\">" + ev.city+ ", " + place.toUpperCase() + "</span></span></a><a href=\""+ webaddress + "\"><span class=\"MEETUP_EVERYWHERE_WIDGET_all\">See all<span class=\"MEETUP_EVERYWHERE_WIDGET_go\">></span></span></a>");
+              $(".time_date_area", ctx).append("<a href=\"" + ev.meetup_url + "\"><span class=\"when birddogData\"><span class=\"date\">" + getMonth(myDate.getMonth()) + " " + (myDate.getDate()) + "</span><span class=\"time\">"+ getTime(myDate.getHours(),myDate.getMinutes()) + "</span></span><span class=\"loc birddogData\"><span class=\"city linked\">" + ev.city+ ", " + place.toUpperCase() + "</span></span></a><a href=\""+ webaddress + "\"><span class=\"MEETUP_EVERYWHERE_WIDGET_all\">See all<span class=\"MEETUP_EVERYWHERE_WIDGET_go\">></span></span></a>");
             }
             // MAP GENERATOR
             if (i < 100) {
@@ -67,7 +67,7 @@ with_jquery(function($) {
           });
           var mapw = $parameters.width - 16;
           var mapv = mapw/2;
-          $("#webaddress").append("<img src=\"http://maps.google.com/maps/api/staticmap?zoom=0&size="+mapw+"x"+mapv+"&maptype=roadmap&markers=color:red|size:tiny" + map_temp + "&sensor=false\"/>");
+          $(".webaddress", ctx).append("<img src=\"http://maps.google.com/maps/api/staticmap?zoom=0&size="+mapw+"x"+mapv+"&maptype=roadmap&markers=color:red|size:tiny" + map_temp + "&sensor=false\"/>");
         }
       });;
     }
@@ -265,17 +265,17 @@ with_jquery(function($) {
 <body>
   
 
-<div class="MEETUP_EVERYWHERE_WIDGET" id="MEETUP_EVERYWHERE_WIDGET_28">
+<div class="MEETUP_EVERYWHERE_WIDGET" class="MEETUP_EVERYWHERE_WIDGET_28">
   <div class="MEETUP_EVERYWHERE_WIDGET_body">
     <div class="MEETUP_EVERYWHERE_WIDGET_total">
-      <a id="webaddress">
-        <span class="MEETUP_EVERYWHERE_WIDGET_title" id="groupname_area"></span>
+      <a class="webaddress">
+        <span class="MEETUP_EVERYWHERE_WIDGET_title groupname_area"></span>
       </a>
     </div>
     <div class="MEETUP_EVERYWHERE_WIDGET_nearby">
-      <div class="MEETUP_EVERYWHERE_WIDGET_nearby_list" id="time_date_area"></div>
+      <div class="MEETUP_EVERYWHERE_WIDGET_nearby_list time_date_area"></div>
     </div>
-    <a class="MEETUP_EVERYWHERE_WIDGET_logo" id="meetup_logo"><img class="MEETUP_EVERYWHERE_WIDGET_bottom_logo" src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"/></a>
+    <a class="MEETUP_EVERYWHERE_WIDGET_logo" class="meetup_logo"><img class="MEETUP_EVERYWHERE_WIDGET_bottom_logo" src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"/></a>
   </div>
 </div>
 
