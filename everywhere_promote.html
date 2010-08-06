@@ -136,23 +136,21 @@
 					
 					$(document).ready(function() {
 						$('.mup-widget-4', ctx).append(
-							'<div class="mup-widget">' +
-								'<div class="mup-hd">' +
-									'<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>' +
-									'<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>' +
-								'</div>' +
-								'<div class="mup-bd"><ul class="mup-list">' +
-									'<li><p><h5>' + addLink( event.container.name + ' Meetup', event.meetup_url )+ '</h5></p></li>' +
-									'<p>' + getFormattedDate( event.time ) + ' @ ' + getFormattedTime( event.time ) + '</p><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p><br />' +
-									'<li><span class="mup-rsvp">' + event.rsvp_count + ' people</span>' +
-									addLink ( '<span class="mup-button" style="width:140px;">Interested?</span>', event.meetup_url ) + '</li>' +
-									'<li><span class="mup-rsvp">Not near ' + event.city + '?</span>' + addLink( '<span class="mup-button" style="width:140px;">Find a meetup near you!</span>', 'http://www.meetup.com/' + event.container.urlname + '/' ) + '</li>' +
-								'</ul></div>' +
-								'<div class="mup-ft">' +
-									'<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>' +
-									'<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>' +
-								'</div></div>'
-							);
+							'<div class="mup-widget">\
+								<div class="mup-hd">\
+									<h4><span id="timer" style="display:block; height: 16px;">Loading...</span></h4>\
+									<span class="mup-tlabel" style="display:block; padding:8px 0 2px; text-align:center; letter-spacing: 1px;">REMAINING UNTIL</span>\
+								</div>\
+								<div class="mup-bd"><ul class="mup-list">\
+									<li><p><h5>' + addLink( event.container.name + ' Meetup', event.meetup_url )+ '</h5></p></li>\
+									<p>' + getFormattedDate( event.time ) + ' @ ' + getFormattedTime( event.time ) + '</p><p>' + getFormattedAddress( event.venue_name, event.address1, event.city, event.state, event.zip ) + '</p><br />\
+									<li><span class="mup-rsvp">' + event.rsvp_count + ' people</span>' + addLink ( '<span class="mup-button" style="width:140px;">Interested?</span>', event.meetup_url ) + '</li>\
+									<li><span class="mup-rsvp">Not near ' + event.city + '?</span>' + addLink( '<span class="mup-button" style="width:140px;">Find a meetup near you!</span>', 'http://www.meetup.com/' + event.container.urlname + '/' ) + '</li>\
+								</ul></div>\
+								<div class="mup-ft">\
+									<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
+									<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
+								</div></div>');
 							initCountdown( function(){
 								var now = new Date();
 								var event = new Date( eventTime );
@@ -317,6 +315,6 @@
 	</style>
 </head>
 <body>
-	<div class="mup-widget-4" class="mup-widget"></div>
+	<div class="mup-widget-4"></div>
 </body>
 </html>
