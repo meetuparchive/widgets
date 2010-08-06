@@ -14,16 +14,16 @@
 	  };
 	  var $queries = {
 	    containers: function() { 
-	      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+	      return mup_widget.api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
 	    },
 			comments: function() { 
-				return api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
+				return mup_widget.api_call("/ew/comments", {urlname: $parameters.urlname, page: '50'});
 			}
 	  };
 	</script>
 	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
 	<script type="text/javascript" charset="utf-8">
-		with_jquery(function($, ctx) {
+		mup_widget.with_jquery(function($, ctx) {
 			var	resultCount = 0,
 					months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 					numberFormat = function(nStr){

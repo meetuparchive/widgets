@@ -13,16 +13,16 @@
 	  };
 	  var $queries = {
 	    containers: function() { 
-	      return api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+	      return mup_widget.api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
 	    },
 	    events: function() { 
-	      return api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "100.0", page: "3", fields: "rsvp_count"});
+	      return mup_widget.api_call("/ew/events", {status: "upcoming", order: "time", urlname: $parameters.urlname, lat: $parameters.lat, lon: $parameters.lon, radius: "100.0", page: "3", fields: "rsvp_count"});
 	    }
 	  };
 	</script>
 	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
 	<script type="text/javascript" charset="utf-8">
-		with_jquery(function($, ctx) {
+		mup_widget.with_jquery(function($, ctx) {
 			// Variables
 			var	resultCount = 0,
 					months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
