@@ -1,62 +1,62 @@
 <html>
 <head>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-	<script src="local.js"></script>
-	<script src="api_key.js"></script>
-	<script id="config" type="text/javascript" charset="utf-8">
-	  var $parameters = {
-	    urlname: "etsy-craft-party",
-	    width: 200,
-			_height: 200,
-	    _name: "Everywhere Badge",
-	    _description: "Shows past meetups and aggregates tagged content from other services."
-	  };
-	  var $queries = {
-	    containers: function() { 
-	      return mup_widget.api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script src="local.js"></script>
+<script src="api_key.js"></script>
+<script id="config" type="text/javascript" charset="utf-8">
+  var $parameters = {
+    urlname: "etsy-craft-party",
+    width: 200,
+		_height: 200,
+    _name: "Everywhere Badge",
+    _description: "Shows past meetups and aggregates tagged content from other services."
+  };
+  var $queries = {
+    containers: function() { 
+      return mup_widget.api_call("/ew/containers", {urlname: $parameters.urlname, fields: "meetup_count,past_meetup_count,member_count,geo_ip"});
+    }
+  };
+</script>
+<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
+<script type="text/javascript" charset="utf-8">
+	mup_widget.with_jquery(function($, ctx) {
+		var	container = '',
+				addLink = function( content, link ) {
+						return '<a href="' + link + '">' + content + '</a>';
+					},
+				numberFormat = function(nStr){
+					  nStr += '';
+					  x = nStr.split('.');
+					  x1 = x[0];
+					  x2 = x.length > 1 ? '.' + x[1] : '';
+					  var rgx = /(\d+)(\d{3})/;
+					  while (rgx.test(x1))
+					    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+					  return x1 + x2;
+					};
+		$.getJSON($queries.containers(), function(data) {
+	    if (data.status && data.status.match(/^200/) == null) {
+		       alert(data.status + ": " + data.details);
+	    } else {
+			container = data.results[0];
+			$('.mup-widget-2', ctx).width($parameters.width);
+			$('.mup-widget-2', ctx).append(
+				'<div class="mup-widget">\
+					<div class="mup-bd">\
+						<h3>' + addLink( container.name, container.meetup_url ) + '</h3>\
+						<span class="mup-stats">' + numberFormat(container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + numberFormat(container.member_count) + '<span class="mup-tlabel"> PEOPLE</span></span>\
+						<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', container.meetup_url ) + '</span></div>\
+					</div>\
+					<div class="mup-ft">\
+						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
+						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
+					</div>\
+				</div>'
+				);
 	    }
-	  };
-	</script>
-	<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
-	<script type="text/javascript" charset="utf-8">
-		mup_widget.with_jquery(function($, ctx) {
-			var	container = '',
-					addLink = function( content, link ) {
-							return '<a href="' + link + '">' + content + '</a>';
-						},
-					numberFormat = function(nStr){
-						  nStr += '';
-						  x = nStr.split('.');
-						  x1 = x[0];
-						  x2 = x.length > 1 ? '.' + x[1] : '';
-						  var rgx = /(\d+)(\d{3})/;
-						  while (rgx.test(x1))
-						    x1 = x1.replace(rgx, '$1' + ',' + '$2');
-						  return x1 + x2;
-						};
-			$.getJSON($queries.containers(), function(data) {
-		    if (data.status && data.status.match(/^200/) == null) {
-			       alert(data.status + ": " + data.details);
-		    } else {
-				container = data.results[0];
-				$('.mup-widget-2', ctx).width($parameters.width);
-				$('.mup-widget-2', ctx).append(
-					'<div class="mup-widget">\
-						<div class="mup-bd">\
-							<h3>' + addLink( container.name, container.meetup_url ) + '</h3>\
-							<span class="mup-stats">' + numberFormat(container.meetup_count+container.past_meetup_count) + '<span class="mup-tlabel"> MEETUPS</span> <span style="color:#000">|</span> ' + numberFormat(container.member_count) + '<span class="mup-tlabel"> PEOPLE</span></span>\
-							<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', container.meetup_url ) + '</span></div>\
-						</div>\
-						<div class="mup-ft">\
-							<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
-							<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
-						</div>\
-					</div>'
-					);
-		    }
-		  });
-		});
-	</script>
+	  });
+	});
+</script>
 <style type="text/css" media="screen">
 .mup-widget-2 {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
