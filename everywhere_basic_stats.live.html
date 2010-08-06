@@ -120,7 +120,7 @@
 						
 						for (var i=0; i < 3; i++ ) {
 							$('.mup-list', ctx).append( 
-								'<li class="mup-item">\
+								'<li>\
 									<div class="mup-when">\
 										<span class="mup-time">' + getFormattedDate( meetupArray[i].time ) + '</span>\
 										<span class="mup-city">' + addLink( getFormattedCity( meetupArray[i].city, meetupArray[i].state ), meetupArray[i].meetup_url ) + '</span>\
@@ -194,7 +194,7 @@
 	-webkit-border-radius: 5px;
 	padding:0;
 }
-.mup-widget-3 .mup-widget .mup-list .mup-item {
+.mup-widget-3 .mup-widget .mup-list li {
 	position: relative;
 	padding: 12px 6px 12px 0;
 	border-top-color: #1A1A1A;
@@ -206,7 +206,7 @@
 	border-top-right-radius: 5px;
 	overflow: hidden;
 }
-.mup-widget-3 .mup-widget .mup-list .mup-item:first-child {
+.mup-widget-3 .mup-widget .mup-list li:first-child {
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 	-moz-border-radius-topleft: 5px;
@@ -214,7 +214,7 @@
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 }
-.mup-widget-3 .mup-widget .mup-list .mup-item:last-child {
+.mup-widget-3 .mup-widget .mup-list li:last-child {
 	-webkit-border-bottom-right-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
