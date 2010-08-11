@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<img src="'+imagesrc+'" alt="'+alt+'" class="crop" />';
+                        return '<img src="'+imagesrc+'" alt="'+alt+'" x1="10" y1="10" x2="20" y2="20" />';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -102,15 +102,6 @@
 .next-event {
 
 }
-.crop {
-    height: 300px;
-    width: 350px;
-    overflow: hidden;
-}
-.crop img {
-    margin: -300px -200px 0 0;
-}
-
 .mup-widget-2 {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
