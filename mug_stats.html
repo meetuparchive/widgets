@@ -24,7 +24,6 @@
 <script type="text/javascript" charset="utf-8">
 	mup_widget.with_jquery(function($, ctx) {
 		var	group = '',
-        var event = '',
 				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
@@ -77,8 +76,8 @@
 	        if (data.status && data.status.match(/^200/) == null) {
 	          alert(data.status + ": " + data.details);
 	        } else {
-                event = data.results[0];
-                $('.next-event', ctx).append('I work?' );
+                var event = data.results[0];
+                $('.next-event', ctx).append(event.name );
 
             }
             });
