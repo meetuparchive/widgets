@@ -30,7 +30,7 @@
 					},
 				getFormattedDate = function( millis ) {
 						var date = new Date( millis );
-						return  months[date.getMonth()] + ' ' + addLeadingZero( date.getDate() ) + date.getFullYear().toString();
+						return  months[date.getMonth()] + ' ' + addLeadingZero( date.getDate() ) + ', ' + date.getFullYear().toString();
 					},
 				numberFormat = function(nStr){
 					  nStr += '';
@@ -59,7 +59,6 @@
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
                         <h4> <span style="color:#FFF">EST. '+ getFormattedDate(group.created)+'</span></h4>\
 						<span class="mup-stats">' + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
-						<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', group.link ) + '</span></div>\
 					</div>\
 					<div class="mup-ft">\
 						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
