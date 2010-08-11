@@ -7,7 +7,7 @@
   var $parameters = {
     urlname: "nystartrek",
     width: 300,
-		_height: 200,
+		_height: 300,
     _name: "MUG Badge",
     _description: "Shows basic stats on your favorite Meetup group."
   };
@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<img src="'+imagesrc+'" alt="'+alt+'" x1="10" y1="10" x2="20" y2="20" />';
+                        return '<div style="width: '+($parameters.width - 20) +'px; height='+($parameters.height / 3)+'px; overflow=hidden"><img src="'+imagesrc+'" alt="'+alt+'"/></div>';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
