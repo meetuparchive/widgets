@@ -21,8 +21,19 @@
 <script type="text/javascript" charset="utf-8">
 	mup_widget.with_jquery(function($, ctx) {
 		var	group = '',
+				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
+					},
+				addLeadingZero = function( num ) {
+						return (num < 10) ? ('0' + num) : num;
+					},
+				getTwoDigitYear = function( yr ) {
+						return yr.substring(2,4);
+					},
+				getFormattedDate = function( millis ) {
+						var date = new Date( millis );
+						return addLeadingZero( date.getDate() ) + ' ' + months[date.getMonth()] + ' ' + getTwoDigitYear( date.getFullYear().toString() );
 					},
 				numberFormat = function(nStr){
 					  nStr += '';
@@ -49,7 +60,7 @@
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
-                        <h4>EST.<span class="mup-tlabel"> '+ group.created+'</span></h4>\
+                        <h4>EST. '+ getFormattedDate(group.created)+'</h4>\
 						<span class="mup-stats">' + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
 						<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', group.link ) + '</span></div>\
 					</div>\
