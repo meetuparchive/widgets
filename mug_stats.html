@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<div style="width: '+($parameters.width - 20) +'px; height='+($parameters.height / 3)+'px; overflow=hidden"><img src="'+imagesrc+'" alt="'+alt+'"/></div>';
+                        return '<img src="'+imagesrc+'" height="75" alt="'+alt+'"/>';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
