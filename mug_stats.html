@@ -87,7 +87,7 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
                 var event = data.results[0];
-                $('.next-event', ctx).append(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedTime(event.time) + " - " + getFormattedDate(event.time) );
+                $('.next-event', ctx).append(addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time) ), event.event_url);
 
             }
             });
