@@ -14,7 +14,7 @@
   var $queries = {
     groups: function() { 
       return mup_widget.api_call("/groups", {group_urlname: $parameters.urlname});
-    }
+    },
     events: function() {
       return mup_widget.api_call("/events", {group_urlname: $parameters.urlname, page: '1'});
     }
@@ -73,7 +73,15 @@
 				</div>'
 				);
 
+	      $.getJSON($queries.events(), function(data) {
+	        if (data.status && data.status.match(/^200/) == null) {
+	          alert(data.status + ": " + data.details);
+	        } else {
+                event = data.results[0];
+                $('.next-event', ctx).append('I work?' );
 
+            }
+            });
 	    }
 	  });
 	});
