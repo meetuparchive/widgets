@@ -28,6 +28,9 @@
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					},
+                addImage = function( imagesrc, alt) {
+                        return '<img src="'+imagesrc+'" alt="'+alt+'" />';
+                }
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
 					},
@@ -71,8 +74,8 @@
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
                         <h4> <span style="color:#FFF">EST. '+ getFormattedDate(group.created)+'</span></h4>\
-						<span class="mup-stats">' + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
-                        <span style="color:#FFF">Next Meetup:</span>\
+						<span class="mup-stats">' + addImage(group.photo_url,group.name)+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
+                        <h4><span style="color:#FFF">Next Meetup:</span></h4>\
                         <div class="next-event"></div>\
 					</div>\
 					<div class="mup-ft">\
@@ -87,7 +90,7 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
                 var event = data.results[0];
-                $('.next-event', ctx).append(addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url));
+                $('.next-event', ctx).append("<h4>"+addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url)+"</h4>");
 
             }
             });
