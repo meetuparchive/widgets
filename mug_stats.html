@@ -15,12 +15,16 @@
     groups: function() { 
       return mup_widget.api_call("/groups", {group_urlname: $parameters.urlname});
     }
+    events: function() {
+      return mup_widget.api_call("/events", {group_urlname: $parameters.urlname, page: '1'});
+    }
   };
 </script>
 <link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
 <script type="text/javascript" charset="utf-8">
 	mup_widget.with_jquery(function($, ctx) {
 		var	group = '',
+        var event = '',
 				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
@@ -60,6 +64,7 @@
                         <h4> <span style="color:#FFF">EST. '+ getFormattedDate(group.created)+'</span></h4>\
 						<span class="mup-stats">' + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
                         <span style="color:#FFF">Next Meetup:</span>\
+                        <div id="next-event"></div>
 					</div>\
 					<div class="mup-ft">\
 						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
@@ -67,6 +72,16 @@
 					</div>\
 				</div>'
 				);
+
+	      $.getJSON($queries.events(), function(data) {
+	        if (data.status && data.status.match(/^200/) == null) {
+	          alert(data.status + ": " + data.details);
+	        } else {
+                event = data.results[0];
+                $('next-event', ctx).append('I work?' );
+
+            }
+            });
 	    }
 	  });
 	});
