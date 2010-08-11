@@ -73,6 +73,15 @@
 				</div>'
 				);
 
+	      $.getJSON($queries.events(), function(data) {
+	        if (data.status && data.status.match(/^200/) == null) {
+	          alert(data.status + ": " + data.details);
+	        } else {
+                event = data.results[0];
+                $('.next-event', ctx).append('I work?' );
+
+            }
+            });
 	    }
 	  });
 	});
