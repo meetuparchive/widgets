@@ -5,7 +5,7 @@
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
-    urlname: "mashable",
+    urlname: "mashabl",
     width: 240,
     _height: 450,
     _name: "Everywhere Basic Stats",
@@ -66,12 +66,18 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					};
 		
-		$(function() {$(".mup-widget-3").width($parameters.width);});
+		$(function() {$(".mup-widget-3", ctx).width($parameters.width);});
 		
 		$.getJSON($queries.containers(), function(data) {
-	    if (data.status && data.status.match(/^200/) == null) {
-	       alert(data.status + ": " + data.details);
-	    } else {
+	    if (data.results.length == 0) {
+				$('.mup-widget-3', ctx).append(
+					'<div class="mup-widget">\
+						<div class="error">\
+							<div class="errorMsg">Oops. An error has occurred.</div>\
+						</div>\
+					</div>');
+	    }
+			else {
 	      var container = data.results[0];
 				// Push lat/lon into event api call
 				mylon = data.meta.geo_ip.lon;

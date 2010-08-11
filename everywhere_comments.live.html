@@ -6,7 +6,7 @@
 <script src="http://static1.dev.meetupstatic.com/script/Meetup/api/widget.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
-    urlname: "etsy-craft-party",
+    urlname: "etsy-craft-part",
     width: 250,
     _height: 500,
     _name: "Everywhere Comments",
@@ -83,9 +83,15 @@
 					};
 		
 		$.getJSON($queries.containers(), function(data) {
-	    if (data.status && data.status.match(/^200/) == null) {
-	       alert(data.status + ": " + data.details);
-	    } else {
+	    if (data.results.length == 0) {
+				$('.mup-widget-1', ctx).append(
+					'<div class="mup-widget" style="width:' + $parameters.width + '">\
+						<div class="error">\
+							<div class="errorMsg">Oops. An error has occurred.</div>\
+						</div>\
+					</div>');
+	    }
+			else {
 	      var container = data.results[0];
 				var total_meetup_count = container.meetup_count + container.past_meetup_count;
 			

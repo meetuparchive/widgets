@@ -5,7 +5,7 @@
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
-    urlname: "etsy-craft-party",
+    urlname: "etsy-craft-part",
     width: 200,
 		_height: 200,
     _name: "Everywhere Badge",
@@ -35,9 +35,16 @@
 					  return x1 + x2;
 					};
 		$.getJSON($queries.containers(), function(data) {
-	    if (data.status && data.status.match(/^200/) == null) {
-		       alert(data.status + ": " + data.details);
-	    } else {
+	    if (data.results.length == 0) {
+		  	$('.mup-widget-2', ctx).width($parameters.width);
+				$('.mup-widget-2', ctx).append(
+					'<div class="mup-widget">\
+						<div class="error">\
+							<div class="errorMsg">Oops. An error has occurred.</div>\
+						</div>\
+					</div>');
+	    }
+			else {
 			container = data.results[0];
 			$('.mup-widget-2', ctx).width($parameters.width);
 			$('.mup-widget-2', ctx).append(
@@ -71,11 +78,7 @@
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	padding-top: 8px;
-}
-.mup-widget-2 .mup-widget .mup-hd {
-	padding: 10px 8px;
-	overflow: hidden;
+	//padding-top: 8px;
 }
 .mup-widget-2 .mup-widget h3,
 .mup-widget-2 .mup-widget h4,
@@ -107,11 +110,12 @@
 	color: #f2f2f2;
 }
 .mup-widget-2 .mup-widget .mup-bd {
+	display: inline-block;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding: 8px 6px;
-	margin: 0 8px;
+	margin: 8px 8px 0;
 	background: #333;
 }
 .mup-widget-2 .mup-widget a,
