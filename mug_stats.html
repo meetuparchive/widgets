@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<img src="'+imagesrc+'" alt="'+alt+'" />';
+                        return '<img src="'+imagesrc+'" alt="'+alt+'" class="crop" />';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -74,7 +74,7 @@
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
                         <h4> <span style="color:#FFF">EST. '+ getFormattedDate(group.created)+'</span></h4>\
-						<span class="mup-stats">' + addImage(group.photo_url,group.name)+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
+						<span class="mup-stats">' + addImage(group.photo_url,group.name)+"<br>"+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
                         <h4><span style="color:#FFF">Next Meetup:</span></h4>\
                         <div class="next-event"></div>\
 					</div>\
@@ -101,6 +101,14 @@
 <style type="text/css" media="screen">
 .next-event {
 
+}
+.crop {
+    height: 300px;
+    width: 350px;
+    overflow: hidden;
+}
+.crop img {
+    margin: -300px -200px 0 0;
 }
 
 .mup-widget-2 {
