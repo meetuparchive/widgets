@@ -5,8 +5,8 @@
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
-    urlname: "etsy-craft-party",
-    width: 200,
+    urlname: "etsy-craft-part",
+    width: 300,
 		_height: 200,
     _name: "Everywhere Badge",
     _description: "Shows past meetups and aggregates tagged content from other services."
@@ -38,10 +38,8 @@
 	    if (data.results.length == 0) {
 		  	$('.mup-widget-2', ctx).width($parameters.width);
 				$('.mup-widget-2', ctx).append(
-					'<div class="mup-widget">\
-						<div class="error">\
-							<div class="errorMsg">Oops. An error has occurred.</div>\
-						</div>\
+					'<div class="mup-widget error">\
+							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
 					</div>');
 	    }
 			else {
@@ -78,7 +76,7 @@
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	//padding-top: 8px;
+	padding-top: 8px;
 }
 .mup-widget-2 .mup-widget h3,
 .mup-widget-2 .mup-widget h4,
@@ -110,12 +108,11 @@
 	color: #f2f2f2;
 }
 .mup-widget-2 .mup-widget .mup-bd {
-	display: inline-block;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding: 8px 6px;
-	margin: 8px 8px 0 8px;
+	margin: 0 8px;
 	background: #333;
 }
 .mup-widget-2 .mup-widget a,

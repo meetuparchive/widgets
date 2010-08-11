@@ -85,10 +85,8 @@
 		$.getJSON($queries.containers(), function(data) {
 	    if (data.results.length == 0) {
 				$('.mup-widget-1', ctx).append(
-					'<div class="mup-widget" style="width:' + $parameters.width + '">\
-						<div class="error">\
-							<div class="errorMsg">Oops. An error has occurred.</div>\
-						</div>\
+					'<div class="mup-widget error" style="width:' + $parameters.width + '">\
+							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
 					</div>');
 	    }
 			else {
