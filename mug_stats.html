@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<img src="'+imagesrc+'" height="75" alt="'+alt+'"/>';
+                        return '<span class="mup-img"><img src="'+imagesrc+'" height="75" alt="'+alt+'"/></span>';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -75,7 +75,7 @@
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
                         <h4> <span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></h4>\
 						<span class="mup-stats">' + addImage(group.photo_url,group.name)+"<br>"+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
-                        <span class="mup-stats-black"><h4><span style="color:#FFF">Next Meetup:</span></h4>\
+                        <span class="mup-stats"><h4><span style="color:#FFF">Next Meetup:</span></h4>\
                         <div class="next-event"></div></span>\
 					</div>\
 					<div class="mup-ft">\
@@ -175,15 +175,11 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
-.mup-stats-black {
-	display: block;
-	margin: 6px 0;
-	padding: 4px;
-	text-align: center;
-	background: #000000;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+.mup-widget-2 .mup-widget .mup-img {
+    overflow: hidden;
+    height: 20;
+    width: 20;
+
 }
 .mup-widget-2 .mup-widget .mup-button {
 	display:block;
