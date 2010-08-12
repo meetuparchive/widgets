@@ -29,7 +29,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<span class="mup-img"><img src="'+imagesrc+'" height="75" alt="'+alt+'"/></span>';
+                        return '<span style="position:relative"><span style="position:absolute; overflow:hidden; clip:rect(10px,50px,50px,10px)"><img src="'+imagesrc+'" height="75" alt="'+alt+'"/></span></span>';
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -174,12 +174,6 @@
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-}
-.mup-widget-2 .mup-widget .mup-img {
-    overflow: hidden;
-    height: 20;
-    width: 20;
-
 }
 .mup-widget-2 .mup-widget .mup-button {
 	display:block;
