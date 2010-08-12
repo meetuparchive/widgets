@@ -30,7 +30,7 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<div class="mup-img"><img src="'+imagesrc+'" height="'+$parameters.imageheight+'" alt="'+alt+'"/></div>';
+                        return '<img src="'+imagesrc+'" height="'+$parameters.imageheight+'" alt="'+alt+'" class="mup-img"/>';
                     },
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
@@ -252,7 +252,7 @@
 	border: 1px solid #0d2748;
 }
 .mup-widget-2 .mup-widget .mup-img {
-	border: 1px solid #000000;
+    overflow: hidden;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
