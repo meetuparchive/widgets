@@ -92,7 +92,7 @@
 	        } else {
 	            if (data.results.length == 0) {
 				    $('.next-event', ctx).append(
-					    'Join and suggest new ideas for Meetups!');
+					    addLink('Join this group and suggest new ideas for Meetups!',group.link+'join/');
 	            }
                 else {
                     var event = data.results[0];
