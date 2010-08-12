@@ -73,10 +73,10 @@
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
-                        <h4> <span style="color:#FFF">EST. '+ getFormattedDate(group.created)+'</span></h4>\
+                        <h4> <span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></h4>\
 						<span class="mup-stats">' + addImage(group.photo_url,group.name)+"<br>"+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
-                        <h4><span style="color:#FFF">Next Meetup:</span></h4>\
-                        <div class="next-event"></div>\
+                        <span class="mup-stats-black"><h4><span style="color:#FFF">Next Meetup:</span></h4>\
+                        <div class="next-event"></div></span>\
 					</div>\
 					<div class="mup-ft">\
 						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
@@ -171,6 +171,16 @@
 	padding: 4px;
 	text-align: center;
 	background: #1A1A1A;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.mup-stats-black {
+	display: block;
+	margin: 6px 0;
+	padding: 4px;
+	text-align: center;
+	background: #000000;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
