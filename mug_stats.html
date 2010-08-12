@@ -1,0 +1,283 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script src="local.js"></script>
+<script src="api_key.js"></script>
+<script id="config" type="text/javascript" charset="utf-8">
+  var $parameters = {
+    urlname: "nystartrek",
+    width: 200,
+    _height: 500,
+    _name: "MUG Badge",
+    _description: "Shows basic stats on your favorite Meetup group."
+  };
+  var $queries = {
+    groups: function() { 
+      return mup_widget.api_call("/groups", {group_urlname: $parameters.urlname});
+    },
+    events: function() {
+      return mup_widget.api_call("/events", {group_urlname: $parameters.urlname, page: '1'});
+    }
+  };
+</script>
+<link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
+<script type="text/javascript" charset="utf-8">
+	mup_widget.with_jquery(function($, ctx) {
+		var	group = '',
+				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+				addLink = function( content, link ) {
+						return '<a href="' + link + '">' + content + '</a>';
+					},
+                addImage = function( imagesrc, alt) {
+                        return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                    },
+                addStarRating = function(rating) {
+                        var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
+                        var starlink = '';
+                        if (rating < 1.25) {
+                            starlink = "100.png";
+                        } else if (rating < 1.75) {
+                            starlink = "150.png";
+                        }else if (rating < 2.25) {
+                            starlink = "200.png";
+                        }else if (rating < 2.75) {
+                            starlink = "250.png";
+                        }else if (rating < 3.25) {
+                            starlink = "300.png";
+                        }else if (rating < 3.75) {
+                            starlink = "350.png";
+                        }else if (rating < 4.25) {
+                            starlink = "400.png";
+                        }else if (rating < 4.75) {
+                            starlink = "450.png";
+                        }else {
+                            starlink = "500.png";
+                        }
+                        return '<img src="'+base_url+starlink+'" alt="'+rating+'" />';
+                        
+                    },
+				addLeadingZero = function( num ) {
+						return (num < 10) ? ('0' + num) : num;
+					},
+				getFormattedDate = function( millis ) {
+						var date = new Date( millis );
+						return  months[date.getMonth()] + ' ' + addLeadingZero( date.getDate() ) + ', ' + date.getFullYear().toString();
+					},
+				getFormattedTime = function( millis ) {
+						var	time = new Date( millis ),
+								hours = time.getHours(),
+								min = time.getMinutes(),
+								ampm = (hours > 11) ? 'PM' : 'AM';
+						min = (min < 10) ? ('0' + min) : min;
+						hours = (hours == 0) ? 1 : hours;
+						hours = (hours > 12) ? hours-12 : hours;
+						return hours + ':' + min + ' ' + ampm;
+					},
+				numberFormat = function(nStr){
+					  nStr += '';
+					  x = nStr.split('.');
+					  x1 = x[0];
+					  x2 = x.length > 1 ? '.' + x[1] : '';
+					  var rgx = /(\d+)(\d{3})/;
+					  while (rgx.test(x1))
+					    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+					  return x1 + x2;
+					};
+		$.getJSON($queries.groups(), function(data) {
+	    if (data.results.length == 0) {
+		  	$('.mup-widget-2', ctx).width($parameters.width);
+				$('.mup-widget-2', ctx).append(
+					'<div class="mup-widget error">\
+							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
+					</div>');
+	    }
+			else {
+			group = data.results[0];
+			$('.mup-widget-2', ctx).width($parameters.width);
+			$('.mup-widget-2', ctx).append(
+				'<div class="mup-widget">\
+					<div class="mup-bd">\
+						<h3>' + addLink( group.name, group.link ) + '</h3>\
+                        <h4> <span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></h4>\
+						<span class="mup-stats">' + addImage(group.photo_url,group.name)+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
+                        <span class="mup-stats"><div class="next-event"></div></span>\
+                        <h4><span class="mup-tlabel">'+ addLink('Join '+group.name,group.link+'join/')+'</span></h4>\
+					</div>\
+					<div class="mup-ft">\
+						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"><div style="float:right;">'+addStarRating(group.rating)+'<br><span class="mup-tlabel">Group Rating</span></div></div>\
+						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
+					</div>\
+				</div>'
+				);
+
+	      $.getJSON($queries.events(), function(data) {
+	        if (data.status && data.status.match(/^200/) == null) {
+	          alert(data.status + ": " + data.details);
+	        } else {
+	            if (data.results.length == 0) {
+				    $('.next-event', ctx).append(addLink('Join this group and suggest new ideas for Meetups!',group.link+'join/'));
+	            }
+                else {
+                    var event = data.results[0];
+                    var city;
+                    if (event.venue_city == "") {
+                        city = group.city;
+                    } else {
+                        city = event.venue_city;
+                    }
+                    var state_country;
+                    if (event.venue_state == "") {
+                        if (group.state == "") {
+                            state_country = group.country.toUpperCase();
+                        } else {
+                            state_country = group.state;
+                        }
+                    } else {
+                        state_country = event.venue_state;
+                    }
+                    var venue;
+                    if (event.venue_name == "") {
+                        if (event.venue_address1 == "") {
+                            venue = "";
+                        } else {
+                            venue = event.venue_address1+ " - ";
+                        }
+                    } else {
+                        venue = event.venue_name + " - ";
+                    }
+                    var location = venue + city + ", " + state_country;
+                    $('.next-event', ctx).append("<h4>"+addLink(getFormattedDate(event.time) + "<br>" + event.name, event.event_url)+'<br><span class="mup-tlabel">' + location + '<br>' + getFormattedTime(event.time)+"</span></h4>");
+                }
+            }
+            });
+	    }
+	  });
+	});
+</script>
+<style type="text/css" media="screen">
+.next-event {
+
+}
+.mup-widget-2 {
+	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
+	font-size: 12px;
+}
+.mup-widget-2 .mup-widget,
+.mup-widget-2 .mup-widget .mup-hd a {
+	background: #1A1A1A;
+	color: #f2f2f2;
+}
+.mup-widget-2 .mup-widget {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding-top: 8px;
+}
+.mup-widget-2 .mup-widget h3,
+.mup-widget-2 .mup-widget h4,
+.mup-widget-2 .mup-widget p {
+	line-height: 1.2 !important;
+	text-align: center;
+}
+.mup-widget-2 .mup-widget h3 {
+	font-size: 18px;
+	color: #f2f2f2;
+	font-weight: bold;
+}
+.mup-widget-2 .mup-widget h4 {
+	font-size: 13px;
+}
+.mup-widget-2 .mup-widget h5 {
+	font-size: 20px;
+	margin: 0 auto;
+	text-align: center;
+	letter-spacing: -1px;
+	text-shadow: 1px 1px 1px #1A1A1A;
+}
+.mup-widget-2 .mup-widget p {
+	text-align: center;
+}
+.mup-widget-2 .mup-widget .mup-bd,
+.mup-widget-2 .mup-widget .mup-timeline,
+.mup-widget-2 .mup-widget .mup-bd p {
+	color: #f2f2f2;
+}
+.mup-widget-2 .mup-widget .mup-bd {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 8px 6px;
+	margin: 0 8px;
+	background: #333;
+}
+.mup-widget-2 .mup-widget a,
+.mup-widget-2 .mup-widget a:active,
+.mup-widget-2 .mup-widget a:visited {
+	color: #f2f2f2;
+	text-decoration: none;
+}
+.mup-widget-2 .mup-widget a:hover {
+    color: #005CE6;
+    text-decoration: none;
+}
+.mup-widget-2 .mup-widget .mup-tlabel {
+	font-size: 10px;
+	color: #AAA;
+}
+.mup-widget-2 .mup-widget .mup-stats {
+	display: block;
+	margin: 6px 0;
+	padding: 4px;
+	text-align: center;
+	background: #1A1A1A;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.mup-widget-2 .mup-widget .mup-button {
+	display:block;
+	margin: 0 auto;
+	padding: 2px 4px;
+	background-color: #2266BB;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));
+	background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	font-size: 10px;
+	font-weight: bold;
+	color: #f2f2f2 !important;
+	text-align: center;
+	border: 1px solid #0d2748;
+}
+.mup-widget-2 .mup-widget .mup-img {
+    overflow: hidden;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.mup-widget-2 .mup-widget .mup-img-wrap {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.mup-widget-2 .mup-widget .mup-ft .mup-getwdgt {
+	padding: 3px 0;
+	font-size: 8px;
+	text-align: center;
+	background: #0A0A0A;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.mup-widget-2 .mup-widget .mup-ft .mup-logo {
+	padding: 6px 8px;
+}
+</style>
+</head>
+<body>
+	<div class="mup-widget-2"></div>
+</body>
+</html>
