@@ -97,14 +97,14 @@
                 else {
                     var event = data.results[0];
                     var city;
-                    if (event.venue_city == null) {
+                    if (event.venue_city == "") {
                         city = group.city;
                     } else {
                         city = event.venue_city;
                     }
                     var state_country;
-                    if (event.venue_state == null) {
-                        if (group.state == null) {
+                    if (event.venue_state == "") {
+                        if (group.state == "") {
                             state_country = group.country.toUpperCase();
                         } else {
                             state_country = group.state;
@@ -113,8 +113,8 @@
                         state_country = event.venue_state;
                     }
                     var venue;
-                    if (event.venue_name == null) {
-                        if (event.venue_address1 == null) {
+                    if (event.venue_name == "") {
+                        if (event.venue_address1 == "") {
                             venue = "";
                         } else {
                             venue = event.venue_address1+ " - ";
