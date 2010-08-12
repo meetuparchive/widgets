@@ -32,7 +32,31 @@
                 addImage = function( imagesrc, alt) {
                         return '<img src="'+imagesrc+'" height="'+$parameters.imageheight+'" alt="'+alt+'"/>';
                     },
-
+                addStarRating = function(rating) {
+                        var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
+                        var starlink = '';
+                        if (rating < 1.25) {
+                            starlink = "100.png";
+                        } else if (rating < 1.75) {
+                            starlink = "150.png";
+                        }else if (rating < 2.25) {
+                            starlink = "200.png";
+                        }else if (rating < 2.75) {
+                            starlink = "250.png";
+                        }else if (rating < 3.25) {
+                            starlink = "300.png";
+                        }else if (rating < 3.75) {
+                            starlink = "350.png";
+                        }else if (rating < 4.25) {
+                            starlink = "400.png";
+                        }else if (rating < 4.75) {
+                            starlink = "450.png";
+                        }else {
+                            starlink = "500.png";
+                        }
+                        return '<img src="'+base_url+starlink+'" alt="'+rating+'" />';
+                        
+                    },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
 					},
@@ -81,7 +105,7 @@
                         <h4><span class="mup-tlabel">'+ addLink('Join '+group.name,group.link+'join/')+'</span></h4>\
 					</div>\
 					<div class="mup-ft">\
-						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
+						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>'+addStarRating(group.rating)+'\
 						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
 					</div>\
 				</div>'
