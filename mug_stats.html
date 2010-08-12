@@ -96,7 +96,34 @@
 	            }
                 else {
                     var event = data.results[0];
-                    $('.next-event', ctx).append("<h4>"+addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url)+"</h4>");
+                    var city;
+                    if (event.venue_city == null) {
+                        city = group.city;
+                    } else {
+                        city = event.venue_city;
+                    }
+                    var state_country;
+                    if (event.venue_state == null) {
+                        if (group.state == null) {
+                            state_country = group.country.toUpperCase();
+                        } else {
+                            state_country = group.state;
+                        }
+                    } else {
+                        state_country = event.venue_state;
+                    }
+                    var venue;
+                    if (event.venue_name == null) {
+                        if (event.venue_address1 == null) {
+                            venue = "";
+                        } else {
+                            venue = event.venue_address1+ " - ";
+                        }
+                    } else {
+                        venue = event.venue_name + " - ";
+                    }
+                    var location = venue + city + ", " + state_country;
+                    $('.next-event', ctx).append("<h4>"+addLink(event.name+'<br>' + location + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url)+"</h4>");
                 }
             }
             });
@@ -167,7 +194,7 @@
 	text-decoration: none;
 }
 .mup-widget-2 .mup-widget a:hover {
-    color: #0066FF;
+    color: #005CE6;
     text-decoration: none;
 }
 .mup-widget-2 .mup-widget .mup-tlabel {
