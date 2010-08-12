@@ -90,9 +90,14 @@
 	        if (data.status && data.status.match(/^200/) == null) {
 	          alert(data.status + ": " + data.details);
 	        } else {
-                var event = data.results[0];
-                $('.next-event', ctx).append("<h4>"+addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url)+"</h4>");
-
+	            if (data.results.length == 0) {
+				    $('.next-event', ctx).append(
+					    'Join and suggest new ideas for Meetups!');
+	            }
+                else {
+                    var event = data.results[0];
+                    $('.next-event', ctx).append("<h4>"+addLink(event.name+'<br>'+event.venue_city+ ', ' +event.venue_state + '<br>' +getFormattedDate(event.time) + ": " + getFormattedTime(event.time), event.event_url)+"</h4>");
+                }
             }
             });
 	    }
