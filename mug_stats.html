@@ -12,6 +12,7 @@
     _name: "MUG Badge",
     _description: "Shows basic stats on your favorite Meetup group."
   };
+  $parameters._height = 250+imageheight;
   var $queries = {
     groups: function() { 
       return mup_widget.api_call("/groups", {group_urlname: $parameters.urlname});
