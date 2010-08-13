@@ -42,7 +42,13 @@
 			else {
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
-			$('.mug-badge', ctx).append("Hello");
+			$('.mug-badge', ctx).append('\
+                <div class="mup-widget">\
+					<div class="mup-bd">\
+                        
+                    </div>\
+                </div>\
+            ');
         }
         });
 
@@ -54,15 +60,22 @@
 	font-size: 12px;
 }
 .mug-badge .mup-widget,
-.mug-badge .mup-widget .mup-hd a {
-	background: #1A1A1A;
-	color: #f2f2f2;
-}
 .mug-badge .mup-widget {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding-top: 8px;
+}
+
+.mug-badge .mup-widget .mup-bd {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 8px 6px;
+	margin: 0 8px;
+	background: #CC0000;
+    height:50px;
+    width:100px;
 }
 
 </style>
