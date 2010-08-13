@@ -43,7 +43,7 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back"><b>I SUPPORT</b></div>\
+                <div class="mup-back"><span class="mup-label">I SUPPORT</span></div>\
             ');
         }
         });
@@ -60,12 +60,16 @@
     background-color:#CC0000;
     height:200px;
     width:300px;
-    color:#FFF;
 	border-radius: 15px;
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
+
+}
+.mug-badge2 .mup-back .mup-label {
     text-align:center;
     font-size: 20px;
+	font-weight: bold;
+    color:#FFF;
 }
 
 .mug-badge2 .mup-widget,
