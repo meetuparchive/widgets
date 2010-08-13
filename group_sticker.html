@@ -31,6 +31,15 @@
                             return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
                         }
                     };
+
+        var w = $parameters.width;                          //width
+        var h = parseInt(w / 1.5);                          //height
+        var r = parseInt(w / 20);                           //radius
+        var bm = parseInt(h / 7);                           //bottom margin
+        var tm = parseInt(bottom_margin * 2);               //top margin
+        var sm = parseInt(w * .015);                        //side margin
+        var fh = h - bm - tm;                               //front height
+        var fw = w - (2*sm);                                //front width
         $.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
 		  	$('.mug-badge2', ctx).width($parameters.width);
@@ -43,7 +52,7 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back"><div class="mup-label">I SUPPORT</div><div class="mup-front"></div></div>\
+                <div class="mup-back" style="height:'+h+'px;width:'+w+'px;border-radius:'+r+'px;-moz-border-radius:'+r+'px;-webkit-border-radius:'+r+'px;"><div class="mup-label">I SUPPORT</div><div class="mup-front" style="height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;"></div></div>\
             ');
         }
         });
@@ -58,13 +67,7 @@
 .mug-badge2 .mup-back {
     background:#CC0000;
     background-color:#CC0000;
-    height:200px;
-    width:300px;
-	border-radius: 15px;
-	-moz-border-radius: 15px;
-	-webkit-border-radius: 15px;
     text-align:center;
-
 }
 .mug-badge2 .mup-back .mup-label {
     padding: 15px;
@@ -76,11 +79,7 @@
 .mug-badge2 .mup-front {
     background:#FFF;
     background-color:#FFF;
-    height: 114px;
-    width: 290px;
     position: absolute;
-    top: 57px;
-    left: 5px;
 }
 
 .mug-badge2 .mup-widget,
