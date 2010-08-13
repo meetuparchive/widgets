@@ -6,9 +6,9 @@
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
     urlname: "nystartrek",
-    width: 200,
+    width: 225,
     _height: 500,
-    _name: "MUG Badge",
+    _name: "Meetup Group Stats",
     _description: "Shows basic stats on your favorite Meetup group."
   };
   var $queries = {
@@ -29,7 +29,11 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                        if (imagesrc == "" ) {
+                            return '';
+                        } else {
+                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                        }
                     },
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
@@ -98,13 +102,13 @@
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
-                        <h4> <span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></h4>\
+                        <h4> <div style="padding-top:5px;"><span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></div></h4>\
 						<span class="mup-stats">' + addImage(group.photo_url,group.name)+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
                         <span class="mup-stats"><div class="next-event"></div></span>\
-                        <h4><span class="mup-tlabel">'+ addLink('Join '+group.name,group.link+'join/')+'</span></h4>\
+                        <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
 					</div>\
 					<div class="mup-ft">\
-						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"><div style="float:right;">'+addStarRating(group.rating)+'<br><span class="mup-tlabel">Group Rating</span></div></div>\
+						<div class="mup-logo"><div style="float:left;">'+addLink('<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png">','http://www.meetup.com')+'</div><div style="float:right;"><div style="float:right;">'+addStarRating(group.rating)+'</div><br><div style="float:right;"><span class="mup-tlabel">Group Rating</span></div></div></div>\
 						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
 					</div>\
 				</div>'
@@ -115,7 +119,7 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
 	            if (data.results.length == 0) {
-				    $('.next-event', ctx).append(addLink('Join this group and suggest new ideas for Meetups!',group.link+'join/'));
+				    $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
 	            }
                 else {
                     var event = data.results[0];
@@ -146,7 +150,7 @@
                         venue = event.venue_name + " - ";
                     }
                     var location = venue + city + ", " + state_country;
-                    $('.next-event', ctx).append("<h4>"+addLink(getFormattedDate(event.time) + "<br>" + event.name, event.event_url)+'<br><span class="mup-tlabel">' + location + '<br>' + getFormattedTime(event.time)+"</span></h4>");
+                    $('.next-event', ctx).append('<h4><div class="mup-tlabel">'+getFormattedDate(event.time) + ' &nbsp | &nbsp ' + getFormattedTime(event.time) + "</div>" + addLink(event.name, event.event_url)+'<div class="mup-tlabel">' + location + "</div></h4>");
                 }
             }
             });
@@ -223,6 +227,10 @@
 .mup-widget-2 .mup-widget .mup-tlabel {
 	font-size: 10px;
 	color: #AAA;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 .mup-widget-2 .mup-widget .mup-stats {
 	display: block;
@@ -235,20 +243,25 @@
 	-webkit-border-radius: 3px;
 }
 .mup-widget-2 .mup-widget .mup-button {
+    width: 30px;
 	display:block;
 	margin: 0 auto;
 	padding: 2px 4px;
-	background-color: #2266BB;
+    height: 100%;
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));
 	background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);
+	background-color: #2266BB;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	font-size: 10px;
 	font-weight: bold;
-	color: #f2f2f2 !important;
+	color: #f2f2f2;
 	text-align: center;
 	border: 1px solid #0d2748;
+}
+.mup-widget-2 .mup-widget .mup-button:hover {
+    color: #005CE6;
 }
 .mup-widget-2 .mup-widget .mup-img {
     overflow: hidden;
@@ -274,6 +287,7 @@
 }
 .mup-widget-2 .mup-widget .mup-ft .mup-logo {
 	padding: 6px 8px;
+    height: 25px;
 }
 </style>
 </head>
