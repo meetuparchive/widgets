@@ -146,7 +146,7 @@
                         venue = event.venue_name + " - ";
                     }
                     var location = venue + city + ", " + state_country;
-                    $('.next-event', ctx).append('<h4><div class="mup-tlabel">'+getFormattedDate(event.time) + " - " + getFormattedTime(event.time) + "</div>" + addLink(event.name, event.event_url)+'<div class="mup-tlabel">' + location + "</div></h4>");
+                    $('.next-event', ctx).append('<h4><div class="mup-tlabel">'+getFormattedDate(event.time) + ' &nbsp | &nbsp ' + getFormattedTime(event.time) + "</div>" + addLink(event.name, event.event_url)+'<div class="mup-tlabel">' + location + "</div></h4>");
                 }
             }
             });
