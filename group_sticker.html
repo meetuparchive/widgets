@@ -29,7 +29,7 @@
                         if (imagesrc == "" ) {
                             return '';
                         } else {
-                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" height="'+height+'" alt="'+alt+'" class="mup-img"/></div>';
+                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" height="'+(height-2)+'" alt="'+alt+'" class="mup-img"/></div>';
                         }
                     };
 
@@ -60,8 +60,8 @@
                     <div style="padding-top: '+lp+'px; font-size: '+fs+'px; font-weight: bold;color: #FFF;">\
                         '+$parameters.label+'\
                     </div>\
-                    <div class="mup-front" style="height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;">\
-                    '+addImage(group.photo_url,group.name,fh)+'\
+                    <div class="mup-front" style="text-align:left;height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;">\
+                        '+addImage(group.photo_url,group.name,fh)+'\
                     </div>\
                 </div>\
             ');
@@ -100,6 +100,9 @@
 	background: #CC0000;
     height:50px;
     width:100px;
+}
+.mug-badge .mup-widget .mup-img {
+    padding: 1px;
 }
 
 </style>
