@@ -52,15 +52,16 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back" style="height:'+h+'px;width:'+w+'px;border-radius:'+r+'px;-moz-border-radius:'+r+'px;-webkit-border-radius:'+r+'px;">\
-                    <div class="mup-label">\
+                <div style="height: '+h+'px; width:'+w+'px; border-radius: '+r+'px; -moz-border-radius: '+r+'px; -webkit-border-radius: '+r+'px; background: #CC0000; background-color: #CC0000; text-align: center;">\
+                    <div style="padding: 15px; font-size: 20px; font-weight: bold;color: #FFF;">\
                         I SUPPORT\
                     </div>\
                 </div>\
             ');
         }
         });
-
+                    //<div class="mup-front" style="height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;">
+                    //</div>
     });
 </script>
 <style type="text/css" media="screen">
@@ -68,17 +69,7 @@
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
 }
-.mug-badge2 .mup-back {
-    background:#CC0000;
-    background-color:#CC0000;
-    text-align:center;
-}
-.mug-badge2 .mup-back .mup-label {
-    padding: 15px;
-    font-size: 20px;
-	font-weight: bold;
-    color:#FFF;
-}
+
 
 .mug-badge2 .mup-front {
     background:#FFF;
