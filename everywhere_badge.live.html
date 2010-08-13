@@ -53,7 +53,7 @@
 						<div style="overflow:hidden;"><span style="font-size:11px; float:left; display:block; padding:2px 0 0 3px;">Find a meetup near you </span><span class="mup-button" style="float:right;margin-right:2px;">' + addLink( 'GO', container.meetup_url ) + '</span></div>\
 					</div>\
 					<div class="mup-ft">\
-						<div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div>\
+						<div class="mup-logo">' + addLink( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />', container.meetup_url ) + '</div>\
 						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>\
 					</div>\
 				</div>'
@@ -140,9 +140,9 @@
 	display:block;
 	margin: 0 auto;
 	padding: 2px 4px;
-	background-color: #2266BB;
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));
 	background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);
+	background-color: #2266BB;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;

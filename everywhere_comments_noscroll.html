@@ -7,7 +7,7 @@
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
     urlname: "etsy-craft-party",
-    width: 250,
+    width: 300,
     _height: 500,
     _name: "Everywhere Comments",
     _description: "Shows the 3 most recent comments for the specified container."
@@ -18,7 +18,10 @@
     },
 		comments: function() { 
 			return mup_widget.api_call("/ew/comments", {urlname: $parameters.urlname, page: '3'});
-		}
+		},
+		events: function() { 
+      return mup_widget.api_call("/ew/events", {status: "upcoming", urlname: $parameters.urlname});
+    }
   };
 </script>
 <link rel="stylesheet" type="text/css" href="http://static2.dev.meetupstatic.com/style/widget.css">
@@ -81,7 +84,13 @@
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					};
-		
+		String.prototype.trunc =
+			function(n,useWordBoundary){
+			    var toLong = this.length>n,
+			        s_ = toLong ? this.substr(0,n-1) : this;
+			    s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+			    return  toLong ? s_ +'...' : s_;
+			 };
 		$.getJSON($queries.containers(), function(data) {
 	    if (data.results.length == 0) {
 				$('.mup-widget-5', ctx).append(
@@ -108,7 +117,6 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
 	          resultCount = parseInt(data.meta.total_count);
-						$('.mup-widget', ctx).append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
 					
 	          $.each(data.results, function(i, com) {
 	            if ( i < resultCount ) {
@@ -117,11 +125,11 @@
 								$('.mup-list', ctx).append( 
 									'<li>\
 										<div class="mup-what">\
-											<span class="mup-comment">&ldquo;' + com.comment + '&rdquo;</span>\
-											<span class="mup-author"> -<em>' + com.member.name + '</em></span>\
+											<span class="mup-comment">' + com.comment.trunc(115,true) + '</span>\
 										</div>\
 										<div class="mup-when">\
-											<span class="mup-time">' + getTimeAgo( com.time ) + '</span>\
+											<span class="mup-time">via ' + com.member.name + ' ' + getTimeAgo( com.time ) + '</span>\
+											<span class="mup-loc mup-loc' + i + '" rel="' + com.event_id + '"></span>\
 										</div>\
 									</li>' );
 	            }
@@ -129,6 +137,14 @@
 
 							$('.mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meeup_api/foundry/' ) + '</div>');
 							
+							$.getJSON($queries.events(), function(data) {
+								$.each(data.results, function(i, ev) {
+									for (var j = 0; j < 3; j++) {
+										var sel = '.mup-loc' + j;
+										ev.id == $(sel).attr('rel') ? $(sel).html( '&middot; ' + ev.city + ', ' + (ev.state == null ? ev.country.toUpperCase() : ev.state.toUpperCase()) ) : '';
+									}
+								});
+							});
 	        }
 	      });
 	    }
@@ -156,7 +172,7 @@
 	overflow: hidden;
 }
 .mup-widget-5 .mup-widget h3 {
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: bold;
 }
 .mup-widget-5 .mup-widget h3 a {
@@ -173,7 +189,7 @@
 	color: #000;
 }
 .mup-widget-5 .mup-widget .mup-bd {
-	padding: 0 6px;
+	padding: 0 8px;
 }
 .mup-widget-5 .mup-widget a,
 .mup-widget-5 .mup-widget a:active,
@@ -190,7 +206,7 @@
 }
 .mup-widget-5 .mup-widget .mup-list li {
 	position: relative;
-	padding: 12px 6px;
+	padding: 12px 8px;
 	border-top-color: #1A1A1A;
 	border-top-style: solid;
 	border-top-width: 1px;
@@ -218,6 +234,10 @@
 	margin-bottom: 3px;
 }
 .mup-widget-5 .mup-widget .mup-time {
+	font-size: 9px;
+	line-height: 1.2em;
+}
+.mup-widget-5 .mup-widget .mup-loc {
 	font-size: 9px;
 	line-height: 1.2em;
 }
