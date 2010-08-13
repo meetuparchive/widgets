@@ -89,16 +89,16 @@
 					};
 		$.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
-		  	$('.mup-widget-2', ctx).width($parameters.width);
-				$('.mup-widget-2', ctx).append(
+		  	$('.mug-badge', ctx).width($parameters.width);
+				$('.mug-badge', ctx).append(
 					'<div class="mup-widget error">\
 							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
 					</div>');
 	    }
 			else {
 			group = data.results[0];
-			$('.mup-widget-2', ctx).width($parameters.width);
-			$('.mup-widget-2', ctx).append(
+			$('.mug-badge', ctx).width($parameters.width);
+			$('.mug-badge', ctx).append(
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
 						<h3>' + addLink( group.name, group.link ) + '</h3>\
@@ -162,51 +162,51 @@
 .next-event {
 
 }
-.mup-widget-2 {
+.mug-badge {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
 }
-.mup-widget-2 .mup-widget,
-.mup-widget-2 .mup-widget .mup-hd a {
+.mug-badge .mup-widget,
+.mug-badge .mup-widget .mup-hd a {
 	background: #1A1A1A;
 	color: #f2f2f2;
 }
-.mup-widget-2 .mup-widget {
+.mug-badge .mup-widget {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding-top: 8px;
 }
-.mup-widget-2 .mup-widget h3,
-.mup-widget-2 .mup-widget h4,
-.mup-widget-2 .mup-widget p {
+.mug-badge .mup-widget h3,
+.mug-badge .mup-widget h4,
+.mug-badge .mup-widget p {
 	line-height: 1.2 !important;
 	text-align: center;
 }
-.mup-widget-2 .mup-widget h3 {
+.mug-badge .mup-widget h3 {
 	font-size: 18px;
 	color: #f2f2f2;
 	font-weight: bold;
 }
-.mup-widget-2 .mup-widget h4 {
+.mug-badge .mup-widget h4 {
 	font-size: 13px;
 }
-.mup-widget-2 .mup-widget h5 {
+.mug-badge .mup-widget h5 {
 	font-size: 20px;
 	margin: 0 auto;
 	text-align: center;
 	letter-spacing: -1px;
 	text-shadow: 1px 1px 1px #1A1A1A;
 }
-.mup-widget-2 .mup-widget p {
+.mug-badge .mup-widget p {
 	text-align: center;
 }
-.mup-widget-2 .mup-widget .mup-bd,
-.mup-widget-2 .mup-widget .mup-timeline,
-.mup-widget-2 .mup-widget .mup-bd p {
+.mug-badge .mup-widget .mup-bd,
+.mug-badge .mup-widget .mup-timeline,
+.mug-badge .mup-widget .mup-bd p {
 	color: #f2f2f2;
 }
-.mup-widget-2 .mup-widget .mup-bd {
+.mug-badge .mup-widget .mup-bd {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -214,17 +214,17 @@
 	margin: 0 8px;
 	background: #333;
 }
-.mup-widget-2 .mup-widget a,
-.mup-widget-2 .mup-widget a:active,
-.mup-widget-2 .mup-widget a:visited {
+.mug-badge .mup-widget a,
+.mug-badge .mup-widget a:active,
+.mug-badge .mup-widget a:visited {
 	color: #f2f2f2;
 	text-decoration: none;
 }
-.mup-widget-2 .mup-widget a:hover {
+.mug-badge .mup-widget a:hover {
     color: #005CE6;
     text-decoration: none;
 }
-.mup-widget-2 .mup-widget .mup-tlabel {
+.mug-badge .mup-widget .mup-tlabel {
 	font-size: 10px;
 	color: #AAA;
     padding-top: 5px;
@@ -232,7 +232,7 @@
     padding-left: 2px;
     padding-right: 2px;
 }
-.mup-widget-2 .mup-widget .mup-stats {
+.mug-badge .mup-widget .mup-stats {
 	display: block;
 	margin: 6px 0;
 	padding: 4px;
@@ -242,7 +242,7 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
-.mup-widget-2 .mup-widget .mup-button {
+.mug-badge .mup-widget .mup-button {
     width: 30px;
 	display:block;
 	margin: 0 auto;
@@ -260,20 +260,20 @@
 	text-align: center;
 	border: 1px solid #0d2748;
 }
-.mup-widget-2 .mup-widget .mup-button:hover {
+.mug-badge .mup-widget .mup-button:hover {
     color: #005CE6;
 }
-.mup-widget-2 .mup-widget .mup-img {
+.mug-badge .mup-widget .mup-img {
     overflow: hidden;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
-.mup-widget-2 .mup-widget .mup-img-wrap {
+.mug-badge .mup-widget .mup-img-wrap {
     padding-top: 5px;
     padding-bottom: 5px;
 }
-.mup-widget-2 .mup-widget .mup-ft .mup-getwdgt {
+.mug-badge .mup-widget .mup-ft .mup-getwdgt {
 	padding: 3px 0;
 	font-size: 8px;
 	text-align: center;
@@ -285,13 +285,13 @@
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
-.mup-widget-2 .mup-widget .mup-ft .mup-logo {
+.mug-badge .mup-widget .mup-ft .mup-logo {
 	padding: 6px 8px;
     height: 25px;
 }
 </style>
 </head>
 <body>
-	<div class="mup-widget-2"></div>
+	<div class="mug-badge"></div>
 </body>
 </html>
