@@ -43,7 +43,7 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back"><div class="mup-label">I SUPPORT</div></div>\
+                <div class="mup-back"><div class="mup-label">I SUPPORT</div><div class="mup-front"></div></div>\
             ');
         }
         });
@@ -67,10 +67,20 @@
 
 }
 .mug-badge2 .mup-back .mup-label {
-    padding: 5px;
+    padding: 15px;
     font-size: 20px;
 	font-weight: bold;
     color:#FFF;
+}
+
+.mug-badge2 .mup-front {
+    background:#FFF;
+    background-color:#FFF;
+    height: 114px;
+    width: 290px;
+    position: absolute;
+    top: 57px;
+    left: 5px;
 }
 
 .mug-badge2 .mup-widget,
