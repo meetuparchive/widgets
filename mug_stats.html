@@ -38,9 +38,11 @@
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
                         var starlink = '';
-                        if (rating < 1.25) {
+                        if (rating == 0) {
+                            return 'Not Yet Rated';
+                        }else if (rating < 1.25) {
                             starlink = "100.png";
-                        } else if (rating < 1.75) {
+                        }else if (rating < 1.75) {
                             starlink = "150.png";
                         }else if (rating < 2.25) {
                             starlink = "200.png";
