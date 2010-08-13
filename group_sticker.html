@@ -34,12 +34,13 @@
 
         var w = $parameters.width;                          //width
         var h = parseInt(w / 1.5);                          //height
-        var r = parseInt(w / 20);                           //radius
+        var r = parseInt(w / 20);                           //radius (and label padding)
         var bm = parseInt(h / 7);                           //bottom margin
         var tm = parseInt(bm * 2);                          //top margin
         var sm = parseInt(w * .015);                        //side margin
         var fh = h - bm - tm;                               //front height
         var fw = w - sm - sm;                               //front width
+        var fs = parseInt(h / 10);                          //font size
 
         $.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
@@ -54,7 +55,7 @@
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
                 <div style="height: '+h+'px; width:'+w+'px; border-radius: '+r+'px; -moz-border-radius: '+r+'px; -webkit-border-radius: '+r+'px; background: #CC0000; background-color: #CC0000; text-align: center;">\
-                    <div style="padding: 15px; font-size: 20px; font-weight: bold;color: #FFF;">\
+                    <div style="padding: '+r+'px; font-size: '+fs+'px; font-weight: bold;color: #FFF;">\
                         I SUPPORT\
                     </div>\
                     <div class="mup-front" style="height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;">\
