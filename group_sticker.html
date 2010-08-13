@@ -33,8 +33,8 @@
                     };
         $.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
-		  	$('.mug-badge', ctx).width($parameters.width);
-				$('.mug-badge', ctx).append(
+		  	$('.mug-badge2', ctx).width($parameters.width);
+				$('.mug-badge2', ctx).append(
 					'<div class="mup-widget error">\
 							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
 					</div>');
@@ -42,7 +42,7 @@
 			else {
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
-			$('.mug-badge', ctx).append('\
+			$('.mug-badge2', ctx).append('\
                 <div style="background:#CC0000;background-color:#CC0000;height:100px;width:50px;color:#000">TEST</div>\
             ');
         }
