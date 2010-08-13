@@ -29,7 +29,11 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
                 addImage = function( imagesrc, alt) {
-                        return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                        if (imagesrc == "" ) {
+                            return '';
+                        } else {
+                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                        }
                     },
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
