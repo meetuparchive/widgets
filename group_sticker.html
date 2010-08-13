@@ -43,7 +43,7 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div style="background:#CC0000;background-color:#CC0000;height:100px;width:50px;color:#000">TEST</div>\
+                <div class="mup-back">I SUPPORT</div>\
             ');
         }
         });
@@ -51,19 +51,30 @@
     });
 </script>
 <style type="text/css" media="screen">
-.mug-badge {
+.mug-badge2 {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
 }
-.mug-badge .mup-widget,
-.mug-badge .mup-widget {
+.mug-badge2 .mup-back {
+    background:#CC0000;
+    background-color:#CC0000;
+    height:100px;
+    width:150px;
+    color:#FFF;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+.mug-badge2 .mup-widget,
+.mug-badge2 .mup-widget {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding-top: 8px;
 }
 
-.mug-badge .mup-widget .mup-bd {
+.mug-badge2 .mup-widget .mup-bd {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
