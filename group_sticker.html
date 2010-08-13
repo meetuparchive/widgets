@@ -6,7 +6,7 @@
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
     urlname: "nystartrek",
-    width: 100,
+    width: 300,
     _height: 300,
     _name: "Meetup Mini Badge",
     _description: "Simple badge to show support for a Meetup group."
@@ -43,7 +43,7 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back">I SUPPORT</div>\
+                <div class="mup-back"><b>I SUPPORT</b></div>\
             ');
         }
         });
@@ -58,12 +58,13 @@
 .mug-badge2 .mup-back {
     background:#CC0000;
     background-color:#CC0000;
-    height:100px;
-    width:150px;
+    height:200px;
+    width:300px;
     color:#FFF;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+    text-align:center;
 }
 
 .mug-badge2 .mup-widget,
