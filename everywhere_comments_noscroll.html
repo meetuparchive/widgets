@@ -86,11 +86,12 @@
 					};
 		String.prototype.trunc =
 			function(n,useWordBoundary){
-			    var toLong = this.length>n,
-			        s_ = toLong ? this.substr(0,n-1) : this;
-			    s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
-			    return  toLong ? s_ +'...' : s_;
+			    var tooLong = this.length>n,
+			        s_ = tooLong ? this.substr(0,n-1) : this;
+			    s_ = useWordBoundary && tooLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+			    return  tooLong ? s_ +'...' : s_;
 			 };
+		
 		$.getJSON($queries.containers(), function(data) {
 	    if (data.results.length == 0) {
 				$('.mup-widget-5', ctx).append(
@@ -117,15 +118,15 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
 	          resultCount = parseInt(data.meta.total_count);
-					
+					  var cache = {};
 	          $.each(data.results, function(i, com) {
 	            if ( i < resultCount ) {
 	              // My code here.
-								
+								cache[i] = {comment: com.comment, time: com.time, member: com.member.name};
 								$('.mup-list', ctx).append( 
-									'<li>\
+									'<li class="mup-item">\
 										<div class="mup-what">\
-											<span class="mup-comment">' + com.comment.trunc(115,true) + '</span>\
+											<span class="mup-comment">' + com.comment.trunc(115,true) + '<a name="expander" href="#">more</a></span>\
 										</div>\
 										<div class="mup-when">\
 											<span class="mup-time">via ' + com.member.name + ' ' + getTimeAgo( com.time ) + '</span>\
@@ -134,17 +135,34 @@
 									</li>' );
 	            }
 	          });
-
-							$('.mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meeup_api/foundry/' ) + '</div>');
+						
+						// Expand/Collapse Long Comment
+						$('a[name=expander]', ctx).click(function(e) {
+							e.preventDefault();
+							var location = '';
 							
-							$.getJSON($queries.events(), function(data) {
-								$.each(data.results, function(i, ev) {
-									for (var j = 0; j < 3; j++) {
-										var sel = '.mup-loc' + j;
-										ev.id == $(sel).attr('rel') ? $(sel).html( '&middot; ' + ev.city + ', ' + (ev.state == null ? ev.country.toUpperCase() : ev.state.toUpperCase()) ) : '';
-									}
-								});
+							$(this).parent().parent().parent().parent().html(
+								'<li class="mup-item">\
+									<div class="mup-what">\
+										<span class="mup-comment">'+ cache[0].comment + '</span>\
+									</div>\
+									<div class="mup-when">\
+										<span class="mup-time">via ' + cache[0].member + ' ' + getTimeAgo( cache[0].time ) + '</span>\
+										<span class="mup-loc rel="' + location + '"></span>\
+									</div>\
+								</li>');
+						});
+
+						$('.mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo"><img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png"></div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meeup_api/foundry/' ) + '</div>');
+						
+						$.getJSON($queries.events(), function(data) {
+							$.each(data.results, function(i, ev) {
+								for (var j = 0; j < 3; j++) {
+									var sel = '.mup-loc' + j;
+									ev.id == $(sel).attr('rel') ? $(sel).html( '&middot; ' + ev.city + ', ' + (ev.state == null ? ev.country.toUpperCase() : ev.state.toUpperCase()) ) : '';
+								}
 							});
+						});
 	        }
 	      });
 	    }
@@ -204,7 +222,7 @@
 	-webkit-border-radius: 5px;
 	padding:0;
 }
-.mup-widget-5 .mup-widget .mup-list li {
+.mup-widget-5 .mup-widget .mup-list .mup-item {
 	position: relative;
 	padding: 12px 8px;
 	border-top-color: #1A1A1A;
@@ -213,7 +231,7 @@
 	background: #333;
 	overflow: hidden;
 }
-.mup-widget-5 .mup-widget .mup-list li:first-child {
+.mup-widget-5 .mup-widget .mup-list .mup-item:first-child {
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 	-moz-border-radius-topleft: 5px;
@@ -221,7 +239,7 @@
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 }
-.mup-widget-5 .mup-widget .mup-list li:last-child {
+.mup-widget-5 .mup-widget .mup-list .mup-item:last-child {
 	-webkit-border-bottom-right-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
