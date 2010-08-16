@@ -7,6 +7,7 @@
   var $parameters = {
     urlname: "nystartrek",
     width: 300,
+    label: "I SUPPORT",
     _height: 300,
     _name: "Meetup Mini Badge",
     _description: "Simple badge to show support for a Meetup group."
@@ -24,13 +25,25 @@
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					},
-                addImage = function( imagesrc, alt) {
+                addImage = function( imagesrc, alt, height) {
                         if (imagesrc == "" ) {
                             return '';
                         } else {
-                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+                            return '<img src="'+imagesrc+'" height="'+height+'" alt="'+alt+'" class="mup-img"/>';
                         }
                     };
+
+        var w = $parameters.width;                          //width
+        var h = parseInt(w / 1.5);                          //height
+        var r = parseInt(w / 20);                           //radius
+        var bm = parseInt(h / 7);                           //bottom margin
+        var tm = parseInt(bm * 2);                          //top margin
+        var sm = parseInt(w * .015);                        //side margin
+        var fh = h - bm - tm;                               //front height
+        var fw = w - sm - sm;                               //front width
+        var fs = parseInt(h / 10);                          //font size
+        var lp = parseInt( (tm/2) - (fs/2) );               //label padding
+
         $.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
 		  	$('.mug-badge2', ctx).width($parameters.width);
@@ -43,7 +56,14 @@
 			group = data.results[0];
 			$('.mug-badge2', ctx).width($parameters.width);
 			$('.mug-badge2', ctx).append('\
-                <div class="mup-back"><span class="mup-label">I SUPPORT</span></div>\
+                <div style="height: '+h+'px; width:'+w+'px; border-radius: '+r+'px; -moz-border-radius: '+r+'px; -webkit-border-radius: '+r+'px; background: #CC0000; background-color: #CC0000; text-align: center;">\
+                    <div style="padding-top: '+lp+'px; font-size: '+fs+'px; font-weight: bold;color: #FFF;">\
+                        '+$parameters.label+'\
+                    </div>\
+                    <div class="mup-front" style="text-align:left;height:'+fh+'px;width:'+fw+'px;top:'+tm+'px;left:'+sm+'px;">\
+                        '+addImage(group.photo_url,group.name,fh)+'\
+                    </div>\
+                </div>\
             ');
         }
         });
@@ -55,22 +75,12 @@
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
 }
-.mug-badge2 .mup-back {
-    background:#CC0000;
-    background-color:#CC0000;
-    height:200px;
-    width:300px;
-	border-radius: 15px;
-	-moz-border-radius: 15px;
-	-webkit-border-radius: 15px;
-    text-align:center;
 
-}
-.mug-badge2 .mup-back .mup-label {
 
-    font-size: 20px;
-	font-weight: bold;
-    color:#FFF;
+.mug-badge2 .mup-front {
+    background:#FFF;
+    background-color:#FFF;
+    position: absolute;
 }
 
 .mug-badge2 .mup-widget,
@@ -90,6 +100,9 @@
 	background: #CC0000;
     height:50px;
     width:100px;
+}
+.mug-badge .mup-widget .mup-img {
+    border-radius: 1px;
 }
 
 </style>
