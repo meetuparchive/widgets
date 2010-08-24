@@ -8,7 +8,7 @@
     width: 240,
 		topic: "mom",
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
-		_height: 200,
+		_height: 600,
     _name: "Meetups by Topic",
     _description: "Display upcoming meetups for a specific topic."
   };
@@ -121,15 +121,18 @@
 						'<li>\
 							<div class="mup-ev-name">' + addLink(ev.name, ev.event_url) + '</div>\
 							<div class="mup-info">\
-							<div class="mup-when">\
-								<div class="mup-date">' + getFormattedDate( ev.time ) + '</div>\
-								<div class="mup-time">' + getFormattedTime( ev.time ) + '</div>\
-							</div>\
-							<div class="mup-where">\
-								<div class="mup-city">' + ((ev.venue) ? getFormattedCity( ev.venue.city, ev.venue.state ) : 'Private Venue') + '</div>\
-								<div class="mup-venue">' + ((ev.venue) ? addLink(getFormattedVenue( ev.venue.name ), 'http://www.meetup.com/' + ev.group.urlname + '/venue/' + ev.venue.id) : addLink('Join Group for Details', 'http://www.meetup.com/' + ev.group.urlname)) + '</div>\
-							</div>\
-							<div class="mup-grp-name"><span style="font-weight:normal;">A meetup of: </span>' + addLink(ev.group.name, 'http://www.meetup.com/' + ev.group.urlname) + '</div>\
+								<div class="mup-when">\
+									<div class="mup-date">' + getFormattedDate( ev.time ) + '</div>\
+									<div class="mup-time">' + getFormattedTime( ev.time ) + '</div>\
+								</div>\
+								<div class="mup-where">\
+									<div class="mup-city">' + ((ev.venue) ? getFormattedCity( ev.venue.city, ev.venue.state ) : 'Private Venue') + '</div>\
+									<div class="mup-venue">' + ((ev.venue) ? addLink(getFormattedVenue( ev.venue.name ), 'http://www.meetup.com/' + ev.group.urlname + '/venue/' + ev.venue.id) : addLink('Join Group for Details', 'http://www.meetup.com/' + ev.group.urlname)) + '</div>\
+								</div>\
+								<div class="mup-grp-name">\
+									<span style="font-weight:normal;">A meetup of: </span>' + addLink(ev.group.name, 'http://www.meetup.com/' + ev.group.urlname) + '\
+								</div>\
+								<div class="mup-accent">=</div>\
 							</div>\
 						</li>');
 				});
@@ -328,6 +331,13 @@
 	font-size: 9px;
 	color: #AAA;
 	clear: left;
+}
+.mup-wdgt-events-by-topic .mup-widget .mup-accent {
+	color: #555;
+	text-align: center;
+	margin-top: -5px;
+	height: 8px;
+	vertical-align: super;
 }
 .mup-wdgt-events-by-topic .mup-widget .mup-grp-name a,
 .mup-wdgt-events-by-topic .mup-widget .mup-grp-name a:active,
