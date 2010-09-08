@@ -1,0 +1,544 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="local.js"></script>
+<script src="api_key.js"></script>
+<script id="config" type="text/javascript" charset="utf-8">
+  var $parameters = {
+    width: 650,
+		campaign: "ecomagination",
+		image_url: "http://photos2.meetupstatic.com/photos/event/c/f/3/4/global_17153044.jpeg",
+		_height: 600,
+    _name: "Sponsored Meetup Groups",
+    _description: "Display Meetup groups in a specified sponsorship campaign."
+  };
+  var $queries = {
+    events2: function() { 
+      return mup_widget.api_call("/2/events", {topic: $parameters.campaign, page: 3, after: "0d"});
+    },
+		topics: function() {
+			return mup_widget.api_call("/topics", {topic: $parameters.campaign});
+		},
+		groups: function() {
+			return mup_widget.api_call("/groups", {topic: $parameters.campaign});
+		}
+  };
+</script>
+<link rel="stylesheet" type="text/css" href="http://static2.meetupstatic.com/style/widget.css">
+<script type="text/javascript" charset="utf-8">
+	mup_widget.with_jquery(function($, ctx) {
+		/*
+		 * Tiny Carousel 1.76
+		 *
+		 * Copyright (c) 2010 Maarten Baijs
+		 *
+		 * Date: 01 / 07 / 2010
+		 * Library: jQuery
+		 *
+		 */
+		(function($){
+			$.fn.tinycarousel = function(options){
+				var defaults = { 
+					start: 1, // where should the carousel start?
+					display: 1, // how many blocks do you want to move at 1 time?
+					axis: 'x', // vertical or horizontal scroller? ( x || y ).
+					controls: true, // show left and right navigation buttons.
+					pager: false, // is there a page number navigation present?
+					interval: false, // move to another block on intervals.
+					intervaltime: 3000, // interval time in milliseconds.
+					animation: true, // false is instant, true is animate.
+					duration: 1000, // how fast must the animation move in ms?
+					callback: null // function that executes after every move
+				};
+				var options = $.extend(defaults, options);  
+
+				var oSlider = $(this);
+				var oViewport = $('.viewport', oSlider);
+				var oContent = $('.overview', oSlider);
+				var oPages = oContent.children();
+				var oBtnNext = $('.next', oSlider);
+				var oBtnPrev = $('.prev', oSlider);
+				var oPager = $('.pager', oSlider);
+				var iPageSize, iSteps, iCurrent, oTimer, bForward = true, bAxis = options.axis == 'x';
+
+				return this.each(function(){
+					initialize();
+				});
+				function initialize(){
+					iPageSize = bAxis ? $(oPages[0]).outerWidth(true) : $(oPages[0]).outerHeight(true);
+					var iLeftover = Math.ceil(((bAxis ? oViewport.outerWidth() : oViewport.outerHeight()) / (iPageSize * options.display)) -1);
+					iSteps = Math.max(1, Math.ceil(oPages.length / options.display) - iLeftover);
+					iCurrent = Math.min(iSteps, Math.max(1, options.start)) -2;
+					oContent.css(bAxis ? 'width' : 'height', (iPageSize * oPages.length));
+					move(1);
+					setEvents();
+				}
+				function setButtons(){
+					if(options.controls){
+						oBtnPrev.toggleClass('disable', !(iCurrent > 0));
+						oBtnNext.toggleClass('disable', !(iCurrent +1 < iSteps));
+					}
+				}
+				function setEvents(){
+					if(options.controls && oBtnPrev.length > 0 && oBtnNext.length > 0){
+						oBtnPrev.click(function(){move(-1); return false;});
+						oBtnNext.click(function(){move( 1); return false;});
+					}
+					if(options.pager && oPager.length > 0){
+						oPager.click(setPager);
+					}
+				}
+				function setPager(oEvent){
+					var oTarget = oEvent.target;
+					if($(oTarget).hasClass('pagenum')){
+						iCurrent = parseInt(oTarget.rel) -1;
+						move(1);
+					}
+					return false;
+				}
+				function setPagerActive(){
+					if(options.pager){
+						var oNumbers = $('.pagenum', oPager);
+						oNumbers.removeClass('active');
+						$(oNumbers[iCurrent]).addClass('active');
+					}
+				}
+				function setTimer(bReset){
+					if(options.interval && !bReset){
+						clearInterval(oTimer);
+						oTimer = window.setInterval(function(){
+							bForward = iCurrent +1 == iSteps ? false : iCurrent == 0 ? true : bForward;
+							move(bForward ? 1 : -1, true);
+						}, options.intervaltime);
+					}
+				}
+				function move(iDirection, bTimerReset){
+					if(iCurrent + iDirection > -1 && iCurrent + iDirection < iSteps){
+						iCurrent += iDirection;
+						var oPosition = {};
+						oPosition[bAxis ? 'left' : 'top'] = -(iCurrent * (iPageSize * options.display));	
+						oContent.animate(oPosition,{
+							queue: false,
+							duration: options.animation ? options.duration : 0,
+							complete: function(){
+								if(typeof options.callback == 'function')
+								options.callback.call(this, oPages[iCurrent], iCurrent);
+							}
+						});
+						setButtons();
+						setPagerActive();
+						setTimer(bTimerReset);
+					}
+				}
+			};
+		})(jQuery);
+		// Variables
+		var	resultCount = 0,
+				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+				numberFormat = function(nStr){
+					  nStr += '';
+					  x = nStr.split('.');
+					  x1 = x[0];
+					  x2 = x.length > 1 ? '.' + x[1] : '';
+					  var rgx = /(\d+)(\d{3})/;
+					  while (rgx.test(x1))
+					    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+					  return x1 + x2;
+					},
+				addLeadingZero = function( num ) {
+						return (num < 10) ? ('0' + num) : num;
+					},
+				getTwoDigitYear = function( yr ) {
+						return yr.substring(2,4);
+					},
+				getFormattedDate = function( millis ) {
+						var date = new Date( millis );
+						return  months[date.getMonth()] + ' ' + addLeadingZero( date.getDate() );
+					},
+				getFormattedTime = function( millis ) {
+						var	time = new Date( millis ),
+								hours = time.getHours(),
+								min = time.getMinutes(),
+								ampm = (hours > 11) ? 'PM' : 'AM';
+						min = (min < 10) ? ('0' + min) : min;
+						hours = (hours == 0) ? 1 : hours;
+						hours = (hours > 12) ? hours-12 : hours;
+						return hours + ':' + min + ' ' + ampm;
+					},
+				getFormattedCity = function( city, state ) {
+						return city + (state == undefined ? "" : ", " + state);
+					},
+				getFormattedVenue = function( venue ) {
+						return (venue != null) ? venue : 'Venue TBD';
+					},
+				addLink = function( content, link ) {
+						return '<a href="' + link + '">' + content + '</a>';
+					},
+				imgResize = function ( $this, w, h) {
+					var	img = $this;
+						var	maxWidth = w,
+								maxHeight = h,
+								width = img.width(),
+								height = img.height();
+						console.info('width: ' + width);
+						console.info('height: ' + height);
+						if (width < height) {
+							img.css('width', maxWidth);
+							img.css('height', 'auto');
+						}
+						else {
+							img.css('height', maxHeight);
+							img.css('width', 'auto');
+						}
+				};
+		
+		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width);});
+		
+		$.getJSON($queries.topics(), function(data) {
+			if (data.results.length == 0) {
+				$('.mup-wdgt-spnsr-carousel', ctx).append(
+					'<div class="mup-widget error">\
+							<div class="errorMsg">Oops. No results for "' + $parameters.campaign + '"</div>\
+					</div>');
+			}
+			else {
+				var campaign = data.results[0];
+				$('.mup-wdgt-spnsr-carousel', ctx).append(
+					'<div class="mup-widget">\
+						<div class="mup-hd">\
+							<div class="mup-hd-img"></div>\
+							<h3>' + addLink( campaign.name + '<span style="color:#AAA;"> Meetups</span>', campaign.link ) + '</span></h3>\
+							<h4>' + numberFormat(campaign.members) + ' members</h4>\
+						</div>\
+						<div class="mup-bd">\
+							<div id="slider-code">\
+								<div class="vp-wrap">\
+									<a class="buttons prev" href="#">&lang;</a>\
+									<div class="viewport">\
+										<ul class="overview">\
+										</ul>\
+									</div>\
+									<a class="buttons next" href="#">&rang;</a>\
+								</div>\
+							</div>\
+						</div>\
+					</div>');
+				//$("div.mup-hd-img").css({backgroundImage: 'url(' + $parameters.image_url + ')'});
+				//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
+				//imgResize('img.resize', 64, 64);
+			}
+		});
+		
+		$.getJSON($queries.groups(), function(data) {
+	    if (data.results.length == 0) {
+				// Do nothing.
+	    }
+			else {
+         $.each(data.results, function(i, grp) {
+					$('.overview', ctx).append( 
+						'<li>\
+							<p>' + grp.name + '</p>\
+							<img src="' + grp.photo_url + '" />\
+						</li>');
+				});
+				
+				$('.mup-wdgt-spnsr-carousel > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>');
+				
+					$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
+					$('img.resize', ctx).hide();
+					$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
+					$('img.resize', ctx).load(function() {
+						imgResize($(this), 64, 64);
+						$('img.loading').hide();
+						$(this).show();
+					});
+				$('#slider-code').tinycarousel({ display: 3 });
+				
+				// Resize carousel
+				$('')
+      }
+    });
+	});
+</script>
+<style type="text/css" media="screen">
+.mup-wdgt-spnsr-carousel .mup-widget {
+	background: #1A1A1A;
+	color: #f2f2f2;
+	font-family: lucida grande, arial, verdana, san-serif;
+	font-size: 13px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd {
+	padding: 8px;
+	//margin-bottom: 8px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd .mup-hd-img {
+	height: 64px;
+	width: 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	float:left;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	//background-size: 100%;
+	overflow:hidden;
+	margin-right: 8px;
+	margin-bottom: 8px;
+	background-color: #f2f2f2;
+	display:table;
+	-moz-background-clip: border;
+	z-index: 10;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd .mup-hd-img {
+	z-index:1;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd a,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd a:active,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd a:visited {
+	color: #f2f2f2;
+	text-decoration: none;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd a:hover {
+	color: #f2f2f2;
+	text-decoration: underline;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-bd {
+	padding: 0 8px;
+	clear: left;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-ft {
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget a,
+.mup-wdgt-spnsr-carousel .mup-widget a:active,
+.mup-wdgt-spnsr-carousel .mup-widget a:visited {
+	//color: #2261A0;
+	color: #f2f2f2;
+	text-decoration: none;
+}
+.mup-wdgt-spnsr-carousel .mup-widget a:hover {
+	color: #f2f2f2;
+	text-decoration: underline;
+}
+.mup-wdgt-spnsr-carousel .mup-widget h3 {
+	font-size: 20px;
+	font-weight: bold;
+	color: #AAA;
+}
+.mup-wdgt-spnsr-carousel .mup-widget h4 {
+	font-size: 13px;
+	//margin-bottom: 8px;
+	color: #f2f2f2;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-list {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding:0;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-list li {
+	position: relative;
+	//padding: 12px 6px;
+	padding: 0 0 8px;
+	border-top-color: #1A1A1A;
+	border-top-style: solid;
+	border-top-width: 1px;
+	//background: #333;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
+	overflow: hidden;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-grp-name {
+	padding: 6px 8px;
+	background-color: #AAA;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#AAA), to(#666));
+	background: -moz-linear-gradient(0% 100% 90deg,#666, #AAA);
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 0 2px 4px #000;
+	-webkit-box-shadow: 0 2px 4px #000;
+	box-shadow: 0 2px 4px #000;
+	/* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=90, Color='#000000')";
+	/* For IE 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=90, Color='#000000');
+	z-index: 100;
+	position: relative;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-ev-name a,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-ev-name a:active,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-ev-name a:visited {
+	color: #1A1A1A;
+	text-decoration: none;
+	//font-weight: bold;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-ev-name a:hover {
+	color: #1A1A1A;
+	text-decoration: underline;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-list li:first-child {
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-list li:last-child {
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	padding: 0;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-info {
+	margin: 0 5px;
+	padding: 6px 8px;
+	background: #333;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	z-index: -1;
+	overflow: hidden;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-when,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-where {
+	display: block;
+	z-index:auto;
+	margin-top: 3px;
+	margin-bottom: 6px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-when {
+	//padding-bottom: 4px;
+	float: left;
+	padding-right: 6px;
+	width: 50px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-where {
+	border-left: 1px dotted #555;
+	margin-left: 56px;
+	padding-left: 6px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-date {
+	text-align: right;
+	padding-bottom: 2px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-time {
+	font-size: 10px;
+	text-align: right;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-city {
+	//display: inline-block;
+	padding-bottom: 2px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-venue {
+	font-size: 10px;
+	//display: inline-block;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-grp-name a,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-grp-name a:active,
+.mup-wdgt-spnsr-carousel .mup-widget .mup-grp-name a:visited {
+	color: #AAA;
+	text-decoration: none;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-grp-name a:hover {
+	color: #AAA;
+	text-decoration: underline;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-badge{
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 10px;
+	height: 14px;
+	color: #1A1A1A;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-badge .mup-badge-label {
+	font-size: 8px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-rsvpcount {
+	background: #2261A0;
+	color: #1A1A1A;
+	padding: 2px 4px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-rsvpcount-1 {
+	background: #2261A0;
+	padding: 2px 4px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-logo {
+	padding: 8px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-getwdgt {
+	border-top-color: #1A1A1A;
+	border-top-style: solid;
+	border-top-width: 1px;
+	padding: 3px;
+	font-size: 8px;
+	text-align: center;
+	background: #0A0A0A;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-getwdgt a {
+	color: #f2f2f2;
+}
+#slider-code { height: 125px; overflow:hidden; }
+#slider-code .viewport { float: left; width: 566px; height: 125px; overflow: hidden; position: relative; }
+#slider-code .buttons { display: block; margin: 0 10px 0 0; float: left; width: 24px; height: 100%; background: #333; -webkit-border-top-left-radius: 5px;
+-webkit-border-bottom-left-radius: 5px;
+-moz-border-radius-topleft: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-top-left-radius: 5px;
+border-bottom-left-radius: 5px;}
+#slider-code .next { margin: 0 0 0 10px;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-radius-topleft: 0;
+	-moz-border-radius-bottomleft: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;}
+#slider-code .disable { visibility: hidden; }
+#slider-code .overview { list-style: none; position: absolute; padding: 0; margin: 0; left: 0; top: 0; }
+#slider-code .overview li{ float: left; margin: 0 9px 0 0; padding: 1px; height: 121px; border: 1px solid #dcdcdc; width: 180px;}
+
+#slider-code .vp-wrap {
+	overflow: hidden;
+	background: #000;
+}
+</style>
+</head>
+<body>
+	<div class="mup-wdgt-spnsr-carousel"></div>
+</body>
+</html>
