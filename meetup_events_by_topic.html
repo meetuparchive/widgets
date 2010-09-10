@@ -11,7 +11,7 @@
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
 		image_width: 64,
 		image_height: 64,
-		location_aware: true,
+		location_aware: 'true',
 		_height: 600,
     _name: "Meetups by Topic",
     _description: "Display upcoming meetups for a specific topic."
@@ -168,7 +168,7 @@
 				// 					meetupArray.push(ev);
 				// 				});
 				
-				if (!$parameters.location_aware) {
+				if ($parameters.location_aware == 'false') {
 					for(var i=0; i < $parameters.max_results; i++) {
 						addRecord(data.results[i]);
 					}
