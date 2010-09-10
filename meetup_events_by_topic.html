@@ -11,7 +11,7 @@
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
 		image_width: 64,
 		image_height: 64,
-		location_aware: false,
+		location_aware: true,
 		_height: 600,
     _name: "Meetups by Topic",
     _description: "Display upcoming meetups for a specific topic."
@@ -30,6 +30,8 @@
 	mup_widget.with_jquery(function($, ctx) {
 		// Variables
 		var	resultCount = 0,
+				mylat = '',
+				mylon = '',
 				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 				numberFormat = function(nStr){
 					  nStr += '';
@@ -92,6 +94,26 @@
 					$('img.loading').hide();
 					$('img.resize').show();
 					console.log('end imgResize fn');
+				},
+				addRecord = function(record) {
+					$('.mup-list', ctx).append( 
+						'<li>\
+							<div class="mup-ev-name">' + addLink(record.name, record.event_url) + '</div>\
+							<div class="mup-info">\
+								<div class="mup-when">\
+									<div class="mup-date">' + getFormattedDate( record.time ) + '</div>\
+									<div class="mup-time">' + getFormattedTime( record.time ) + '</div>\
+								</div>\
+								<div class="mup-where">\
+									<div class="mup-city">' + ((record.venue) ? getFormattedCity( record.venue.city, record.venue.state ) : 'Private Venue') + '</div>\
+									<div class="mup-venue">' + ((record.venue) ? addLink(getFormattedVenue( record.venue.name ), 'http://www.meetup.com/' + record.group.urlname + '/venue/' + record.venue.id) : addLink('Join Group for Details', 'http://www.meetup.com/' + record.group.urlname)) + '</div>\
+								</div>\
+								<div class="mup-grp-name">\
+									<span style="font-weight:normal;">A meetup of: </span>' + addLink(record.group.name, 'http://www.meetup.com/' + record.group.urlname) + '\
+								</div>\
+								<div class="mup-accent">=</div>\
+							</div>\
+						</li>');
 				};
 		
 		$(function() {$(".mup-wdgt-events-by-topic", ctx).width($parameters.width);});
@@ -105,6 +127,10 @@
 			}
 			else {
 				var topic = data.results[0];
+				
+				mylon = data.meta.geo_ip.lon;
+				mylat = data.meta.geo_ip.lat;
+				
 				$('.mup-wdgt-events-by-topic', ctx).append(
 					'<div class="mup-widget">\
 						<div class="mup-hd">\
@@ -117,6 +143,13 @@
 				//$("div.mup-hd-img").css({backgroundImage: 'url(' + $parameters.image_url + ')'});
 				//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
 				//imgResize('img.resize', 64, 64);
+				$(window).load(function() {
+					imgResize($('img.resize'));
+					var imgIcon = document.getElementById("resize");
+					var src = imgIcon.src;
+					imgIcon.src = '';
+					imgIcon.src = src;
+				});
 			}
 		});
 		
@@ -126,51 +159,56 @@
 	    }
 			else {
 				console.info('RESULTS');
-				var meetupArray = []
+				
+				resultCount = parseInt(data.meta.total_count);
+				var	meetupArray = [];
+						
+				// Put all results into array
+				// $.each(data.results, function(i, ev) {
+				// 					meetupArray.push(ev);
+				// 				});
+				
 				if (!$parameters.location_aware) {
+					for(var i=0; i < $parameters.max_results; i++) {
+						addRecord(data.results[i]);
+					}
+				}
+				else {
+					// Sort array by proximity to geo_ip
+					var	R = 6371, // km
+							dLat = '',
+							dLon = '',
+							a = '',
+							c = '';
+					Number.prototype.toRad = function() {  // convert degrees to radians 
+					  return this * Math.PI / 180; 
+					};
+					
+					$.each(data.results, function(i, ev) {
+            if ( ev.venue ) {
+							dLat = (ev.venue.lat-mylat).toRad();  // Javascript functions in radians
+							dLon = (ev.venue.lon-mylon).toRad(); 
+							a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+							        Math.cos(mylat.toRad()) * Math.cos(ev.venue.lat.toRad()) * 
+							        Math.sin(dLon/2) * Math.sin(dLon/2); 
+							c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+							ev.dist = R * c; // Distance in km
+							meetupArray.push(ev);
+            }
+          });
+					meetupArray.sort( function(a, b) {
+						return a.dist-b.dist;
+					});
+					
+					for (var i=0; i < $parameters.max_results; i++) {
+						addRecord(meetupArray[i]);
+					}
 					
 				}
 				
-         $.each(data.results, function(i, ev) {
-					$('.mup-list', ctx).append( 
-						'<li>\
-							<div class="mup-ev-name">' + addLink(ev.name, ev.event_url) + '</div>\
-							<div class="mup-info">\
-								<div class="mup-when">\
-									<div class="mup-date">' + getFormattedDate( ev.time ) + '</div>\
-									<div class="mup-time">' + getFormattedTime( ev.time ) + '</div>\
-								</div>\
-								<div class="mup-where">\
-									<div class="mup-city">' + ((ev.venue) ? getFormattedCity( ev.venue.city, ev.venue.state ) : 'Private Venue') + '</div>\
-									<div class="mup-venue">' + ((ev.venue) ? addLink(getFormattedVenue( ev.venue.name ), 'http://www.meetup.com/' + ev.group.urlname + '/venue/' + ev.venue.id) : addLink('Join Group for Details', 'http://www.meetup.com/' + ev.group.urlname)) + '</div>\
-								</div>\
-								<div class="mup-grp-name">\
-									<span style="font-weight:normal;">A meetup of: </span>' + addLink(ev.group.name, 'http://www.meetup.com/' + ev.group.urlname) + '\
-								</div>\
-								<div class="mup-accent">=</div>\
-							</div>\
-						</li>');
-				});
+        
 				
 				$('.mup-wdgt-events-by-topic > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>');
-				
-					//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
-					//$('img.resize', ctx).hide();
-					//$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
-					// $('img.resize', ctx).load(function() {
-					// 						imgResize($(this), 64, 64);
-					// 						$('img.loading').css({display: 'none'});
-					// 						$(this).css({display: 'block'});
-					// 					});
-					//imgResize($('img.resize'), 64, 64);
-					
-					$(window).load(function() {
-						imgResize($('img.resize'));
-						var imgIcon = document.getElementById("resize");
-						var src = imgIcon.src;
-						imgIcon.src = '';
-						imgIcon.src = src;
-					});
       }
     });
 	});
