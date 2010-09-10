@@ -11,7 +11,7 @@
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
 		image_width: 64,
 		image_height: 64,
-		location_aware: 'true',
+		location_aware: 'false',
 		_height: 600,
     _name: "Meetups by Topic",
     _description: "Display upcoming meetups for a specific topic."
@@ -148,12 +148,12 @@
 				//$("div.mup-hd-img").css({backgroundImage: 'url(' + $parameters.image_url + ')'});
 				//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
 				//imgResize('img.resize', 64, 64);
-				$(window).load(function() {
+				$('img#resize').load(function() {
 					imgResize($('img.resize'));
-					var imgIcon = document.getElementById("resize");
-					var src = imgIcon.src;
-					imgIcon.src = '';
-					imgIcon.src = src;
+					// var imgIcon = document.getElementById("resize");
+					// 					var src = imgIcon.src;
+					// 					imgIcon.src = '';
+					// 					imgIcon.src = src;
 				});
 			}
 		});
