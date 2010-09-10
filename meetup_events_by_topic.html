@@ -84,10 +84,15 @@
 					if (width < height) {
 						img.css('width', maxWidth);
 						img.css('height', 'auto');
+						img.attr('width', maxWidth);
+						img.attr('height', 'auto');
 					}
 					else {
 						img.css('height', maxHeight);
 						img.css('width', 'auto');
+						img.attr('height', maxHeight);
+						img.attr('width', 'auto');
+						
 					}
 					// Resize mup-hd
 					//$('.mup-hd').attr('height', img.height());
