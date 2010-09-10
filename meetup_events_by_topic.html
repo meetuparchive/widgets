@@ -7,17 +7,21 @@
   var $parameters = {
     width: 240,
 		topic: "mom",
+		max_results: 3,
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
+		image_width: 64,
+		image_height: 64,
+		location_aware: false,
 		_height: 600,
     _name: "Meetups by Topic",
     _description: "Display upcoming meetups for a specific topic."
   };
   var $queries = {
-    events2: function() { 
-      return mup_widget.api_call("/2/events", {topic: $parameters.topic, page: 3, after: "0d"});
-    },
 		topics: function() {
-			return mup_widget.api_call("/topics", {topic: $parameters.topic});
+			return mup_widget.api_call("/topics", {topic: $parameters.topic, fields: "geo_ip"});
+		},
+		open_events: function() {
+			return mup_widget.api_call("/2/open_events", {topic: $parameters.topic, page: 200 });
 		}
   };
 </script>
@@ -66,22 +70,28 @@
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					},
-				imgResize = function ( $this, w, h) {
+				imgResize = function ( $this ) {
+					console.log('ingResize fn start');
 					var	img = $this;
-						var	maxWidth = w,
-								maxHeight = h,
-								width = img.width(),
-								height = img.height();
-						console.info('width: ' + width);
-						console.info('height: ' + height);
-						if (width < height) {
-							img.css('width', maxWidth);
-							img.css('height', 'auto');
-						}
-						else {
-							img.css('height', maxHeight);
-							img.css('width', 'auto');
-						}
+					var	maxWidth = $parameters.image_width,
+							maxHeight = $parameters.image_height,
+							width = img.width(),
+							height = img.height();
+					console.info('width: ' + width);
+					console.info('height: ' + height);
+					if (width < height) {
+						img.css('width', maxWidth);
+						img.css('height', 'auto');
+					}
+					else {
+						img.css('height', maxHeight);
+						img.css('width', 'auto');
+					}
+					// Resize mup-hd
+					//$('.mup-hd').attr('height', img.height());
+					$('img.loading').hide();
+					$('img.resize').show();
+					console.log('end imgResize fn');
 				};
 		
 		$(function() {$(".mup-wdgt-events-by-topic", ctx).width($parameters.width);});
@@ -98,7 +108,7 @@
 				$('.mup-wdgt-events-by-topic', ctx).append(
 					'<div class="mup-widget">\
 						<div class="mup-hd">\
-							<div class="mup-hd-img"></div>\
+							<div class="mup-hd-img"><img id="resize" class="resize" style="display: none;" src="' + $parameters.image_url + '" width="auto" height="auto" /><img class="loading" style="padding:16px; display: block;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" /></div>\
 							<h3>' + addLink( topic.name + '<span style="color:#AAA;"> Meetups</span>', topic.link ) + '</span></h3>\
 							<h4>' + numberFormat(topic.members) + ' members</h4>\
 						</div>\
@@ -110,11 +120,17 @@
 			}
 		});
 		
-		$.getJSON($queries.events2(), function(data) {
+		$.getJSON($queries.open_events(), function(data) {
 	    if (data.results.length == 0) {
 				// Do nothing.
 	    }
 			else {
+				console.info('RESULTS');
+				var meetupArray = []
+				if (!$parameters.location_aware) {
+					
+				}
+				
          $.each(data.results, function(i, ev) {
 					$('.mup-list', ctx).append( 
 						'<li>\
@@ -138,23 +154,25 @@
 				
 				$('.mup-wdgt-events-by-topic > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>');
 				
-					$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
-					$('img.resize', ctx).hide();
-					$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
-					$('img.resize', ctx).load(function() {
-						imgResize($(this), 64, 64);
-						$('img.loading').hide();
-						$(this).show();
+					//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
+					//$('img.resize', ctx).hide();
+					//$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
+					// $('img.resize', ctx).load(function() {
+					// 						imgResize($(this), 64, 64);
+					// 						$('img.loading').css({display: 'none'});
+					// 						$(this).css({display: 'block'});
+					// 					});
+					//imgResize($('img.resize'), 64, 64);
+					
+					$(window).load(function() {
+						imgResize($('img.resize'));
+						var imgIcon = document.getElementById("resize");
+						var src = imgIcon.src;
+						imgIcon.src = '';
+						imgIcon.src = src;
 					});
       }
     });
-
-			// $('img.resize', ctx).load($parameters.image_url, function() {
-			// 	alert('image loaded!');
-			// 	imgResize('img.resize', 64, 64);
-			// });
-			
-		
 	});
 </script>
 <style type="text/css" media="screen">
@@ -172,8 +190,8 @@
 	//margin-bottom: 8px;
 }
 .mup-wdgt-events-by-topic .mup-widget .mup-hd .mup-hd-img {
-	height: 64px;
-	width: 64px;
+	//height: 64px;
+	//width: 64px;
 	background-repeat: no-repeat;
 	background-position: center center;
 	float:left;
@@ -185,7 +203,7 @@
 	margin-right: 8px;
 	margin-bottom: 8px;
 	background-color: #f2f2f2;
-	display:table;
+	display:block;
 	-moz-background-clip: border;
 	z-index: 10;
 }
