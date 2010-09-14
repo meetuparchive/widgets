@@ -205,8 +205,19 @@
 						return a.dist-b.dist;
 					});
 					
+					var limitedArray = [];
+					
 					for (var i=0; i < $parameters.max_results; i++) {
-						addRecord(meetupArray[i]);
+						//addRecord(meetupArray[i]);
+						limitedArray.push(meetupArray[i]);
+					}
+					
+					limitedArray.sort( function(j, h) {
+						return j.time-h.time;
+					});
+					
+					for (var i=0; i < $parameters.max_results; i++) {
+						addRecord(limitedArray[i]);
 					}
 					
 				}
@@ -367,7 +378,7 @@
 	padding: 0;
 }
 .mup-wdgt-events-by-topic .mup-widget .mup-info {
-	margin: 0 5px;
+	//margin: 0 5px;
 	padding: 6px 8px;
 	background: #333;
 	-webkit-border-bottom-right-radius: 3px;
