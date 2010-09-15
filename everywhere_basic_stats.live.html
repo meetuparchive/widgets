@@ -138,9 +138,8 @@
 							}
 						}
 						else {
-							alert(container.scheduling);
 							// No meetups have been scheduled.
-							$('.mup-list', ctx).append('<li style="padding-left: 6px;"><div class="mup-where">No upcoming meetups.</div>' + ((container.scheduling == 'open') ? '<div class="mup-when">' + addLink('Schedule a Meetup', 'http://www.dev.meetup.com/SteveTest/event_create/') + ' near you</div></li>' : '</li>'));
+							$('.mup-list', ctx).append('<li style="padding-left: 6px;"><div class="mup-where">No upcoming meetups.</div>' + ((container.event_create == 'anyone') ? '<div class="mup-when">' + addLink('Schedule a Meetup', 'http://www.dev.meetup.com/SteveTest/event_create/') + ' near you</div></li>' : '</li>'));
 						}
 						
 						
