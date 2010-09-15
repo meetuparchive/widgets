@@ -9,6 +9,7 @@
 		topic: "mom",
 		max_results: 3,
 		image_url: "http://spocus.typepad.com/photos/uncategorized/2008/01/16/shcitychic_columbuscircle_mom_bab_4.jpg",
+		retain_aspect_ratio: 'true',
 		image_width: 64,
 		image_height: 64,
 		location_aware: 'false',
@@ -81,18 +82,25 @@
 							height = img.height();
 					console.info('width: ' + width);
 					console.info('height: ' + height);
-					if (width < height) {
-						img.css('width', maxWidth);
-						img.css('height', 'auto');
-						img.attr('width', maxWidth);
-						img.attr('height', 'auto');
+					if($parameters.retain_aspect_ratio == 'true') {
+						if (width < height) {
+							img.css('width', maxWidth);
+							img.css('height', 'auto');
+							img.attr('width', maxWidth);
+							img.attr('height', 'auto');
+						}
+						else {
+							img.css('height', maxHeight);
+							img.css('width', 'auto');
+							img.attr('height', maxHeight);
+							img.attr('width', 'auto');
+						}
 					}
 					else {
 						img.css('height', maxHeight);
-						img.css('width', 'auto');
+						img.css('width', maxWidth);
 						img.attr('height', maxHeight);
-						img.attr('width', 'auto');
-						
+						img.attr('width', maxWidth);
 					}
 					// Resize mup-hd
 					//$('.mup-hd').attr('height', img.height());
