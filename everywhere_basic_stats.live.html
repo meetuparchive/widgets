@@ -96,46 +96,53 @@
 	        if (data.status && data.status.match(/^200/) == null) {
 	          alert(data.status + ": " + data.details);
 	        } else {
-	          resultCount = parseInt(data.meta.total_count);
-						var meetupArray = [],
-								R = 6371, // km
-								dLat = '',
-								dLon = '',
-								a = '',
-								c = '';
-						Number.prototype.toRad = function() {  // convert degrees to radians 
-						  return this * Math.PI / 180; 
-						};
-	          $.each(data.results, function(i, ev) {
-	            if ( i < resultCount ) {
-								dLat = (ev.lat-mylat).toRad();  // Javascript functions in radians
-								dLon = (ev.lon-mylon).toRad(); 
-								a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-								        Math.cos(mylat.toRad()) * Math.cos(ev.lat.toRad()) * 
-								        Math.sin(dLon/2) * Math.sin(dLon/2); 
-								c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-								ev.dist = R * c; // Distance in km
-								meetupArray.push(ev);
-	            }
-	          });
-						meetupArray.sort( function(a, b) {
-							return a.dist-b.dist;
-						});
-						
-						for (var i=0; i < 3; i++ ) {
-							$('.mup-list', ctx).append( 
-								'<li>\
-									<div class="mup-when">\
-										<span class="mup-time">' + getFormattedDate( meetupArray[i].time ) + '</span>\
-										<span class="mup-city">' + addLink( getFormattedCity( meetupArray[i].city, meetupArray[i].state ), meetupArray[i].meetup_url ) + '</span>\
-									</div>\
-									<div class="mup-where">\
-										<span class="mup-time">' + getFormattedTime( meetupArray[i].time ) + '</span>\
-										<span class="mup-venue">' + getFormattedVenue( meetupArray[i].venue_name ) + '</span>\
-									</div>\
-									<span class="mup-badge"><span class="mup-badge-label">PEOPLE </span><span class="' + (i == 0 ? "mup-rsvpcount-1" : "mup-rsvpcount") + '">' + meetupArray[i].rsvp_count + '</span></span>\
-								</li>');
+						if( (resultCount = parseInt(data.meta.total_count)) ) {
+							var meetupArray = [],
+									R = 6371, // km
+									dLat = '',
+									dLon = '',
+									a = '',
+									c = '';
+							Number.prototype.toRad = function() {  // convert degrees to radians 
+							  return this * Math.PI / 180; 
+							};
+		          $.each(data.results, function(i, ev) {
+			            if ( i < resultCount ) {
+									dLat = (ev.lat-mylat).toRad();  // Javascript functions in radians
+									dLon = (ev.lon-mylon).toRad(); 
+									a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+									        Math.cos(mylat.toRad()) * Math.cos(ev.lat.toRad()) * 
+									        Math.sin(dLon/2) * Math.sin(dLon/2); 
+									c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+									ev.dist = R * c; // Distance in km
+									meetupArray.push(ev);
+		            }
+		          });
+							meetupArray.sort( function(a, b) {
+								return a.dist-b.dist;
+							});
+
+							for (var i=0; i < 3; i++ ) {
+								$('.mup-list', ctx).append( 
+									'<li>\
+										<div class="mup-when">\
+											<span class="mup-time">' + getFormattedDate( meetupArray[i].time ) + '</span>\
+											<span class="mup-city">' + addLink( getFormattedCity( meetupArray[i].city, meetupArray[i].state ), meetupArray[i].meetup_url ) + '</span>\
+										</div>\
+										<div class="mup-where">\
+											<span class="mup-time">' + getFormattedTime( meetupArray[i].time ) + '</span>\
+											<span class="mup-venue">' + getFormattedVenue( meetupArray[i].venue_name ) + '</span>\
+										</div>\
+										<span class="mup-badge"><span class="mup-badge-label">PEOPLE </span><span class="' + (i == 0 ? "mup-rsvpcount-1" : "mup-rsvpcount") + '">' + meetupArray[i].rsvp_count + '</span></span>\
+									</li>');
+							}
 						}
+						else {
+							alert(container.scheduling);
+							// No meetups have been scheduled.
+							$('.mup-list', ctx).append('<li style="padding-left: 6px;"><div class="mup-where">No upcoming meetups.</div>' + ((container.scheduling == 'open') ? '<div class="mup-when">' + addLink('Schedule a Meetup', 'http://www.dev.meetup.com/SteveTest/event_create/') + ' near you</div></li>' : '</li>'));
+						}
+						
 						
 						$('.mup-widget-3>.mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>');
 	        }
