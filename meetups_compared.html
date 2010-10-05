@@ -51,8 +51,7 @@ mup_widget.with_jquery(function($, ctx) {
           if (data.status && data.status.match(/^200/) == null) {
             alert(data.status + ": " + data.details);
           } else {
-		  	console.log(data.results.length);
-            $.each(data.results, draw);
+           $.each(data.results, draw);
           }
         });
       }
