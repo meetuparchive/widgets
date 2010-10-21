@@ -14,42 +14,38 @@
    _name: "Meetups Compared",
    _description: "Shows Meetup groups side by side with an Everywhere."
  };
- var $queries = {
-	group_events: [  
-	   function() { 
-	    return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
-	   },
-	   function() {
+ var $queries = [
+	function() { 
+		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
+	},
+	function() {
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:1});
-	   },
-	   function() {
+	},
+	function() {
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:2});
-	   },
-	   function() {
+	},
+	function() {
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:3});
-	   },
-	   function() {
+	},
+	function() {
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:4});
-	   }
-	],
-	ew_events: [
-		function() {
-  		  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname});
-		},
-		function() {
-		  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:1});
-		},
-		function() {
-		  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:2});
-		},
-		function() {
-		  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:3});
-		},
-		function() {
-		  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:4});
-		},
-	]
- };
+	},
+	function() {
+		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname});
+	},
+	function() {
+		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:1});
+	},
+	function() {
+		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:2});
+	},
+	function() {
+		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:3});
+	},
+	function() {
+		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:4});
+	}
+ ];
 </script>
 <script language="JavaScript">
 mup_widget.with_jquery(function($, ctx) {
@@ -62,14 +58,14 @@ mup_widget.with_jquery(function($, ctx) {
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
-	  with_each($queries.group_events, function(i, ev) {
-		var loc = typeof ev.venue == 'undefined' ? ev : ev.venue;
-		pin(loc, ev.group.name, ev.time, ev.event_url, "gb");
-	  });
-
-	  with_each($queries.ew_events, function(i, ev) {
-		if (ev.rsvp_count > 2) {
-			pin(ev, ev.city + ' Rally for Sanity', ev.time, ev.meetup_url, "r5s");
+	  with_each($queries, function(i, ev) {
+		if (typeof(ev.group) != "undefined") {
+			var loc = typeof ev.venue == 'undefined' ? ev : ev.venue;
+			pin(loc, ev.group.name, ev.time, ev.event_url, "gb");
+		} else {
+			if (ev.rsvp_count > 2) {
+				pin(ev, ev.city + ' Rally for Sanity', ev.time, ev.meetup_url, "r5s");
+			}
 		}
 	  });
 
