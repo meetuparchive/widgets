@@ -15,12 +15,12 @@
    _description: "Shows Meetup groups side by side with an Everywhere."
  };
  var $queries = {
-  group_events: function() { 
-    return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
+  group_events: function(page) { 
+    return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset: page});
   },
-  ew_events: function() {
+  ew_events: function(page) {
     return mup_widget.api_call("/ew/events",
-      { urlname: $parameters.everywhere_urlname, status: "upcoming", fields: "rsvp_count"});
+      { urlname: $parameters.everywhere_urlname, status: "upcoming", fields: "rsvp_count", offset: page});
   }
  };
 </script>
@@ -34,30 +34,44 @@ mup_widget.with_jquery(function($, ctx) {
         center: new google.maps.LatLng(0,0),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-	  with_each($queries.group_events(), function(i, ev) {
-		var loc = typeof ev.venue == 'undefined' ? ev : ev.venue;
-		pin(loc, ev.group.name, ev.time, ev.event_url, "gb");
-	  });
 
-	  with_each($queries.ew_events(), function(i, ev) {
-		if (ev.rsvp_count > 2) {
-			pin(ev, ev.city + ' Rally for Sanity', ev.time, ev.meetup_url, "r4s");
-		}
-	  });
+	  var mup_call = function(page) {
+		  with_each($queries.group_events(page), function(i, ev) {
+			var loc = typeof ev.venue == 'undefined' ? ev : ev.venue;
+			pin(loc, ev.group.name, ev.time, ev.event_url, "gb");
+		  }, "mu", page);
+	  };
+
+	  var ev_call = function(page) {
+		  with_each($queries.ew_events(page), function(i, ev) {
+			if (ev.rsvp_count > 2) {
+				pin(ev, ev.city + ' Rally for Sanity', ev.time, ev.meetup_url, "r5s");
+			}
+		  }, "ev", page);
+	  };
+
       open_win = null;
 	  var points = [];
-      function with_each(query, draw) {
+      function with_each(query, draw, type, page) {
+		if (!page) page = 0;
         $.getJSON(query, function(data) {
           if (data.status && data.status.match(/^200/) == null) {
-            alert(data.status + ": " + data.details);
+			if (typeof(console) != "undefined") {
+				console.error(data.status + ": " + data.details);
+			} else {
+				alert(data.status + ": " + data.details);
+			}
           } else {
-           $.each(data.results, draw);
+			 $.each(data.results, draw);
+			 if ( page < 5) {
+				 (type == "ev") ? ev_call(page + 1) : mup_call(page + 1);
+			 }
           }
         });
       }
      function pin(loc, title, time, url, type) {
 
-		var img = (type == "gb") ? "http://photos3.meetupstatic.com/photos/event/6/7/e/a/thumb_18386602.jpeg" : "http://photos2.meetupstatic.com/photos/event/6/7/e/9/thumb_18386601.jpeg" 
+		var img = (type == "gb") ? "http://photos3.meetupstatic.com/photos/event/6/7/e/a/thumb_18386602.jpeg" : "http://photos4.meetupstatic.com/photos/event/4/7/9/5/thumb_18918325.jpeg" 
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(loc.lat, loc.lon), 
             map: map, 
@@ -74,7 +88,10 @@ mup_widget.with_jquery(function($, ctx) {
           win.open(map, marker);
           open_win = win;
         });
-  };
+	 };
+
+	  mup_call(0);
+	  ev_call(0);
 
   });
 });
