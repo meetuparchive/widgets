@@ -16,11 +16,44 @@
  };
  var $queries = {
   group_events: function(page) { 
-    return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset: page});
+	switch (page) {
+		case 0:
+			return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
+			break;
+		case 1:
+			return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:1});
+			break;
+		case 2:
+			return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:2});
+			break;
+		case 3:
+		    return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:3});
+		    break;
+		case 4:
+			return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:4});
+			break;
+	}
   },
   ew_events: function(page) {
     return mup_widget.api_call("/ew/events",
       { urlname: $parameters.everywhere_urlname, status: "upcoming", fields: "rsvp_count", offset: page});
+	  switch (page) {
+		  case 0:
+			  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname});
+			  break;
+		  case 1:
+			  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:1});
+			  break;
+		  case 2:
+			  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:2});
+			  break;
+		  case 3:
+			  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:3});
+			  break;
+		  case 4:
+			  return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:4});
+			  break;
+	  }
   }
  };
 </script>
