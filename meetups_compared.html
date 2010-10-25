@@ -19,31 +19,7 @@
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
 	},
 	function() {
-		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:1});
-	},
-	function() {
-		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:2});
-	},
-	function() {
-		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:3});
-	},
-	function() {
-		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics, offset:4});
-	},
-	function() {
 		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname});
-	},
-	function() {
-		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:1});
-	},
-	function() {
-		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:2});
-	},
-	function() {
-		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:3});
-	},
-	function() {
-		return mup_widget.api_call("/ew/events", {status: "upcoming", fields: "rsvp_count", urlname: $parameters.everywhere_urlname, offset:4});
 	}
  ];
 </script>
@@ -82,6 +58,7 @@ mup_widget.with_jquery(function($, ctx) {
 				}
 			  } else {
 				 $.each(data.results, draw);
+				 console.dir(data.meta);
 			  }
 			});
 		});
