@@ -12,8 +12,9 @@
    width: 530,
    _height: 300,
    _name: "Meetups Compared",
-   _description: "Shows Meetup groups side by side with an Everywhere."
- };
+   _description: "Shows Meetup groups side by side with an Everywhere.",
+   _iframe_only: true
+};
  var $queries = [
 	function() { 
 		return mup_widget.api_call("/2/open_events", {status: "upcoming", topic: $parameters.group_topics});
