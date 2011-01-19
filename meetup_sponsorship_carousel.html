@@ -6,7 +6,7 @@
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
     width: 650,
-		campaign: "ecomagination",
+		campaign: "moms",
 		image_url: "http://photos2.meetupstatic.com/photos/event/c/f/3/4/global_17153044.jpeg",
 		_height: 600,
     _name: "Sponsored Meetup Groups",
@@ -232,15 +232,16 @@
 		$.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
 				// Do nothing.
-	    }
-			else {
+	    } else {
          $.each(data.results, function(i, grp) {
-					$('.overview', ctx).append( 
-						'<li>\
-							<p>' + grp.name + '</p>\
-							<img src="' + grp.photo_url + '" />\
-						</li>');
-				});
+            if(grp.photo_url) {
+			  $('.overview', ctx).append( 
+                '<li>\
+                  <p>' + grp.name + '</p>\
+                  <img src="' + grp.photo_url + '" />\
+                </li>');
+            }
+		 });
 				
 				$('.mup-wdgt-spnsr-carousel > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/' ) + '</div>');
 				
