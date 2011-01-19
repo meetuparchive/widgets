@@ -194,7 +194,7 @@
 						}
 				};
 		
-		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width).height($parameters.height);});
+		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width - 10).height($parameters.height - 20);});
 		
 		$.getJSON($queries.topics(), function(data) {
 			if (data.results.length == 0) {
