@@ -5,10 +5,11 @@
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
+    height:264,
     width: 650,
 		campaign: "moms",
 		image_url: "http://photos2.meetupstatic.com/photos/event/c/f/3/4/global_17153044.jpeg",
-		_height: 600,
+		_height: 264,
     _name: "Sponsored Meetup Groups",
     _description: "Display Meetup groups in a specified sponsorship campaign."
   };
@@ -192,7 +193,7 @@
 						}
 				};
 		
-		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width);});
+		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width).height($parameters.height);});
 		
 		$.getJSON($queries.topics(), function(data) {
 			if (data.results.length == 0) {
