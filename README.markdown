@@ -13,7 +13,7 @@ With a key file in place you should be able to preview any of the widget HTML so
 
 To try out your widget inside the foundry, paste it over the source of any other widget there; just click on its Edit Source link. And when you're finished, send us a pull request!
 
-For any questions about using the foundry or the Meetup API in general, see the [the API forum][forum].
+For any questions about using the foundry or the Meetup API in general, see the [the API list][list].
 
 [wf]: http://www.meetup.com/meetup_api/foundry/
-[forum]: http://www.meetup.com/boards/forum/811221
+[list]: http://groups.google.com/group/meetup-api/topics
