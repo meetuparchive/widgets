@@ -177,19 +177,19 @@
 						return '<a href="' + link + '">' + content + '</a>';
 					},
 				imgResize = function ( $this, w, h) {
-					var	img = $this;
-						var	maxWidth = w,
-								maxHeight = h,
-								width = img.width(),
-								height = img.height();
-						if (width < height) {
-							img.css('width', maxWidth);
-							img.css('height', 'auto');
-						}
-						else {
-							img.css('height', maxHeight);
-							img.css('width', 'auto');
-						}
+					var img = $this;
+					var maxWidth = w,
+					    maxHeight = h,
+						width = img.width(),
+						height = img.height();
+					if (width < height) {
+					   img.css('width', maxWidth);
+					   img.css('height', 'auto');
+					}
+					else {
+					   img.css('height', maxHeight);
+					   img.css('width', 'auto');
+					}
 				};
 		
 		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width - 10).height($parameters.height - 20);});
@@ -207,8 +207,8 @@
 					'<div class="mup-widget">\
 						<div class="mup-hd">\
 							<div class="mup-hd-img"></div>\
-							<h3>' + addLink( campaign.name + '<span style="color:#AAA;"> Meetups</span>', campaign.link ) + '</span></h3>\
-							<h4>' + numberFormat(campaign.members) + ' members</h4>\
+							<div class="mup-hd-info"><h3>' + addLink( campaign.name + '<span style="color:#AAA;"> Meetups</span>', campaign.link ) + '</span></h3>\
+							<h4>' + numberFormat(campaign.members) + ' members</h4></div>\
 						</div>\
 						<div class="mup-bd">\
 							<div id="slider-code">\
@@ -273,7 +273,9 @@
 }
 .mup-wdgt-spnsr-carousel .mup-widget .mup-hd {
 	padding: 8px;
-	//margin-bottom: 8px;
+}
+.mup-wdgt-spnsr-carousel .mup-widget .mup-hd .mup-hd-info {
+  float:right;
 }
 .mup-wdgt-spnsr-carousel .mup-widget .mup-hd .mup-hd-img {
 	height: 64px;
@@ -284,7 +286,6 @@
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	//background-size: 100%;
 	overflow:hidden;
 	margin-right: 8px;
 	margin-bottom: 8px;
