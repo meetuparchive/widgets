@@ -7,10 +7,10 @@
   var $parameters = {
     height:300,
     width: 650,
-		campaign: "moms",
-		image_url: "http://photos2.meetupstatic.com/photos/event/c/f/3/4/global_17153044.jpeg",
-		_height: 280,
-       _width: 660,
+    campaign: "pugs",
+    image_url: "http://photos2.meetupstatic.com/photos/event/c/f/3/4/global_17153044.jpeg",
+    _height: 280,
+    _width: 660,
     _name: "Sponsored Meetup Groups",
     _description: "Display Meetup groups in a specified sponsorship campaign."
   };
@@ -18,12 +18,12 @@
     events2: function() { 
       return mup_widget.api_call("/2/events", {topic: $parameters.campaign, page: 3, after: "0d"});
     },
-		topics: function() {
-			return mup_widget.api_call("/topics", {topic: $parameters.campaign});
-		},
-		groups: function() {
-			return mup_widget.api_call("/groups", {topic: $parameters.campaign});
-		}
+    topics: function() {
+      return mup_widget.api_call("/topics", {topic: $parameters.campaign});
+    },
+    groups: function() {
+      return mup_widget.api_call("/groups", {topic: $parameters.campaign});
+    }
   };
 </script>
 <link rel="stylesheet" type="text/css" href="http://static2.meetupstatic.com/style/widget.css">
