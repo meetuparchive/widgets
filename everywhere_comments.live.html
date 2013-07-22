@@ -106,24 +106,26 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
 	          resultCount = parseInt(data.meta.total_count);
-						$('.mup-widget', ctx).append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
-					
-	          $.each(data.results, function(i, com) {
-	            if ( i < resultCount ) {
-	              // My code here.
-								
-								$('.mup-timeline', ctx).append( 
-									'<li>\
-										<div class="mup-what">\
-											<span class="mup-comment">&ldquo;' + com.comment + '&rdquo;</span>\
-											<span class="mup-author"> -<em>' + com.member.name + '</em></span>\
-										</div>\
-										<div class="mup-when">\
-											<span class="mup-time">' + getTimeAgo( com.time ) + '</span>\
-										</div>\
-									</li>' );
-	            }
-	          });
+			  $('.mup-widget', ctx).append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
+			  if (data.result) {
+	            $.each(data.results, function(i, com) {
+	              if (i < resultCount) {
+	                 // My code here.
+                     $('.mup-timeline', ctx).append( 
+                     '<li>\
+                     <div class="mup-what">\
+                     <span class="mup-comment">&ldquo;' + com.comment + '&rdquo;</span>\
+                     <span class="mup-author"> -<em>' + com.member.name + '</em></span>\
+                     </div>\
+                     <div class="mup-when">\
+                     <span class="mup-time">' + getTimeAgo( com.time ) + '</span>\
+                     </div>\
+                     </li>');
+                     }
+                  });
+              } else {
+                 $('.mup-timeline', ctx).append("<li>No upcoming events with comments</li>");
+              }
 
 							$('.mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink('<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />',container.meetup_url) + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meeup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-") ) + '</div>');
 							
