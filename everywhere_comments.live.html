@@ -107,7 +107,7 @@
 	        } else {
 	          resultCount = parseInt(data.meta.total_count);
 			  $('.mup-widget', ctx).append('<div class="mup-bd"><ul class="mup-timeline"></ul></div>');
-			  if (data.results) {
+			  if (data.results.length > 0) {
 	            $.each(data.results, function(i, com) {
 	              if (i < resultCount) {
 	                 // My code here.
