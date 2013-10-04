@@ -12,11 +12,11 @@
     _description: "Shows basic stats on your favorite Meetup group."
   };
   var $queries = {
-    groups: function() { 
-      return mup_widget.api_call("/groups", {group_urlname: $parameters.urlname});
+    groups: function() {
+      return mup_widget.api_call("/2/groups", {group_urlname: $parameters.urlname});
     },
     events: function() {
-      return mup_widget.api_call("/events", {group_urlname: $parameters.urlname, page: '1'});
+      return mup_widget.api_call("/2/events", {group_urlname: $parameters.urlname, page: '1'});
     }
   };
 </script>
@@ -25,16 +25,12 @@
 	mup_widget.with_jquery(function($, ctx) {
 		var	group = '',
 				months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-				addLink = function( content, link ) {
+				addLink = function(content, link) {
 						return '<a target="_top" href="' + link + '">' + content + '</a>';
-					},
-                addImage = function( imagesrc, alt) {
-                        if (imagesrc == "" ) {
-                            return '';
-                        } else {
-                            return '<div class="mup-img-wrap"><img src="'+imagesrc+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
-                        }
-                    },
+	      },
+        addImage = function(src, alt) {
+           return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+        },
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
                         var starlink = '';
@@ -60,7 +56,7 @@
                             starlink = "500.png";
                         }
                         return '<img src="'+base_url+starlink+'" alt="'+rating+'" />';
-                        
+
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -103,15 +99,15 @@
 			$('.mug-badge', ctx).append(
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
-						<h3>' + addLink( group.name, group.link ) + '</h3>\
-                        <h4> <div style="padding-top:5px;"><span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></div></h4>\
-						<span class="mup-stats">' + addImage(group.photo_url,group.name)+numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
-                        <span class="mup-stats"><div class="next-event"></div></span>\
-                        <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
+						<h3>' + addLink(group.name, group.link) + '</h3>\
+            <h4> <div style="padding-top:5px;"><span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></div></h4>\
+						<span class="mup-stats">' + addImage(group["group_photo"] ? group.group_photo.photo_link : "", group.name) + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
+            <span class="mup-stats"><div class="next-event"></div></span>\
+            <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
 					</div>\
 					<div class="mup-ft">\
 						<div class="mup-logo"><div style="float:left;">'+addLink('<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png">','http://www.meetup.com')+'</div><div style="float:right;"><div style="float:right;">'+addStarRating(group.rating)+'</div><br><div style="float:right;"><span class="mup-tlabel">Group Rating</span></div></div></div>\
-						<div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-") ) + '</div>\
+						<div class="mup-getwdgt">' + addLink('ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-")) + '</div>\
 					</div>\
 				</div>'
 				);
@@ -121,38 +117,42 @@
 	          alert(data.status + ": " + data.details);
 	        } else {
 	            if (data.results.length == 0) {
-				    $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
-	            }
-                else {
+		             $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
+	            } else {
                     var event = data.results[0];
+     console.log(event)
+                    var venue = event.venue;
+     console.log(venue)
                     var city;
-                    if (event.venue_city == "") {
+                    if (!venue || !venue.city) {
                         city = group.city;
                     } else {
-                        city = event.venue_city;
+                        city = venue.city;
                     }
                     var state_country;
-                    if (event.venue_state == "") {
+                    if (!venue || !venue.state) {
                         if (group.state == "") {
                             state_country = group.country.toUpperCase();
                         } else {
                             state_country = group.state;
                         }
                     } else {
-                        state_country = event.venue_state;
+                        state_country = venue.state;
                     }
-                    var venue;
-                    if (event.venue_name == "") {
-                        if (event.venue_address1 == "") {
-                            venue = "";
+                    var venue_addr;
+                    if (venue) {
+                        if (venue.name !== undefined) {
+                            venue_addr = venue.name  + " - ";
+                        } else if (venue.address_1 !== undefined) {
+                            venue_addr = venue.address_1 + " - ";
                         } else {
-                            venue = event.venue_address1+ " - ";
+                            venue_addr = "";
                         }
                     } else {
-                        venue = event.venue_name + " - ";
+                       venue_addr = "";
                     }
-                    var location = venue + city + ", " + state_country;
-                    $('.next-event', ctx).append('<h4><div class="mup-tlabel">'+getFormattedDate(parseInt(event.utc_time)) + ' &nbsp | &nbsp ' + getFormattedTime(parseInt(event.utc_time)) + "</div>" + addLink(event.name, event.event_url)+'<div class="mup-tlabel">' + location + "</div></h4>");
+                    var location = venue_addr + city + ", " + state_country;
+                    $('.next-event', ctx).append('<h4><div class="mup-tlabel">'+getFormattedDate(event.time) + ' &nbsp | &nbsp ' + getFormattedTime(event.time) + "</div>" + addLink(event.name, event.event_url)+'<div class="mup-tlabel">' + location + "</div></h4>");
                 }
             }
             });
