@@ -15,14 +15,14 @@
     _description: "Display Meetup groups in a specified sponsorship campaign."
   };
   var $queries = {
-    events2: function() { 
+    events2: function() {
       return mup_widget.api_call("/2/events", {topic: $parameters.campaign, page: 3, after: "0d"});
     },
     topics: function() {
       return mup_widget.api_call("/topics", {topic: $parameters.campaign});
     },
     groups: function() {
-      return mup_widget.api_call("/groups", {topic: $parameters.campaign});
+      return mup_widget.api_call("/2/groups", {topic: $parameters.campaign});
     }
   };
 </script>
@@ -40,7 +40,7 @@
 		 */
 		(function($){
 			$.fn.tinycarousel = function(options){
-				var defaults = { 
+				var defaults = {
 					start: 1, // where should the carousel start?
 					display: 1, // how many blocks do you want to move at 1 time?
 					axis: 'x', // vertical or horizontal scroller? ( x || y ).
@@ -52,7 +52,7 @@
 					duration: 1000, // how fast must the animation move in ms?
 					callback: null // function that executes after every move
 				};
-				var options = $.extend(defaults, options);  
+				var options = $.extend(defaults, options);
 
 				var oSlider = $(this);
 				var oViewport = $('.viewport', oSlider);
@@ -118,7 +118,7 @@
 					if(iCurrent + iDirection > -1 && iCurrent + iDirection < iSteps){
 						iCurrent += iDirection;
 						var oPosition = {};
-						oPosition[bAxis ? 'left' : 'top'] = -(iCurrent * (iPageSize * options.display));	
+						oPosition[bAxis ? 'left' : 'top'] = -(iCurrent * (iPageSize * options.display));
 						oContent.animate(oPosition,{
 							queue: false,
 							duration: options.animation ? options.duration : 0,
@@ -191,9 +191,9 @@
 					   img.css('width', 'auto');
 					}
 				};
-		
+
 		$(function() {$(".mup-wdgt-spnsr-carousel", ctx).width($parameters.width - 10).height($parameters.height - 20);});
-		
+
 		$.getJSON($queries.topics(), function(data) {
 			if (data.results.length == 0) {
 				$('.mup-wdgt-spnsr-carousel', ctx).append(
@@ -228,23 +228,23 @@
 				//imgResize('img.resize', 64, 64);
 			}
 		});
-		
+
 		$.getJSON($queries.groups(), function(data) {
 	    if (data.results.length == 0) {
 				// Do nothing.
 	    } else {
          $.each(data.results, function(i, grp) {
-            if(grp.photo_url) {
-			  $('.overview', ctx).append( 
+            if(grp.group_photo) {
+              $('.overview', ctx).append(
                 '<li>\
                   <p>' + grp.name + '</p>\
-                  <img src="' + grp.photo_url + '" />\
+                  <img src="' + grp.group_photo.photo_link + '" />\
                 </li>');
             }
-		 });
-				
+        });
+
 				$('.mup-wdgt-spnsr-carousel > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png" />','http://www.meetup.com/everywhere/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-") ) + '</div>');
-				
+
 					$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
 					$('img.resize', ctx).hide();
 					$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="http://img1.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
@@ -254,7 +254,7 @@
 						$(this).show();
 					});
 				$('#slider-code').tinycarousel({ display: 3 });
-				
+
 				// Resize carousel
 				$('')
       }
@@ -532,7 +532,7 @@ border-top-right-radius: 5px;
 border-bottom-right-radius: 5px;}
 #slider-code .disable { visibility: hidden; }
 #slider-code .overview { list-style: none; position: absolute; padding: 0; margin: 0; left: 0; top: 0; }
-#slider-code .overview li{ float: left; margin: 0 9px 0 0; padding: 1px; height: 121px; border: 1px solid #dcdcdc; width: 180px;}
+#slider-code .overview li{ float: left; margin: 0 9px 0 0; padding: 1px; height: 121px; border: 1px solid #dcdcdc; width: 180px; overflow:hidden;}
 
 #slider-code .vp-wrap {
 	overflow: hidden;
