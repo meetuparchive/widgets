@@ -1,5 +1,6 @@
 <html>
 <head>
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 <script src="local.js"></script>
 <script src="api_key.js"></script>
@@ -8,6 +9,10 @@
     urlname: "nystartrek",
     width: 225,
     height:570,
+    bgcolor:'#DDD',
+    textcolor:'#333',
+    fontfamily:'inherit',
+    fontsize:'inherit',
     _name: "Meetup Group Stats",
     _description: "Shows basic stats on your favorite Meetup group."
   };
@@ -19,6 +24,7 @@
       return mup_widget.api_call("/2/events", {group_urlname: $parameters.urlname, page: '1'});
     }
   };
+  //$('.mug-badge .mup-widget, .mug-badge .mup-widget .mup-hd a').css('background', parameters.bgcolor);
 </script>
 <link rel="stylesheet" type="text/css" href="http://static2.meetupstatic.com/style/widget.css">
 <script type="text/javascript" charset="utf-8">
@@ -119,9 +125,9 @@
 		             $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
 	            } else {
                     var event = data.results[0];
-     console.log(event)
+     console.log(event);
                     var venue = event.venue;
-     console.log(venue)
+     console.log(venue);
                     var city;
                     if (!venue || !venue.city) {
                         city = group.city;
@@ -155,8 +161,17 @@
                 }
             }
             });
+            $('.mug-badge .mup-widget, .mug-badge .mup-widget .mup-hd a').css({
+              'background': $parameters.bgcolor,
+              'color': $parameters.textcolor
+            });
+            $('.mug-badge').css({
+              'font-family': $parameters.fontfamily,
+              'font-size': $parameters.fontsize,
+            })
 	    }
 	  });
+	  
 	});
 </script>
 <style type="text/css" media="screen">
@@ -164,14 +179,10 @@
 
 }
 .mug-badge {
-	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
-	font-size: 12px;
+	/*font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
+	font-size: 12px;*/
 }
-.mug-badge .mup-widget,
-.mug-badge .mup-widget .mup-hd a {
-	background: #1A1A1A;
-	color: #f2f2f2;
-}
+
 .mug-badge .mup-widget {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -186,7 +197,6 @@
 }
 .mug-badge .mup-widget h3 {
 	font-size: 18px;
-	color: #f2f2f2;
 	font-weight: bold;
 }
 .mug-badge .mup-widget h4 {
@@ -205,29 +215,25 @@
 .mug-badge .mup-widget .mup-bd,
 .mug-badge .mup-widget .mup-timeline,
 .mug-badge .mup-widget .mup-bd p {
-	color: #f2f2f2;
 }
+
 .mug-badge .mup-widget .mup-bd {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	padding: 8px 6px;
 	margin: 0 8px;
-	background: #333;
 }
 .mug-badge .mup-widget a,
 .mug-badge .mup-widget a:active,
 .mug-badge .mup-widget a:visited {
-	color: #f2f2f2;
 	text-decoration: none;
 }
 .mug-badge .mup-widget a:hover {
-    color: #005CE6;
     text-decoration: none;
 }
 .mug-badge .mup-widget .mup-tlabel {
 	font-size: 10px;
-	color: #AAA;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 2px;
@@ -238,7 +244,6 @@
 	margin: 6px 0;
 	padding: 4px;
 	text-align: center;
-	background: #1A1A1A;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
@@ -248,20 +253,15 @@
 	display:block;
 	margin: 0 auto;
 	padding: 2px 4px;
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2266BB), to(#102f56));
-	background: -moz-linear-gradient(0% 100% 90deg,#102F56, #2266BB);
-	background-color: #2266BB;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	font-size: 10px;
 	font-weight: bold;
-	color: #f2f2f2;
 	text-align: center;
 	border: 1px solid #0d2748;
 }
 .mug-badge .mup-widget .mup-button:hover {
-    color: #005CE6;
 }
 .mug-badge .mup-widget .mup-img {
     overflow: hidden;
@@ -277,7 +277,6 @@
 	padding: 3px 0;
 	font-size: 8px;
 	text-align: center;
-	background: #0A0A0A;
 	-webkit-border-bottom-right-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
@@ -293,5 +292,6 @@
 </head>
 <body class="framed-mup-widget">
 	<div class="mug-badge"></div>
+
 </body>
 </html>
