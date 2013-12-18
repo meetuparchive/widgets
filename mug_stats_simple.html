@@ -36,7 +36,7 @@
 						return '<a target="_top" href="' + link + '">' + content + '</a>';
 	      },
         addImage = function(src, alt) {
-           return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
+           return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" alt="'+alt+'" class="mup-img"/></div>';
         },
                 addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
@@ -169,7 +169,8 @@
             $('.mug-badge').css({
               'font-family': $parameters.fontfamily,
               'font-size': $parameters.fontsize,
-            })
+            });
+            $('.mup-img-wrap img').css('max-width', '90%')
 	    }
 	  });
 	  
