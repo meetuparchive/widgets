@@ -1,5 +1,6 @@
 <html>
 <head>
+
   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 <script src="local.js"></script>
@@ -7,7 +8,7 @@
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
     urlname: "nystartrek",
-    width: 225,
+    width: '25%',
     height:570,
     bgcolor:'#DDD',
     textcolor:'#333',
@@ -101,7 +102,7 @@
 	    }
 			else {
 			group = data.results[0];
-			$('.mug-badge', ctx).width($parameters.width);
+			$('.mug-badge', ctx).css('max-width',$parameters.width);
 			$('.mug-badge', ctx).append(
 				'<div class="mup-widget">\
 					<div class="mup-bd">\
