@@ -12,6 +12,9 @@
     height:570,
     bgcolor:'#DDD',
     textcolor:'#111',
+    buttontextcolor:'#111',
+    buttonbgcolor:'#CCC',
+    buttonborder:'#666',
     fontfamily:'inherit',
     fontsize:'inherit',
     _name: "Meetup Group Stats",
@@ -109,7 +112,7 @@
 						<h3>' + addLink(group.name, group.link) + '</h3>\
 						<span class="mup-stats">' + addImage(group["group_photo"] ? group.group_photo.photo_link : "", group.name) + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
             <span class="mup-stats"><div class="next-event"></div></span>\
-            <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
+            <h4><span class="mup-button" style="color:'+$parameters.buttontextcolor+'; background-color:'+$parameters.buttonbgcolor+'; border-color: '+$parameters.buttonborder+';">'+ addLink('JOIN',group.link)+'</span></h4>\
 					</div>\
 					<div class="mup-ft">\
 						<div class="mup-logo"><div style="float:left;">'+addLink('<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png">','http://www.meetup.com')+'</div><div style="float:right;"><div style="float:right;">'+addStarRating(group.rating)+'</div><br><div style="float:right;"><span class="mup-tlabel">Group Rating</span></div></div></div>\
@@ -224,6 +227,10 @@
 	font-size: 1em;
 	font-weight: bold;
 	border: 1px solid #0d2748;
+}
+
+.mug-badge .mup-widget .mup-button a {
+  color:inherit;
 }
 
 .mug-badge a {
