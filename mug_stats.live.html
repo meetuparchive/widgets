@@ -5,15 +5,15 @@
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
   var $parameters = {
-    urlname: "nystartrek",
+    urlname: "dalvik",
     width: 225,
     height:570,
     _name: "Meetup Group Stats",
     _description: "Shows basic stats on your favorite Meetup group."
   };
   var $queries = {
-    groups: function() {
-      return mup_widget.api_call("/2/groups", {group_urlname: $parameters.urlname});
+    group: function() {
+      return mup_widget.api_call("/" + $parameters.urlname);
     },
     events: function() {
       return mup_widget.api_call("/2/events", {group_urlname: $parameters.urlname, page: '1'});
@@ -30,8 +30,7 @@
 	      },
         addImage = function(src, alt) {
            return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
-        },
-                addStarRating = function(rating) {
+        }, addStarRating = function(rating) {
                         var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
                         var starlink = '';
                         if (rating == 0) {
@@ -56,7 +55,6 @@
                             starlink = "500.png";
                         }
                         return '<img src="'+base_url+starlink+'" alt="'+rating+'" />';
-
                     },
 				addLeadingZero = function( num ) {
 						return (num < 10) ? ('0' + num) : num;
@@ -85,16 +83,15 @@
 					    x1 = x1.replace(rgx, '$1' + ',' + '$2');
 					  return x1 + x2;
 					};
-		$.getJSON($queries.groups(), function(data) {
-	    if (data.results.length == 0) {
+		$.getJSON($queries.group(), function(result) {
+	    if (result.data.errors) {
 		  	$('.mug-badge', ctx).width($parameters.width);
 				$('.mug-badge', ctx).append(
 					'<div class="mup-widget error">\
 							<div class="errorMsg">Oops. No results for "' + $parameters.urlname + '"</div>\
 					</div>');
-	    }
-			else {
-			group = data.results[0];
+	    } else {
+			group = result.data;
 			$('.mug-badge', ctx).width($parameters.width);
 			$('.mug-badge', ctx).append(
 				'<div class="mup-widget">\
@@ -120,9 +117,7 @@
 		             $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
 	            } else {
                     var event = data.results[0];
-     console.log(event)
                     var venue = event.venue;
-     console.log(venue)
                     var city;
                     if (!venue || !venue.city) {
                         city = group.city;
@@ -161,9 +156,6 @@
 	});
 </script>
 <style type="text/css" media="screen">
-.next-event {
-
-}
 .mug-badge {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 	font-size: 12px;
