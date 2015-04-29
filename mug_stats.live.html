@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 <script src="local.js"></script>
 <script src="api_key.js"></script>
 <script id="config" type="text/javascript" charset="utf-8">
@@ -20,7 +20,7 @@
     }
   };
 </script>
-<link rel="stylesheet" type="text/css" href="http://static2.meetupstatic.com/style/widget.css">
+<link rel="stylesheet" type="text/css" href="https://a248.e.akamai.net/secure.meetupstatic.com/style/widget.css">
 <script type="text/javascript" charset="utf-8">
 	mup_widget.with_jquery(function($, ctx) {
 		var	group = '',
@@ -32,7 +32,7 @@
            return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
         },
                 addStarRating = function(rating) {
-                        var base_url = 'http://img1.meetupstatic.com/9260736631256287675/img/star_';
+                        var base_url = 'https://a248.e.akamai.net/secure.meetupstatic.com/img/03784007994490629714917/star_';
                         var starlink = '';
                         if (rating == 0) {
                             return 'Not Yet Rated';
@@ -106,7 +106,7 @@
             <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
 					</div>\
 					<div class="mup-ft">\
-						<div class="mup-logo"><div style="float:left;">'+addLink('<img src="http://img1.meetupstatic.com/84869143793177372874/img/birddog/everywhere_widget.png">','http://www.meetup.com')+'</div><div style="float:right;"><div style="float:right;">'+addStarRating(group.rating)+'</div><br><div style="float:right;"><span class="mup-tlabel">Group Rating</span></div></div></div>\
+						<div class="mup-logo"><div style="float:left;">'+addLink('<img src="https://a248.e.akamai.net/secure.meetupstatic.com/img/84869143793177372874/birddog/everywhere_widget.png">','http://www.meetup.com')+'</div><div style="float:right;"><div style="float:right;">'+addStarRating(group.rating)+'</div><br><div style="float:right;"><span class="mup-tlabel">Group Rating</span></div></div></div>\
 						<div class="mup-getwdgt">' + addLink('ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-")) + '</div>\
 					</div>\
 				</div>'
