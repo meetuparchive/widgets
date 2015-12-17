@@ -120,9 +120,9 @@
 		             $('.next-event', ctx).append('<span class="mup-tlabel">'+addLink('Suggest new ideas for Meetups!',group.link)+'</span>');
 	            } else {
                     var event = data.results[0];
-     console.log(event)
+                    console.log(event);
                     var venue = event.venue;
-     console.log(venue)
+                    console.log(venue);
                     var city;
                     if (!venue || !venue.city) {
                         city = group.city;
