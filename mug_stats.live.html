@@ -31,6 +31,9 @@
         addImage = function(src, alt) {
            return src == "" ? '' : '<div class="mup-img-wrap"><img src="'+src+'" width="'+($parameters.width - 50)+'" alt="'+alt+'" class="mup-img"/></div>';
         },
+        escapeHtml = function(str) {
+            return $('<textarea />').text(str).html();
+        }
                 addStarRating = function(rating) {
                         var base_url = 'https://a248.e.akamai.net/secure.meetupstatic.com/img/03784007994490629714917/star_';
                         var starlink = '';
@@ -101,7 +104,7 @@
 					<div class="mup-bd">\
 						<h3>' + addLink(group.name, group.link) + '</h3>\
             <h4> <div style="padding-top:5px;"><span class="mup-tlabel">EST. '+ getFormattedDate(group.created)+'</span></div></h4>\
-						<span class="mup-stats">' + addImage(group["group_photo"] ? group.group_photo.photo_link : "", group.name) + numberFormat(group.members) + '<span class="mup-tlabel"> '+ group.who+'</span></span>\
+						<span class="mup-stats">' + addImage(group["group_photo"] ? group.group_photo.photo_link : "", group.name) + numberFormat(group.members) + '<span class="mup-tlabel"> '+ escapeHtml(group.who) +'</span></span>\
             <span class="mup-stats"><div class="next-event"></div></span>\
             <h4><span class="mup-button">'+ addLink('JOIN',group.link)+'</span></h4>\
 					</div>\
