@@ -176,6 +176,9 @@
 				addLink = function( content, link ) {
 						return '<a href="' + link + '">' + content + '</a>';
 					},
+				escapeHTML = function(text) {
+						return $('<textarea />').text(text).html().replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+					},
 				imgResize = function ( $this, w, h) {
 					var img = $this;
 					var maxWidth = w,
@@ -198,7 +201,7 @@
 			if (data.results.length == 0) {
 				$('.mup-wdgt-spnsr-carousel', ctx).append(
 					'<div class="mup-widget error">\
-							<div class="errorMsg">Oops. No results for "' + $parameters.campaign + '"</div>\
+							<div class="errorMsg">Oops. No results for "' + escapeHTML($parameters.campaign) + '"</div>\
 					</div>');
 			}
 			else {
@@ -223,9 +226,6 @@
 							</div>\
 						</div>\
 					</div>');
-				//$("div.mup-hd-img").css({backgroundImage: 'url(' + $parameters.image_url + ')'});
-				//$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
-				//imgResize('img.resize', 64, 64);
 			}
 		});
 
@@ -245,7 +245,7 @@
 
 				$('.mup-wdgt-spnsr-carousel > .mup-widget', ctx).append('<div class="mup-ft"><div class="mup-logo">' + addLink ( '<img src="https://a248.e.akamai.net/secure.meetupstatic.com/img/84869143793177372874/birddog/everywhere_widget.png" />','http://www.meetup.com/meetup_api/foundry/') + '</div><div class="mup-getwdgt">' + addLink( 'ADD THIS TO YOUR SITE', 'http://www.meetup.com/meetup_api/foundry/#'+$parameters._name.toLowerCase().replace(/ /g,"-") ) + '</div>');
 
-					$('.mup-hd-img', ctx).html('<img class="resize" src="' + $parameters.image_url + '" width="auto" height="auto" />');
+					$('.mup-hd-img', ctx).html('<img class="resize" src="' + escapeHTML($parameters.image_url) + '" width="auto" height="auto" />');
 					$('img.resize', ctx).hide();
 					$('.mup-hd-img', ctx).append('<img class="loading" style="padding:16px;" src="https://a248.e.akamai.net/secure.meetupstatic.com/img/ajax_loader_trans.gif" width="auto" height="auto" />');
 					$('img.resize', ctx).load(function() {
