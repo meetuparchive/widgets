@@ -15,7 +15,7 @@
   };
   var $queries = {
     events: function() { 
-      return api_call("/events", {
+      return mup_widget.api_call("/events", {
         after: $parameters.after,
         before: $parameters.before,
         group_urlname: $parameters.group_urlname,
@@ -24,7 +24,7 @@
       });
     },
     groups: function() { 
-      return api_call("/groups", {
+      return mup_widget.api_call("/groups", {
         group_urlname: $parameters.group_urlname
       });
     }
